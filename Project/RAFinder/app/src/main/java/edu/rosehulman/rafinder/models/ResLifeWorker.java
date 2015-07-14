@@ -1,8 +1,5 @@
 package edu.rosehulman.rafinder.models;
 
-/**
- * Created by daveyle on 7/11/2015.
- */
 public class ResLifeWorker extends Resident implements SearchResultItem {
 
     private String name;

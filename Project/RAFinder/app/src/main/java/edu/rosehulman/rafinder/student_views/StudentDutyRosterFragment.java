@@ -87,8 +87,7 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() +
-                    " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -100,7 +99,7 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
+        if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
             //mListener.onFragmentInteraction(rosterItems[position]);

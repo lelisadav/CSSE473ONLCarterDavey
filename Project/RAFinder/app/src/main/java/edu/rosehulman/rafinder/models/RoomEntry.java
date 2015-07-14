@@ -1,8 +1,5 @@
 package edu.rosehulman.rafinder.models;
 
-/**
- * Created by daveyle on 7/11/2015.
- */
 public class RoomEntry {
 
     private Resident[] residents;
@@ -37,7 +34,7 @@ public class RoomEntry {
         this.roomNumber = roomNumber;
     }
 
-    public static class Lobby extends RoomEntry { // TODO: don't think a lobby is necessary...
+    public static class Lobby extends RoomEntry {
         public Lobby() {
             super.roomNumber = "Lobby";
         }

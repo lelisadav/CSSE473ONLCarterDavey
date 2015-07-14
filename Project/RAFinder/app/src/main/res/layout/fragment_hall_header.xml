@@ -16,6 +16,6 @@
         android:paddingRight="20dp"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="30dp" />
+        android:textSize="30sp" />
 
 </LinearLayout>

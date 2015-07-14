@@ -9,7 +9,10 @@
     <FrameLayout
         android:id="@+id/headerFrame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></FrameLayout>
+        android:layout_height="wrap_content">
+
+        <!-- TODO -->
+    </FrameLayout>
 
     <GridView
         android:id="@android:id/list"

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="36dp" />
+            android:textSize="36sp" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
                 android:paddingRight="20dp"
                 android:text="@string/fri"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/nameTextView"
@@ -58,7 +58,7 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:text="Large Text"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30dp" />
+                android:textSize="30sp" />
 
             <ImageButton
                 android:id="@+id/callButton"
@@ -68,7 +68,7 @@
                 android:layout_alignParentRight="true"
                 android:background="@drawable/ic_phone"
                 android:contentDescription="phone image"
-                android:paddingRight="20dp" />
+                android:paddingRight="20sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -91,7 +91,7 @@
                 android:paddingRight="12dp"
                 android:text="@string/sat"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/nameTextView2"
@@ -108,7 +108,7 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:text="Large Text"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30dp" />
+                android:textSize="30sp" />
 
             <ImageButton
                 android:id="@+id/callButton2"
@@ -118,7 +118,7 @@
                 android:layout_alignParentRight="true"
                 android:background="@drawable/ic_phone"
                 android:contentDescription="phone image"
-                android:paddingRight="20dp" />
+                android:paddingRight="20sp" />
         </RelativeLayout>
 
     </LinearLayout>

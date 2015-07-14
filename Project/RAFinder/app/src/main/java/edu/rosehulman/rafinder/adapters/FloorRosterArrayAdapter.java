@@ -13,9 +13,6 @@ import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.models.Resident;
 import edu.rosehulman.rafinder.models.RoomEntry;
 
-/**
- * Created by daveyle on 7/11/2015.
- */
 public class FloorRosterArrayAdapter extends ArrayAdapter<RoomEntry> {
     private final Context context;
     private final int layout;
