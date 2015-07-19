@@ -18,4 +18,18 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Example action</string>
+
+    <!-- Profile Page -->
+    <string name="name_default">John Public</string>
+    <string name="room_default">Room: Apartments East 201</string>
+    <string name="room_format">Room: %s</string>
+    <string name="location_default">Location: Apartments East 201</string>
+    <string name="location_format">Location: %s</string>
+    <string name="status_default">Status: In my room</string>
+    <string name="status_format">Status: %s</string>
+    <string name="status_detail_default">\"In my apartment. Come hang out with me!\"</string>
+    <string name="status_detail_format">\"%s\"</string>
+    <string name="feedback">Anonymous Feedback</string>
+    <string name="phone_default">+1 (555) 555–5555</string>
+    <string name="email_default">publicjq@rose-hulman.edu</string>
 </resources>
