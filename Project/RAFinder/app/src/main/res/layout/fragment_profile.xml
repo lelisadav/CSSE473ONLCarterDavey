@@ -23,6 +23,18 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_person" />
 
+    <Button
+        android:id="@+id/doneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/done_button"
+        android:textSize="15sp"/>
+
     <RelativeLayout
         android:id="@+id/gridLayout"
         android:layout_width="match_parent"
@@ -70,7 +82,8 @@
             android:layout_above="@+id/statusDetailTextView"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/locationTextView"
-            android:layout_toRightOf="@+id/statusTextView" />
+            android:layout_toRightOf="@+id/statusTextView"
+            android:gravity="center_vertical" />
 
         <EditText
             android:id="@+id/statusDetailTextView"
@@ -80,8 +93,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:textSize="15sp"
-            android:hint="@string/status_detail_prompt"/>
+            android:hint="@string/status_detail_prompt"
+            android:textSize="15sp" />
     </RelativeLayout>
 
     <GridLayout

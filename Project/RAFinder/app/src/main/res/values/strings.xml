@@ -34,4 +34,5 @@
     <string name="phone_default">+1 (555) 555–5555</string>
     <string name="email_default">publicjq@rose-hulman.edu</string>
     <string name="status_detail_prompt">Enter a detailed status</string>
+    <string name="done_button">Done</string>
 </resources>

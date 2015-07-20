@@ -3,6 +3,13 @@
     <string-array name="default_statuses">
         <item>In My Room</item>
         <item>In Class</item>
-        <item>Around</item>
+        <item>Around Campus</item>
+        <item>Around My Hall</item> <!-- TODO: change this to the RA's hall -->
+        <item>Out of Town</item>
+        <item>In Terre Haute</item>
+        <item>At Home</item>
+        <item>At Lunch</item>
+        <item>In a Meeting</item>
+        <item>At the SRC</item>
     </string-array>
 </resources>
