@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="default_statuses">
+        <item>In My Room</item>
+        <item>In Class</item>
+        <item>Around</item>
+    </string-array>
+</resources>
