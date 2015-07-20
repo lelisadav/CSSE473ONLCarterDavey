@@ -29,4 +29,4 @@
     For more on layout aliases, see:
     http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
     -->
-    <item name="fragment_search" type="layout">@layout/fragment_search_grid</item></resources>
+    <item name="fragment_search" type="layout">@layout/fragment_search_list</item></resources>
