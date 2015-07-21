@@ -10,8 +10,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import edu.rosehulman.rafinder.R;
-import edu.rosehulman.rafinder.model.person.Resident;
 import edu.rosehulman.rafinder.model.RoomEntry;
+import edu.rosehulman.rafinder.model.person.Resident;
 
 public class FloorRosterArrayAdapter extends ArrayAdapter<RoomEntry> {
     private final Context context;
@@ -48,7 +48,7 @@ public class FloorRosterArrayAdapter extends ArrayAdapter<RoomEntry> {
         TextView roommate4 = (TextView) view.findViewById(R.id.roommate4);
         TextView roommate5 = (TextView) view.findViewById(R.id.roommate5);
 
-        TextView[] textViews = {roommate1, roommate2, roommate3, roommate4, roommate5};
+        TextView[] textViews = { roommate1, roommate2, roommate3, roommate4, roommate5 };
         RoomEntry item = super.getItem(position);
         if (item instanceof RoomEntry.Lobby) {
             for (TextView textView : textViews) {

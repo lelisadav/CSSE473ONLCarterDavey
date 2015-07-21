@@ -3,12 +3,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="fri">Fri:</string>
     <string name="sat">Sat:</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -16,10 +12,8 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_example">Example action</string>
 
-    <!-- Profile Page -->
     <string name="name_default">John Public</string>
     <string name="room_default">Room: Apartments East 201</string>
     <string name="room_format">Room: %s</string>
@@ -35,4 +29,17 @@
     <string name="email_default">publicjq@rose-hulman.edu</string>
     <string name="status_detail_prompt">Enter a detailed status</string>
     <string name="done_button">Done</string>
+    <string name="room_default_short">Apts E 201</string>
+    <string name="off_duty">Off Duty</string>
+    <string name="res_hall_default">Apartments East</string>
+    <string name="dash">" - "</string>
+    <string name="month_default">July 2015</string>
+    <string name="duty_roster">Duty Roster</string>
+
+    <string name="emergency_contacts">Emergency Contacts</string>
+    <string name="name_default_emergency">John Public (My RA)</string>
+    <string name="call">Call</string>
+    <string name="email">Email</string>
+    <string name="my_ra">My RA</string>
+    <string name="hall_ra">Other Hall RAs</string>
 </resources>

@@ -3,6 +3,9 @@ package edu.rosehulman.rafinder.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An entire floor of {@link RoomEntry} objects.
+ */
 public class Floor {
 
     private int lobbyAfterRoomNumber;

@@ -1,7 +1,7 @@
 package edu.rosehulman.rafinder.model.person;
 
 /**
- * Created by daveyle on 7/11/2015.
+ * A Residence Life administrator (an employee of the Office of Residence Life)
  */
 public class Administrator extends Employee {
 }

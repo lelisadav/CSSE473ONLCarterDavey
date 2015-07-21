@@ -11,9 +11,7 @@ import android.view.ViewGroup;
 import edu.rosehulman.rafinder.R;
 
 /**
- * A simple {@link Fragment} subclass. Activities that contain this fragment must implement the {@link
- * HomeFragment.OnFragmentInteractionListener} interface to handle interaction events. Use the {@link
- * HomeFragment#newInstance} factory method to create an instance of this fragment.
+ * The Home Page.
  */
 public class HomeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match

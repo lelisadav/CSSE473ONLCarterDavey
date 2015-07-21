@@ -17,9 +17,6 @@ import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.model.DutyRosterItem;
 import edu.rosehulman.rafinder.model.person.Employee;
 
-/**
- * Created by daveyle on 7/11/2015.
- */
 public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
     private final Context context;
     private final List<DutyRosterItem> objects;
@@ -58,9 +55,9 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
         LocalDate friday = item.getFriday();
         LocalDate sunday = friday.plusDays(2);
         String weekend = friday.dayOfWeek().getAsShortText() + " " +
-                friday.toString("M/d") + " - " +
-                sunday.dayOfWeek().getAsShortText() + " " +
-                sunday.toString("M/d");
+                         friday.toString("M/d") + " - " +
+                         sunday.dayOfWeek().getAsShortText() + " " +
+                         sunday.toString("M/d");
         weekendText.setText(weekend);
         friNameText.setText(fridayDuty.getName());
         satNameText.setText(saturdayDuty.getName());

@@ -1,7 +1,8 @@
 package edu.rosehulman.rafinder.model.person;
 
-import edu.rosehulman.rafinder.model.SearchResultItem;
-
+/**
+ * Any Residence Life employee.
+ */
 public class Employee extends Resident {
 
     private String name;

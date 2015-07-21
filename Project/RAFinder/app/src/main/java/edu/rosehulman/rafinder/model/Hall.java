@@ -1,5 +1,8 @@
 package edu.rosehulman.rafinder.model;
 
+/**
+ * A Residence Hall.
+ */
 public class Hall implements SearchResultItem {
     private String name;
     private Floor[] floors;

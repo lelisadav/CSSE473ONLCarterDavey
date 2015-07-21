@@ -1,19 +1,20 @@
 package edu.rosehulman.rafinder.controller;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import edu.rosehulman.rafinder.R;
 
+
 /**
- * The Emergency Contacts list. Contains items of type {@link EmergencyContactFragment}.
+ * A single Item in the {@link EmergencyContactFragment} list.
  */
-public class EmergencyContactsFragment extends Fragment {
+public class EmergencyContactFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,11 +33,11 @@ public class EmergencyContactsFragment extends Fragment {
      *         Parameter 1.
      * @param param2
      *         Parameter 2.
-     * @return A new instance of fragment EmergencyContactsFragment.
+     * @return A new instance of fragment EmergencyContactFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EmergencyContactsFragment newInstance(String param1, String param2) {
-        EmergencyContactsFragment fragment = new EmergencyContactsFragment();
+    public static EmergencyContactFragment newInstance(String param1, String param2) {
+        EmergencyContactFragment fragment = new EmergencyContactFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -44,7 +45,7 @@ public class EmergencyContactsFragment extends Fragment {
         return fragment;
     }
 
-    public EmergencyContactsFragment() {
+    public EmergencyContactFragment() {
         // Required empty public constructor
     }
 
@@ -61,7 +62,7 @@ public class EmergencyContactsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_emergency_contacts, container, false);
+        return inflater.inflate(R.layout.layout_emergency_contact, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -77,8 +78,7 @@ public class EmergencyContactsFragment extends Fragment {
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                                         + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 

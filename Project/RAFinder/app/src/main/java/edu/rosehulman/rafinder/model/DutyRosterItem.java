@@ -4,9 +4,8 @@ import org.joda.time.LocalDate;
 
 import edu.rosehulman.rafinder.model.person.Employee;
 
-
 /**
- * Created by daveyle on 7/11/2015.
+ * A single item in the Duty Roster.
  */
 public class DutyRosterItem {
 
