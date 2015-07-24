@@ -1,26 +1,33 @@
 package edu.rosehulman.rafinder;
 
-import android.app.Activity;
-
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
+
+import edu.rosehulman.rafinder.controller.EmergencyContactsFragment;
+import edu.rosehulman.rafinder.controller.HomeFragment;
+import edu.rosehulman.rafinder.controller.reslife.DutyRosterFragment;
+import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
+import edu.rosehulman.rafinder.controller.reslife.ProfileFragment;
 
 /**
  * The container activity for the entire app.
  */
-public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends Activity implements ICallback {
+    private static final int HOME = 0;
+    private static final int MY_RA = 1;
+    private static final int EMERGENCY_CONTACTS = 2;
+    private static final int DUTY_ROSTER = 3;
+    private static final int HALL_ROSTER = 4;
 
+    public static boolean isRA = true;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -50,8 +57,33 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
+        Fragment fragment;
+
+        switch (position) {
+        case HOME:
+            fragment = HomeFragment.newInstance();
+            break;
+        case MY_RA:
+            fragment = ProfileFragment.newInstance();
+            break;
+        case EMERGENCY_CONTACTS:
+            fragment = EmergencyContactsFragment.newInstance();
+            break;
+        case DUTY_ROSTER:
+            fragment = DutyRosterFragment.newInstance();
+            break;
+        case HALL_ROSTER:
+            if (isRA) {
+                fragment = HallRosterFragment.newInstance();
+                break;
+            }
+        default:
+            // intentional fallthrough
+            fragment = HomeFragment.newInstance();
+        }
+
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.content_frame, fragment)
                 .commit();
     }
 
@@ -105,49 +137,36 @@ public class MainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
-    }
-
     public void dialPhoneNumber(String phoneNumber) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phoneNumber));
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onDutyRosterInteraction() {
+
+    }
+
+    @Override
+    public void onEmergencyContactsInteraction() {
+
+    }
+
+    @Override
+    public void onHallRosterInteraction() {
+
+    }
+
+    @Override
+    public void onHomeInteraction() {
+
+    }
+
+    @Override
+    public void onProfileInteraction() {
+
     }
 }

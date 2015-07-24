@@ -46,7 +46,6 @@ public class EmergencyContactFragment extends Fragment {
     }
 
     public EmergencyContactFragment() {
-        // Required empty public constructor
     }
 
     @Override

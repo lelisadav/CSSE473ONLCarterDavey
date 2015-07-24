@@ -1,9 +1,10 @@
 package edu.rosehulman.rafinder.model;
 
+import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
 import edu.rosehulman.rafinder.model.person.Resident;
 
 /**
- * An entry for one room of the {@link edu.rosehulman.rafinder.controller.reslife.FloorRosterFragment}.
+ * An entry for one room of the {@link HallRosterFragment}.
  */
 public class RoomEntry {
 

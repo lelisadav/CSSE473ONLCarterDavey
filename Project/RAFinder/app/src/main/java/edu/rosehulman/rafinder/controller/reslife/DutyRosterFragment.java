@@ -14,7 +14,14 @@ import edu.rosehulman.rafinder.R;
  * The RA view of the Duty Roster (which is editable for RAs, but not for SAs).
  */
 public class DutyRosterFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
+    private DutyRosterListener mListener;
+
+    public static DutyRosterFragment newInstance() {
+        return new DutyRosterFragment();
+    }
+
+    public DutyRosterFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,9 +38,9 @@ public class DutyRosterFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (DutyRosterListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(activity.toString() + " must implement DutyRosterListener");
         }
     }
 
@@ -43,7 +50,7 @@ public class DutyRosterFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-
+    public interface DutyRosterListener {
+        public void onDutyRosterInteraction();
     }
 }

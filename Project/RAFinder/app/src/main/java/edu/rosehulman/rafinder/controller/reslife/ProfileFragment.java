@@ -2,7 +2,6 @@ package edu.rosehulman.rafinder.controller.reslife;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,19 @@ import edu.rosehulman.rafinder.R;
  * TODO: status long press to status spinner dialog
  */
 public class ProfileFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
+    private ProfileListener mListener;
+
+    /**
+     * Use this factory method to create a new instance of this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment ProfileFragment.
+     */
+    public static ProfileFragment newInstance() {
+        return new ProfileFragment();
+    }
+
+    public ProfileFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,9 +46,9 @@ public class ProfileFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (ProfileListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(activity.toString() + " must implement ProfileListener");
         }
     }
 
@@ -47,9 +58,8 @@ public class ProfileFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+    public interface ProfileListener {
+        public void onProfileInteraction();
     }
 
 }

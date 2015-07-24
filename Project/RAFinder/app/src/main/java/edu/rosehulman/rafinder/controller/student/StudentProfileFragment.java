@@ -18,6 +18,9 @@ import edu.rosehulman.rafinder.R;
 public class StudentProfileFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
+    public StudentProfileFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

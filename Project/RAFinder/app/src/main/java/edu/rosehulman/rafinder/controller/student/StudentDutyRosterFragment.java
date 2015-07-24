@@ -47,10 +47,6 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
         return fragment;
     }
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon
-     * screen orientation changes).
-     */
     public StudentDutyRosterFragment() {
     }
 

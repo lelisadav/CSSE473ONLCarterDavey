@@ -46,9 +46,7 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
         View view = inflater.inflate(layout, parent, false);
         TextView weekendText = (TextView) view.findViewById(R.id.weekendTextView);
         TextView friNameText = (TextView) view.findViewById(R.id.nameTextView);
-        TextView satNameText = (TextView) view.findViewById(R.id.nameTextView2);
         ImageButton friButton = (ImageButton) view.findViewById(R.id.callButton);
-        ImageButton satButton = (ImageButton) view.findViewById(R.id.callButton2);
         DutyRosterItem item = super.getItem(position);
         final Employee fridayDuty = item.getFriDuty();
         final Employee saturdayDuty = item.getSatDuty();
@@ -60,17 +58,10 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
                          sunday.toString("M/d");
         weekendText.setText(weekend);
         friNameText.setText(fridayDuty.getName());
-        satNameText.setText(saturdayDuty.getName());
         friButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((MainActivity) context).dialPhoneNumber(fridayDuty.getPhoneNumber());
-            }
-        });
-        satButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((MainActivity) context).dialPhoneNumber(saturdayDuty.getPhoneNumber());
             }
         });
         view.refreshDrawableState();

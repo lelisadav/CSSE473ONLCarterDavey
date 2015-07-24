@@ -12,4 +12,23 @@
         <item>In a Meeting</item>
         <item>At the SRC</item>
     </string-array>
+
+    <string-array name="nav_drawer_student">
+        <item>Home</item>
+        <item>My RA</item>
+        <item>Emergency Contacts</item>
+        <item>Duty Roster</item>
+        <!--<item>Settings</item>-->
+        <!--<item>Feedback</item>-->
+    </string-array>
+
+    <string-array name="nav_drawer_ra">
+        <item>Home</item>
+        <item>Profile</item>
+        <item>Emergency Contacts</item>
+        <item>Duty Roster</item>
+        <item>Hall Roster</item>
+        <!--<item>Settings</item>-->
+        <!--<item>Feedback</item>-->
+    </string-array>
 </resources>

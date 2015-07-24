@@ -22,14 +22,14 @@ import edu.rosehulman.rafinder.model.RoomEntry;
 /**
  * The RA's view of a listing for a floor's residents
  */
-public class FloorRosterFragment extends Fragment
-        implements AbsListView.OnItemClickListener, HallHeader.OnFragmentInteractionListener {
+public class HallRosterFragment extends Fragment
+        implements AbsListView.OnItemClickListener, HallHeader.HallHeaderListener {
 
     private Hall hall;
     private int floorIndex; //not necessarily the floor number
     private List<RoomEntry> rooms;
 
-    private OnFragmentInteractionListener mListener;
+    private HallRosterListener mListener;
 
     /**
      * The fragment's ListView/GridView.
@@ -41,6 +41,13 @@ public class FloorRosterFragment extends Fragment
      */
     private ListAdapter mAdapter;
 
+    public static HallRosterFragment newInstance() {
+        return new HallRosterFragment();
+    }
+
+    public HallRosterFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +57,10 @@ public class FloorRosterFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_res_life_floor_roster, container, false);
+        View view = inflater.inflate(R.layout.fragment_res_life_floor_roster_grid, container, false);
         FrameLayout frame = (FrameLayout) view.findViewById(R.id.headerFrame);
         HallHeader header = new HallHeader();
-        frame.addView(header.getView());
+//        frame.addView(header.getView()); // TODO: NullPointer
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
@@ -68,10 +75,9 @@ public class FloorRosterFragment extends Fragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (HallRosterListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() +
-                    " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(activity.toString() + " must implement HallRosterListener");
         }
     }
 
@@ -117,9 +123,8 @@ public class FloorRosterFragment extends Fragment
         this.floorIndex = index;
     }
 
-    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(String id);
+    public interface HallRosterListener {
+        public void onHallRosterInteraction();
     }
 
 }

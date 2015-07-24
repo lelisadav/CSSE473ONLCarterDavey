@@ -18,7 +18,10 @@ import edu.rosehulman.rafinder.model.Hall;
 public class HallHeader extends Fragment {
     private Hall hall;
     private int currentFloor;
-    private OnFragmentInteractionListener mListener;
+    private HallHeaderListener mListener;
+
+    public HallHeader() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,10 +65,10 @@ public class HallHeader extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (HallHeaderListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                                         + " must implement HallHeaderListener");
         }
     }
 
@@ -75,9 +78,7 @@ public class HallHeader extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-
+    public interface HallHeaderListener {
         public Hall getHall();
 
         public int getCurrentFloorIndex();
