@@ -82,7 +82,7 @@ public class DummyData {
 
     private static Resident resmh=new Resident("Hikaru Sulu", "105", "BSB");
     private static SophomoreAdvisor resmi=new SophomoreAdvisor("Ianto Jones", "105", "1", "BSB", "1-(555)-5560", "battleButler@torchwood.com", "In my room--Do not disturb");
-    private static SophomoreAdvisor resmj=new SophomoreAdvisor("Jack Harkness, Capt.", "105", "1","BSB", "1-(555)-5559","wheresMyStopwatch@torchword.com", "In my room--Do not disturb");
+    private static SophomoreAdvisor resmj=new SophomoreAdvisor("Jack Harkness, Capt.", "105", "1","BSB", "1-(555)-5559","wheresMyStopwatch@torchwood.com", "In my room--Do not disturb");
     private static Resident[] room5={resmh, resmi, resmj};
 
     private static Resident resmk=new Resident("Kraft Lawrence", "107", "BSB");
