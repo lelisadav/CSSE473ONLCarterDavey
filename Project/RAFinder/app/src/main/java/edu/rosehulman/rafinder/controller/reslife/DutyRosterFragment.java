@@ -3,11 +3,16 @@ package edu.rosehulman.rafinder.controller.reslife;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import edu.rosehulman.rafinder.R;
+import edu.rosehulman.rafinder.adapter.DutyRosterArrayAdapter;
+import edu.rosehulman.rafinder.model.dummy.DummyData;
 
 
 /**
@@ -15,6 +20,7 @@ import edu.rosehulman.rafinder.R;
  */
 public class DutyRosterFragment extends Fragment {
     private DutyRosterListener mListener;
+    private DutyRosterArrayAdapter mAdapter;
 
     public static DutyRosterFragment newInstance() {
         return new DutyRosterFragment();
@@ -26,7 +32,13 @@ public class DutyRosterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_student_duty_roster, container, false);
+        View view =inflater.inflate(R.layout.fragment_student_duty_roster, container, false);
+        Log.i("RA Finder", DummyData.getDutyRoster().size()+"");
+        ListView listView= (ListView) view.findViewById(R.id.dutyRosterListView);
+        Toast.makeText(this.getActivity(),DummyData.getDutyRoster().size()+"", Toast.LENGTH_LONG );
+        mAdapter=new DutyRosterArrayAdapter(this.getActivity(), R.layout.fragment_student_duty_roster_widget, DummyData.getDutyRoster());
+        listView.setAdapter(mAdapter);
+        return view;
     }
 
     @Override

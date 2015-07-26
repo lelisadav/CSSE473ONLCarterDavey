@@ -7,6 +7,11 @@ public class Hall implements SearchResultItem {
     private String name;
     private Floor[] floors;
 
+    public Hall(String name, Floor[] floors){
+        this.name=name;
+        this.floors=floors;
+    }
+
     public String getName() {
         return name;
     }

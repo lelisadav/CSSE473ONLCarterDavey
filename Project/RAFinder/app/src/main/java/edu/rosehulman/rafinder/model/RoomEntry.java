@@ -15,6 +15,11 @@ public class RoomEntry {
     public RoomEntry() {
 
     }
+    public RoomEntry(Resident[] residents, String hallName, String roomNumber){
+        this.residents=residents;
+        this.hallName=hallName;
+        this.roomNumber=roomNumber;
+    }
 
     public Resident[] getResidents() {
         return residents;

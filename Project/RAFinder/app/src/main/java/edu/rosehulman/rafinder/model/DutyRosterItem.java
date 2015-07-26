@@ -22,6 +22,11 @@ public class DutyRosterItem {
             this.friDuty=getFridayWorker();
             this.satDuty=getSaturdayWorker();
         }
+        public DutyRosterItem(LocalDate friday, Employee friDuty, Employee satDuty){
+            this.friday=friday;
+            this.friDuty=friDuty;
+            this.satDuty=satDuty;
+        }
         private Employee getFridayWorker(){
             //use firebase url to pull friday worker
             return null;

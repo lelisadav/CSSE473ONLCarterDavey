@@ -2,17 +2,29 @@ package edu.rosehulman.rafinder.controller;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.List;
 
 import edu.rosehulman.rafinder.R;
+import edu.rosehulman.rafinder.adapter.RAListArrayAdapter;
+import edu.rosehulman.rafinder.model.dummy.DummyData;
+import edu.rosehulman.rafinder.model.person.Employee;
+import edu.rosehulman.rafinder.model.person.Resident;
+import edu.rosehulman.rafinder.model.person.ResidentAssistant;
+import edu.rosehulman.rafinder.model.person.SophomoreAdvisor;
 
 /**
  * The Home Page.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements RAListArrayAdapter.RAListArrayAdapterCallbacks{
     private HomeListener mListener;
 
     /**
@@ -37,7 +49,22 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View v= inflater.inflate(R.layout.fragment_home, container, false);
+        ListView listViewMyRA= (ListView) v.findViewById(R.id.myRAView);
+        ListView listViewMySA= (ListView) v.findViewById(R.id.mySAsView);
+        ListView listViewMyHallRA= (ListView) v.findViewById(R.id.myHallRAsFragment);
+        List<ResidentAssistant> myRAs= DummyData.getMyRAs();
+        List<SophomoreAdvisor> mySAs=DummyData.getMySAs();
+        List<Employee> hallRAs=DummyData.getMyHallResLife();
+        RAListArrayAdapter<ResidentAssistant> mAdapter1= new RAListArrayAdapter<ResidentAssistant>(this.getActivity(), R.layout.fragment_home, myRAs, this);
+        listViewMyRA.setAdapter(mAdapter1);
+        RAListArrayAdapter<Employee> mAdapter2= new RAListArrayAdapter<Employee>(this.getActivity(), R.layout.fragment_home, hallRAs, this);
+        listViewMyHallRA.setAdapter(mAdapter2);
+        RAListArrayAdapter<SophomoreAdvisor> mAdapter3= new RAListArrayAdapter<SophomoreAdvisor>(this.getActivity(), R.layout.fragment_home, mySAs, this);
+        listViewMySA.setAdapter(mAdapter3);
+        return v;
+
+
     }
 
     @Override
@@ -57,8 +84,15 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void moreDetailsRequested(Employee RA) {
+        mListener.switchToProfile(RA);
+    }
+
     public interface HomeListener {
         public void onHomeInteraction();
+        public void switchToProfile(Resident res);
+
     }
 
 }

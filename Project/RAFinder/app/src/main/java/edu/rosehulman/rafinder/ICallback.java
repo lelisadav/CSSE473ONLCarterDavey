@@ -5,6 +5,7 @@ import edu.rosehulman.rafinder.controller.HomeFragment;
 import edu.rosehulman.rafinder.controller.reslife.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
 import edu.rosehulman.rafinder.controller.reslife.ProfileFragment;
+import edu.rosehulman.rafinder.controller.student.StudentProfileFragment;
 
 /**
  * Superinterface for Fragment callbacks.
@@ -15,5 +16,7 @@ public interface ICallback
                 ProfileFragment.ProfileListener,
                 EmergencyContactsFragment.EmergencyContactsListener,
                 DutyRosterFragment.DutyRosterListener,
-                HallRosterFragment.HallRosterListener {
+                HallRosterFragment.HallRosterListener,
+                StudentProfileFragment.StudentProfileListener
+{
 }

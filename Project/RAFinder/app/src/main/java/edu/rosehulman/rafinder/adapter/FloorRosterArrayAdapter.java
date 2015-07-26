@@ -11,7 +11,10 @@ import java.util.List;
 
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.model.RoomEntry;
+import edu.rosehulman.rafinder.model.person.GraduateAssistant;
 import edu.rosehulman.rafinder.model.person.Resident;
+import edu.rosehulman.rafinder.model.person.ResidentAssistant;
+import edu.rosehulman.rafinder.model.person.SophomoreAdvisor;
 
 public class FloorRosterArrayAdapter extends ArrayAdapter<RoomEntry> {
     private final Context context;
@@ -52,18 +55,32 @@ public class FloorRosterArrayAdapter extends ArrayAdapter<RoomEntry> {
         RoomEntry item = super.getItem(position);
         if (item instanceof RoomEntry.Lobby) {
             for (TextView textView : textViews) {
-                textView.setVisibility(View.GONE);
+                textView.setVisibility(View.INVISIBLE);
                 roomNumberText.setTextSize(42);
             }
         } else {
             final Resident[] residents = item.getResidents();
             int numResidents = residents.length;
             for (int i = 0; i < 5; i++) {
+
                 if (numResidents <= i) {
-                    textViews[i].setVisibility(View.GONE);
+                    textViews[i].setVisibility(View.INVISIBLE);
                 } else {
                     textViews[i].setText(residents[i].getName());
+                    if (residents[i] instanceof ResidentAssistant){
+                        textViews[i].setTextColor(context.getResources().getColor(R.color.red));
+                        textViews[i].setText(textViews[i].getText()+" (RA)");
+                    }
+                    else if (residents[i] instanceof SophomoreAdvisor){
+                        textViews[i].setTextColor(context.getResources().getColor(R.color.blue));
+                        textViews[i].setText(textViews[i].getText() + " (SA)");
+                    }
+                    else if (residents[i] instanceof GraduateAssistant){
+                        textViews[i].setTextColor(context.getResources().getColor(R.color.green));
+                        textViews[i].setText(textViews[i].getText()+" (GA)");
+                    }
                 }
+
             }
         }
         roomNumberText.setText(item.getRoomNumber());

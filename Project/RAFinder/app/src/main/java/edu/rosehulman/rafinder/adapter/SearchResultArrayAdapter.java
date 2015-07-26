@@ -62,7 +62,7 @@ public class SearchResultArrayAdapter extends ArrayAdapter<SearchResultItem> {
                 Employee emp = (Employee) objects.get(position);
                 nameText.setText(emp.getName());
                 roomText.setText(emp.getFloor());
-                statusText.setText(emp.getDutyStatus());
+                statusText.setText(emp.getLocation());
                 statusText.setVisibility(View.VISIBLE);
             } else {
                 Resident res = (Resident) objects.get(position);

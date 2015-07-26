@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.rosehulman.rafinder.R;
+import edu.rosehulman.rafinder.model.person.Resident;
 
 /**
  * The RA view of the Profile Page.
@@ -18,7 +19,7 @@ import edu.rosehulman.rafinder.R;
  */
 public class ProfileFragment extends Fragment {
     private ProfileListener mListener;
-
+    private Resident resident;
     /**
      * Use this factory method to create a new instance of this fragment using the provided parameters.
      *
@@ -34,12 +35,15 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (mListener!=null){
+            resident=mListener.getSelectedResident();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+       return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     @Override
@@ -60,6 +64,7 @@ public class ProfileFragment extends Fragment {
 
     public interface ProfileListener {
         public void onProfileInteraction();
+        public Resident getSelectedResident();
     }
 
 }

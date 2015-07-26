@@ -19,6 +19,7 @@ import java.util.List;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.DutyRosterArrayAdapter;
 import edu.rosehulman.rafinder.model.DutyRosterItem;
+import edu.rosehulman.rafinder.model.dummy.DummyData;
 
 
 /**
@@ -28,7 +29,7 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
 
     private String firebaseURL;
 
-    private List<DutyRosterItem> rosterItems;
+    private List<DutyRosterItem> rosterItems= DummyData.getDutyRoster();
     private OnFragmentInteractionListener mListener;
 
     /**

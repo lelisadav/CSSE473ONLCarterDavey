@@ -16,6 +16,9 @@ import edu.rosehulman.rafinder.controller.HomeFragment;
 import edu.rosehulman.rafinder.controller.reslife.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
 import edu.rosehulman.rafinder.controller.reslife.ProfileFragment;
+import edu.rosehulman.rafinder.controller.student.StudentProfileFragment;
+import edu.rosehulman.rafinder.model.dummy.DummyData;
+import edu.rosehulman.rafinder.model.person.Resident;
 
 /**
  * The container activity for the entire app.
@@ -26,7 +29,7 @@ public class MainActivity extends Activity implements ICallback {
     private static final int EMERGENCY_CONTACTS = 2;
     private static final int DUTY_ROSTER = 3;
     private static final int HALL_ROSTER = 4;
-
+    private Resident selectedResident;
     public static boolean isRA = true;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -63,9 +66,10 @@ public class MainActivity extends Activity implements ICallback {
         case HOME:
             fragment = HomeFragment.newInstance();
             break;
-        case MY_RA:
-            fragment = ProfileFragment.newInstance();
-            break;
+//        case MY_RA:
+////            this.selectedResident= DummyData.getMyRAs().get(0);
+//            fragment = StudentProfileFragment.newInstance();
+//            break;
         case EMERGENCY_CONTACTS:
             fragment = EmergencyContactsFragment.newInstance();
             break;
@@ -166,7 +170,28 @@ public class MainActivity extends Activity implements ICallback {
     }
 
     @Override
+    public void switchToProfile(Resident res) {
+        this.selectedResident=res;
+        FragmentManager fragmentManager = getFragmentManager();
+        Fragment fragment=StudentProfileFragment.newInstance();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
+
+    }
+
+    @Override
     public void onProfileInteraction() {
 
+    }
+
+    @Override
+    public void onStudentProfileInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public Resident getSelectedResident() {
+        return this.selectedResident;
     }
 }

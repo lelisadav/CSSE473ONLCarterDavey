@@ -18,6 +18,7 @@ import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.FloorRosterArrayAdapter;
 import edu.rosehulman.rafinder.model.Hall;
 import edu.rosehulman.rafinder.model.RoomEntry;
+import edu.rosehulman.rafinder.model.dummy.DummyData;
 
 /**
  * The RA's view of a listing for a floor's residents
@@ -27,7 +28,7 @@ public class HallRosterFragment extends Fragment
 
     private Hall hall;
     private int floorIndex; //not necessarily the floor number
-    private List<RoomEntry> rooms;
+    private List<RoomEntry> rooms= DummyData.getRooms();
 
     private HallRosterListener mListener;
 

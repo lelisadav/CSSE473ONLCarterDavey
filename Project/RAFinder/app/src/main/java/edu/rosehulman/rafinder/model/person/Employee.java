@@ -5,10 +5,22 @@ package edu.rosehulman.rafinder.model.person;
  */
 public class Employee extends Resident {
 
-    private String name;
+    //private String name;
     private String phoneNumber;
-    private String dutyStatus;
+    private String emailAddress;
+
+    private String location;
+
     private String floor;
+    public Employee(String name, String room, String floor, String hall, String phoneNumber,String email,  String location){
+        super(name, room, hall);
+        this.floor=floor;
+        this.phoneNumber=phoneNumber;
+        this.emailAddress=email;
+
+        this.location=location;
+
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -18,21 +30,9 @@ public class Employee extends Resident {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public String getDutyStatus() {
-        return dutyStatus;
-    }
 
-    public void setDutyStatus(String dutyStatus) {
-        this.dutyStatus = dutyStatus;
-    }
     public String getFloor() {
         return floor;
     }
@@ -40,5 +40,23 @@ public class Employee extends Resident {
     public void setFloor(String floor) {
         this.floor = floor;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
 
 }

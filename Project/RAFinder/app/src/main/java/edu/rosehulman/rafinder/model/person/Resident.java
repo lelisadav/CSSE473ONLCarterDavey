@@ -2,9 +2,16 @@ package edu.rosehulman.rafinder.model.person;
 
 import edu.rosehulman.rafinder.model.SearchResultItem;
 
-public abstract class Resident implements SearchResultItem {
+public class Resident implements SearchResultItem {
     private String name;
     private String room;
+    private String hall;
+
+    public Resident(String name, String room, String hall){
+        this.name=name;
+        this.room=room;
+        this.hall=hall;
+    }
 
     public String getName() {
         return name;
@@ -19,6 +26,14 @@ public abstract class Resident implements SearchResultItem {
     }
     public void setRoom(String room){
         this.room=room;
+    }
+
+    public String getHall() {
+        return hall;
+    }
+
+    public void setHall(String hall) {
+        this.hall = hall;
     }
 
 
