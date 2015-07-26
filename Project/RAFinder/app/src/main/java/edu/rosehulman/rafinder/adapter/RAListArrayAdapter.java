@@ -12,11 +12,7 @@ import java.util.List;
 
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.model.person.Employee;
-import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 
-/**
- * Created by daveyle on 7/25/2015.
- */
 public class RAListArrayAdapter<T extends Employee> extends ArrayAdapter<T> {
     private final Context context;
     private final List<T> objects;
@@ -24,8 +20,8 @@ public class RAListArrayAdapter<T extends Employee> extends ArrayAdapter<T> {
     private RAListArrayAdapterCallbacks mListener;
 
     public RAListArrayAdapter(Context context, int textViewResourceId, List<T> objects, RAListArrayAdapterCallbacks callbacks) {
-        super(context, R.layout.ra_list_item_view, textViewResourceId, objects);
-        this.layout = R.layout.ra_list_item_view;
+        super(context, R.layout.layout_ra_item, textViewResourceId, objects);
+        this.layout = R.layout.layout_ra_item;
         this.context = context;
         this.objects = objects;
         this.mListener= callbacks;
