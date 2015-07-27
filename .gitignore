@@ -1,2 +1,7 @@
-*.bin
-Project/RAFinder/.gradle/2.2.1/taskArtifacts/cache.properties.lock
+/Project/RAFinder/.gradle
+/Project/RAFinder/local.properties
+/Project/RAFinder/.idea/workspace.xml
+/Project/RAFinder/.idea/libraries
+.DS_Store
+/Project/RAFinder/build
+/Project/RAFinder/captures
