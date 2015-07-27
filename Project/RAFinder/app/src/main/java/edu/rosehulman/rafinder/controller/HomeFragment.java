@@ -50,18 +50,7 @@ public class HomeFragment extends Fragment implements RAListArrayAdapter.RAListA
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_home, container, false);
-        ListView listViewMyRA= (ListView) v.findViewById(R.id.myRAView);
-        ListView listViewMySA= (ListView) v.findViewById(R.id.mySAsView);
-        ListView listViewMyHallRA= (ListView) v.findViewById(R.id.myHallRAsFragment);
-        List<ResidentAssistant> myRAs= DummyData.getMyRAs();
-        List<SophomoreAdvisor> mySAs=DummyData.getMySAs();
-        List<Employee> hallRAs=DummyData.getMyHallResLife();
-        RAListArrayAdapter<ResidentAssistant> mAdapter1= new RAListArrayAdapter<ResidentAssistant>(this.getActivity(), R.layout.fragment_home, myRAs, this);
-        listViewMyRA.setAdapter(mAdapter1);
-        RAListArrayAdapter<Employee> mAdapter2= new RAListArrayAdapter<Employee>(this.getActivity(), R.layout.fragment_home, hallRAs, this);
-        listViewMyHallRA.setAdapter(mAdapter2);
-        RAListArrayAdapter<SophomoreAdvisor> mAdapter3= new RAListArrayAdapter<SophomoreAdvisor>(this.getActivity(), R.layout.fragment_home, mySAs, this);
-        listViewMySA.setAdapter(mAdapter3);
+
         return v;
 
 

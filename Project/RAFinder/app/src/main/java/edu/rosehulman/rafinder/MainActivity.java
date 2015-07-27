@@ -11,12 +11,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 import edu.rosehulman.rafinder.controller.EmergencyContactsFragment;
 import edu.rosehulman.rafinder.controller.HomeFragment;
 import edu.rosehulman.rafinder.controller.reslife.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
 import edu.rosehulman.rafinder.controller.student.StudentProfileFragment;
 import edu.rosehulman.rafinder.model.dummy.DummyData;
+import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.Resident;
 
 /**
@@ -28,7 +31,7 @@ public class MainActivity extends Activity implements ICallback {
     private static final int EMERGENCY_CONTACTS = 2;
     private static final int DUTY_ROSTER = 3;
     private static final int HALL_ROSTER = 4;
-    private Resident selectedResident;
+    private Resident selectedResident=DummyData.getMyRAs().get(0);
     public static boolean isRA = false;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -67,8 +70,9 @@ public class MainActivity extends Activity implements ICallback {
             break;
         case MY_RA:
             switchToProfile(DummyData.getMyRAs().get(0));
-            fragment = StudentProfileFragment.newInstance();
-            break;
+            //fragment = StudentProfileFragment.newInstance();
+            //break;
+            return;
         case EMERGENCY_CONTACTS:
             fragment = EmergencyContactsFragment.newInstance();
             break;
@@ -143,9 +147,17 @@ public class MainActivity extends Activity implements ICallback {
     public void dialPhoneNumber(String phoneNumber) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phoneNumber));
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
+//        if (intent.resolveActivity(getPackageManager()) != null) {
+//            startActivity(intent);
+//        }
+    }
+    public void sendEmail(String emailAddress){
+
+    }
+
+    @Override
+    public List<Employee> getEmergencyContacts() {
+        return DummyData.getEmergencyContacts();
     }
 
     @Override
@@ -165,6 +177,21 @@ public class MainActivity extends Activity implements ICallback {
 
     @Override
     public void onHomeInteraction() {
+
+    }
+
+    @Override
+    public void onHomeMyHallInteraction() {
+
+    }
+
+    @Override
+    public void onHomeMyRAInteraction() {
+
+    }
+
+    @Override
+    public void onHomeMySAInteraction() {
 
     }
 

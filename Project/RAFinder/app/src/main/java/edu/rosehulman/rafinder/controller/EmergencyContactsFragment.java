@@ -6,14 +6,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.List;
 
 import edu.rosehulman.rafinder.R;
+import edu.rosehulman.rafinder.adapter.EmergencyContactArrayAdapter;
+import edu.rosehulman.rafinder.model.person.Employee;
 
 /**
- * The Emergency Contacts list. Contains items of type {@link EmergencyContactFragment}.
+ * The Emergency Contacts list. Contains items of type {@link Employee}.
  */
-public class EmergencyContactsFragment extends Fragment {
+public class EmergencyContactsFragment extends Fragment implements EmergencyContactArrayAdapter.EmergencyContactCallbacks {
     private EmergencyContactsListener mListener;
+    private List<Employee> emergencyContacts;
 
     /**
      * Use this factory method to create a new instance of this fragment using the provided parameters.
@@ -31,13 +37,21 @@ public class EmergencyContactsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (mListener!=null){
+            emergencyContacts=mListener.getEmergencyContacts();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_emergency_contacts, container, false);
+        View view= inflater.inflate(R.layout.fragment_emergency_contacts, container, false);
+        ListView listView= (ListView) view.findViewById(R.id.emergencyContactsListView);
+        EmergencyContactArrayAdapter mAdapter= new EmergencyContactArrayAdapter(this.getActivity(), R.layout.fragment_emergency_contacts, emergencyContacts, this);
+        listView.setAdapter(mAdapter);
+        return view;
+
     }
 
     @Override
@@ -57,8 +71,27 @@ public class EmergencyContactsFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void makePhoneCall(String phoneNumber) {
+        if (mListener!=null){
+            mListener.dialPhoneNumber(phoneNumber);
+        }
+
+    }
+
+    @Override
+    public void sendEmail(String emailAddress) {
+        if (mListener!=null){
+            mListener.sendEmail(emailAddress);
+        }
+
+    }
+
     public interface EmergencyContactsListener {
         public void onEmergencyContactsInteraction();
+        public void dialPhoneNumber(String phoneNumber);
+        public void sendEmail(String emailAddress);
+        public List<Employee> getEmergencyContacts();
     }
 
 }

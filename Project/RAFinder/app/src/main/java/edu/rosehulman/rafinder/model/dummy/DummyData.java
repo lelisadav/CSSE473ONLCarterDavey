@@ -7,6 +7,7 @@ import java.util.List;
 
 import edu.rosehulman.rafinder.model.DutyRosterItem;
 import edu.rosehulman.rafinder.model.RoomEntry;
+import edu.rosehulman.rafinder.model.person.Administrator;
 import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.Resident;
 import edu.rosehulman.rafinder.model.person.ResidentAssistant;
@@ -25,7 +26,7 @@ public class DummyData {
     private static ResidentAssistant RA3 = new ResidentAssistant("Calcifer", "304", "3", "BSB", "1-(555)-555-5557", "scaryPowerfulFireDemon@howl.org", "Union");
 
     private static Resident resfa = new Resident("Arya Stark", "101", "BSB");
-    private static Resident resfb = new Resident("Beifong Toph", "101", "BSB");
+    private static Resident resfb = new Resident("Beifong Toph, Melon Lord", "101", "BSB");
     private static Resident resfc = new Resident("Carol Marcus", "101", "BSB");
     private static Resident resfd = new Resident("Daenerys Targaryen", "101", "BSB");
 
@@ -78,8 +79,8 @@ public class DummyData {
     private static Resident[] room3 = { resmd, resme, resmf, resmg };
 
     private static Resident resmh = new Resident("Hikaru Sulu", "105", "BSB");
-    private static SophomoreAdvisor resmi = new SophomoreAdvisor("Ianto Jones", "105", "1", "BSB", "1-(555)-5560", "battleButler@torchwood.com", "In my room--Do not disturb");
-    private static SophomoreAdvisor resmj = new SophomoreAdvisor("Jack Harkness, Capt.", "105", "1", "BSB", "1-(555)-5559", "wheresMyStopwatch@torchwood.com", "In my room--Do not disturb");
+    private static SophomoreAdvisor resmi = new SophomoreAdvisor("Ianto Jones", "105", "1", "BSB", "1-(555)-555-5560", "battleButler@torchwood.com", "In my room--Do not disturb");
+    private static SophomoreAdvisor resmj = new SophomoreAdvisor("Jack Harkness, Capt.", "105", "1", "BSB", "1-(555)-555-5559", "wheresMyStopwatch@torchwood.com", "In my room--Do not disturb");
     private static Resident[] room5 = { resmh, resmi, resmj };
 
     private static Resident resmk = new Resident("Kraft Lawrence", "107", "BSB");
@@ -105,6 +106,7 @@ public class DummyData {
     private static Resident resmy = new Resident("Yana, Professor", "112", "BSB");
     private static Resident resmz = new Resident("Zuko, Fire Lord", "112", "BSB");
 
+    private static Administrator gandalf= new Administrator("Gandalf the Grey", "N/A", "N/A", "N/A", "1-(555)-867-5309", "disturberOfThePeace@arda.net", "Library");
 
     private static Resident[] room12 = { resmv, resmw, resmx, resmy, resmz };
 
@@ -163,6 +165,16 @@ public class DummyData {
         ras.add(RA2);
         ras.add(RA3);
         return ras;
+    }
+    public static List<Employee> getEmergencyContacts(){
+        List<Employee> emergencyContacts= new ArrayList<Employee>();
+        emergencyContacts.add(resms);
+        emergencyContacts.add(RA1);
+        emergencyContacts.add(RA1b);
+        emergencyContacts.add(RA2);
+        emergencyContacts.add(RA3);
+        emergencyContacts.add(gandalf);
+        return emergencyContacts;
     }
 
 
