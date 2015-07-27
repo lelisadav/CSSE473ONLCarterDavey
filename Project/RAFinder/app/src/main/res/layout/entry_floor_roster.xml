@@ -2,99 +2,107 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/background_rectangle">
+    android:background="@drawable/background_rectangle"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/roomNumberTextView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
+        android:layout_weight="0.25"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:text="Medium Text"
+        android:text="@string/hall_roster_room_default"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_weight=".25" />
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight=".25">
+        android:layout_height="wrap_content"
+        android:layout_weight=".25"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/roommate1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:paddingBottom="5dp"
-            android:paddingLeft="5dp"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:paddingRight="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
             android:background="@drawable/background_grey_rectangle"
             android:gravity="center_vertical"
-            android:layout_weight=".5" />
+            android:lines="4"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/name_default"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
             android:id="@+id/roommate2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="0.5"
+            android:background="@drawable/background_grey_rectangle"
+            android:gravity="center_vertical"
+            android:lines="4"
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:background="@drawable/background_grey_rectangle"
-            android:gravity="center_vertical"
-            android:layout_gravity="right"
-            android:layout_weight=".5" />
+            android:text="@string/name_default"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight=".25">
+        android:layout_height="wrap_content"
+        android:layout_weight=".25"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/roommate3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:paddingBottom="5dp"
-            android:paddingLeft="5dp"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:paddingRight="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
             android:background="@drawable/background_grey_rectangle"
             android:gravity="center_vertical"
-            android:layout_weight=".5" />
+            android:lines="4"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/name_default"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
             android:id="@+id/roommate4"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="0.5"
+            android:background="@drawable/background_grey_rectangle"
+            android:gravity="center_vertical"
+            android:lines="4"
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:background="@drawable/background_grey_rectangle"
-            android:gravity="center_vertical"
-            android:layout_gravity="right"
-            android:layout_weight=".5" />
+            android:text="@string/name_default"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
     </LinearLayout>
 
     <TextView
         android:id="@+id/roommate5"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_weight="0.25"
+        android:background="@drawable/background_grey_rectangle"
         android:gravity="center_vertical|center_horizontal"
+        android:lines="4"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="Small Text"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:background="@drawable/background_grey_rectangle"
-        android:layout_weight=".25" />
+        android:text="@string/name_default"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 </LinearLayout>
