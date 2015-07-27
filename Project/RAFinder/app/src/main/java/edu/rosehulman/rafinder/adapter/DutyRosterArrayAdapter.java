@@ -60,6 +60,12 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
                          sunday.toString("M/d");
         weekendText.setText(weekend);
         friNameText.setText(fridayDuty.getName());
+        friNameText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) context).switchToProfile(fridayDuty);
+            }
+        });
         friButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +77,12 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
             @Override
             public void onClick(View view) {
                 ((MainActivity) context).dialPhoneNumber(saturdayDuty.getPhoneNumber());
+            }
+        });
+        satNameText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) context).switchToProfile(saturdayDuty);
             }
         });
         view.refreshDrawableState();
