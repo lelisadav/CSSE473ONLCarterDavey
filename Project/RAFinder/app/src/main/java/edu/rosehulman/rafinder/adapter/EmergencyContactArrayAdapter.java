@@ -69,7 +69,7 @@ public class EmergencyContactArrayAdapter  extends ArrayAdapter<Employee> {
         TextView callTV= (TextView) view.findViewById(R.id.callTextView);
         TextView emailTV= (TextView) view.findViewById(R.id.emailTextView);
         callTV.setText(selected.getPhoneNumber());
-        emailTV.setText(selected.getEmailAddress());
+        emailTV.setText(selected.getEmail());
 
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +80,7 @@ public class EmergencyContactArrayAdapter  extends ArrayAdapter<Employee> {
         emailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.sendEmail(selected.getEmailAddress());
+                mCallbacks.sendEmail(selected.getEmail());
             }
         });
         view.refreshDrawableState();

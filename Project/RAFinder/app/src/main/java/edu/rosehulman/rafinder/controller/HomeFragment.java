@@ -2,24 +2,15 @@ package edu.rosehulman.rafinder.controller;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import java.util.List;
 
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.RAListArrayAdapter;
-import edu.rosehulman.rafinder.model.dummy.DummyData;
 import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.Resident;
-import edu.rosehulman.rafinder.model.person.ResidentAssistant;
-import edu.rosehulman.rafinder.model.person.SophomoreAdvisor;
 
 /**
  * The Home Page.
@@ -79,8 +70,7 @@ public class HomeFragment extends Fragment implements RAListArrayAdapter.RAListA
     }
 
     public interface HomeListener {
-        public void onHomeInteraction();
-        public void switchToProfile(Resident res);
+        public void switchToProfile(Employee res);
 
     }
 

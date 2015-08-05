@@ -5,21 +5,54 @@ package edu.rosehulman.rafinder.model.person;
  */
 public class Employee extends Resident {
 
-    //private String name;
+    private String email;
+    private int floor;
+    private String hall;
     private String phoneNumber;
-    private String emailAddress;
+    private int room;
+    private String status;
+    private String statusDetail;
 
-    private String location;
+    public Employee(String name,
+                    String email,
+                    int floor,
+                    String hall,
+                    String phoneNumber,
+                    int room,
+                    String status,
+                    String statusDetail) {
+        super(name);
+        this.email = email;
+        this.floor = floor;
+        this.hall = hall;
+        this.phoneNumber = phoneNumber;
+        this.room = room;
+        this.status = status;
+        this.statusDetail = statusDetail;
+    }
 
-    private String floor;
-    public Employee(String name, String room, String floor, String hall, String phoneNumber,String email,  String location){
-        super(name, room, hall);
-        this.floor=floor;
-        this.phoneNumber=phoneNumber;
-        this.emailAddress=email;
+    public String getEmail() {
+        return email;
+    }
 
-        this.location=location;
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
+    public String getHall() {
+        return hall;
+    }
+
+    public void setHall(String hall) {
+        this.hall = hall;
     }
 
     public String getPhoneNumber() {
@@ -30,32 +63,28 @@ public class Employee extends Resident {
         this.phoneNumber = phoneNumber;
     }
 
-
-
-
-    public String getFloor() {
-        return floor;
+    public int getRoom() {
+        return room;
     }
 
-    public void setFloor(String floor) {
-        this.floor = floor;
+    public void setRoom(int room) {
+        this.room = room;
     }
 
-    public String getLocation() {
-        return location;
+    public String getStatus() {
+        return status;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getStatusDetail() {
+        return statusDetail;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setStatusDetail(String statusDetail) {
+        this.statusDetail = statusDetail;
     }
 
 

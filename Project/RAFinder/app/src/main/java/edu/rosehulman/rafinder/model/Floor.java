@@ -13,10 +13,10 @@ public class Floor {
     private int number;
     private List<RoomEntry> rooms;
 
-    public Floor(int number, List<RoomEntry> rooms, int lobbyAfterRoomNumber){
-        this.number=number;
-        this.rooms=rooms;
-        this.lobbyAfterRoomNumber=lobbyAfterRoomNumber;
+    public Floor(int number, List<RoomEntry> rooms, int lobbyAfterRoomNumber) {
+        this.number = number;
+        this.rooms = rooms;
+        this.lobbyAfterRoomNumber = lobbyAfterRoomNumber;
     }
 
     public List<RoomEntry> getRooms() {

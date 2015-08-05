@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.DutyRosterArrayAdapter;
@@ -32,11 +31,11 @@ public class DutyRosterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =inflater.inflate(R.layout.fragment_student_duty_roster, container, false);
-        Log.i("RA Finder", DummyData.getDutyRoster().size()+"");
-        ListView listView= (ListView) view.findViewById(R.id.dutyRosterListView);
-        Toast.makeText(this.getActivity(),DummyData.getDutyRoster().size()+"", Toast.LENGTH_LONG );
-        mAdapter=new DutyRosterArrayAdapter(this.getActivity(), R.layout.fragment_student_duty_roster_widget, DummyData.getDutyRoster());
+        View view = inflater.inflate(R.layout.fragment_student_duty_roster, container, false);
+        Log.i("RA Finder", DummyData.getDutyRoster().size() + "");
+        ListView listView = (ListView) view.findViewById(R.id.dutyRosterListView);
+//        Toast.makeText(this.getActivity(), DummyData.getDutyRoster().size() + "", Toast.LENGTH_LONG).show();
+        mAdapter = new DutyRosterArrayAdapter(this.getActivity(), R.layout.fragment_student_duty_roster_widget, DummyData.getDutyRoster());
         listView.setAdapter(mAdapter);
         return view;
     }
@@ -63,6 +62,5 @@ public class DutyRosterFragment extends Fragment {
     }
 
     public interface DutyRosterListener {
-        public void onDutyRosterInteraction();
     }
 }

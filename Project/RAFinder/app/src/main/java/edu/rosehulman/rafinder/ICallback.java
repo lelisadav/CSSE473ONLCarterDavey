@@ -21,8 +21,7 @@ public interface ICallback
                 DutyRosterFragment.DutyRosterListener,
                 HallRosterFragment.HallRosterListener,
                 StudentProfileFragment.StudentProfileListener,
-        HomeFragmentSubsectionMyHallRAs.HomeMyHallListener,
-        HomeFragmentSubsectionMyRA.HomeMyRAListener,
-        HomeFragmentSubsectionMySAs.HomeMySAListener
-{
+                HomeFragmentSubsectionMyHallRAs.HomeMyHallListener,
+                HomeFragmentSubsectionMyRA.HomeMyRAListener,
+                HomeFragmentSubsectionMySAs.HomeMySAListener {
 }

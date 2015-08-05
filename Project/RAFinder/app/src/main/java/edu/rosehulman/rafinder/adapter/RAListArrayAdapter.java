@@ -47,7 +47,7 @@ public class RAListArrayAdapter<T extends Employee> extends ArrayAdapter<T> {
         ImageButton button= (ImageButton) view.findViewById(R.id.raMoreDetails);
         final T RA= objects.get(position);
         nameTV.setText(RA.getName());
-        statusTV.setText(RA.getLocation());
+        statusTV.setText(RA.getStatus());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -88,7 +88,6 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyCont
     }
 
     public interface EmergencyContactsListener {
-        public void onEmergencyContactsInteraction();
         public void dialPhoneNumber(String phoneNumber);
         public void sendEmail(String emailAddress);
         public List<Employee> getEmergencyContacts();
