@@ -28,7 +28,7 @@ public class HallRosterFragment extends Fragment
 
     private Hall hall;
     private int floorIndex; //not necessarily the floor number
-    private List<RoomEntry> rooms= DummyData.getRooms();
+    private List<RoomEntry> rooms = DummyData.getRooms();
 
     private HallRosterListener mListener;
 
@@ -125,7 +125,6 @@ public class HallRosterFragment extends Fragment
     }
 
     public interface HallRosterListener {
-        public void onHallRosterInteraction();
     }
 
 }

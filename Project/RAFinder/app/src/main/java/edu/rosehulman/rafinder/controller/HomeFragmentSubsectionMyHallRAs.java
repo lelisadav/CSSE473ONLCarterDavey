@@ -1,9 +1,8 @@
 package edu.rosehulman.rafinder.controller;
 
 import android.app.Activity;
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +18,6 @@ import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.RAListArrayAdapter;
 import edu.rosehulman.rafinder.model.dummy.DummyData;
 import edu.rosehulman.rafinder.model.person.Employee;
-import edu.rosehulman.rafinder.model.person.Resident;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -158,8 +156,7 @@ public class HomeFragmentSubsectionMyHallRAs extends Fragment implements RAListA
     }
 
     public interface HomeMyHallListener {
-        public void onHomeMyHallInteraction();
-        public void switchToProfile(Resident res);
+        public void switchToProfile(Employee res);
 
     }
 

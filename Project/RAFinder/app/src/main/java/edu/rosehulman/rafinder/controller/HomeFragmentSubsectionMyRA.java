@@ -1,9 +1,8 @@
 package edu.rosehulman.rafinder.controller;
 
 import android.app.Activity;
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,8 +18,6 @@ import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.RAListArrayAdapter;
 import edu.rosehulman.rafinder.model.dummy.DummyData;
 import edu.rosehulman.rafinder.model.person.Employee;
-import edu.rosehulman.rafinder.model.person.Resident;
-import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -88,8 +85,8 @@ public class HomeFragmentSubsectionMyRA extends Fragment implements RAListArrayA
                 return false;
             }
         });
-        List<ResidentAssistant> hallRAs= DummyData.getMyRAs();
-        RAListArrayAdapter<ResidentAssistant> mAdapter2= new RAListArrayAdapter<ResidentAssistant>(this.getActivity(), R.layout.fragment_home, hallRAs, this);
+        List<Employee> hallRAs= DummyData.getMyRAs();
+        RAListArrayAdapter<Employee> mAdapter2= new RAListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallRAs, this);
         listView.setAdapter(mAdapter2);
         setListViewHeightBasedOnChildren(listView);
         final ToggleButton toggleButton=(ToggleButton) view.findViewById(R.id.myRAexpander);
@@ -157,8 +154,7 @@ public class HomeFragmentSubsectionMyRA extends Fragment implements RAListArrayA
     }
 
     public interface HomeMyRAListener {
-        public void onHomeMyRAInteraction();
-        public void switchToProfile(Resident res);
+        public void switchToProfile(Employee res);
 
     }
 
