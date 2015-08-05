@@ -5,3 +5,5 @@
 .DS_Store
 /Project/RAFinder/build
 /Project/RAFinder/captures
+/Project/RAFinder/.idea/gradle.xml
+/Project/RAFinder/.idea/misc.xml
