@@ -20,7 +20,6 @@ import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
 import edu.rosehulman.rafinder.controller.student.StudentProfileFragment;
 import edu.rosehulman.rafinder.model.dummy.DummyData;
 import edu.rosehulman.rafinder.model.person.Employee;
-import edu.rosehulman.rafinder.model.person.Resident;
 
 /**
  * The container activity for the entire app.
@@ -31,8 +30,8 @@ public class MainActivity extends Activity implements ICallback {
     private static final int EMERGENCY_CONTACTS = 2;
     private static final int DUTY_ROSTER = 3;
     private static final int HALL_ROSTER = 4;
-    private Resident selectedResident=DummyData.getMyRAs().get(0);
-    public static boolean isRA = false;
+    private Employee selectedResident = DummyData.getMyRAs().get(0);
+    public static boolean isRA = true; // TODO: set this from the login data
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -151,7 +150,8 @@ public class MainActivity extends Activity implements ICallback {
 //            startActivity(intent);
 //        }
     }
-    public void sendEmail(String emailAddress){
+
+    public void sendEmail(String emailAddress) {
 
     }
 
@@ -161,63 +161,17 @@ public class MainActivity extends Activity implements ICallback {
     }
 
     @Override
-    public void onDutyRosterInteraction() {
-
-    }
-
-    @Override
-    public void onEmergencyContactsInteraction() {
-
-    }
-
-    @Override
-    public void onHallRosterInteraction() {
-
-    }
-
-    @Override
-    public void onHomeInteraction() {
-
-    }
-
-    @Override
-    public void onHomeMyHallInteraction() {
-
-    }
-
-    @Override
-    public void onHomeMyRAInteraction() {
-
-    }
-
-    @Override
-    public void onHomeMySAInteraction() {
-
-    }
-
-    @Override
-    public void switchToProfile(Resident res) {
-        this.selectedResident=res;
+    public void switchToProfile(Employee res) {
+        selectedResident = res;
         FragmentManager fragmentManager = getFragmentManager();
-        Fragment fragment=StudentProfileFragment.newInstance();
+        Fragment fragment = StudentProfileFragment.newInstance();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
-
     }
 
     @Override
-    public void onProfileInteraction() {
-
-    }
-
-    @Override
-    public void onStudentProfileInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public Resident getSelectedResident() {
-        return this.selectedResident;
+    public Employee getSelectedResident() {
+        return selectedResident;
     }
 }

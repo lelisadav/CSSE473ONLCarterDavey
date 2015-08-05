@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.rosehulman.rafinder.R;
+import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.Resident;
 
 /**
@@ -63,8 +64,7 @@ public class ProfileFragment extends Fragment {
     }
 
     public interface ProfileListener {
-        public void onProfileInteraction();
-        public Resident getSelectedResident();
+        public Employee getSelectedResident();
     }
 
 }

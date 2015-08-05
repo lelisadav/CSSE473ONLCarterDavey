@@ -30,7 +30,6 @@ public class SearchResultArrayAdapter extends ArrayAdapter<SearchResultItem> {
         this.objects = objects;
     }
 
-
     @Override
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
@@ -49,6 +48,7 @@ public class SearchResultArrayAdapter extends ArrayAdapter<SearchResultItem> {
         TextView nameText = (TextView) view.findViewById(R.id.nameTextView);
         TextView roomText = (TextView) view.findViewById(R.id.roomTextView);
         TextView statusText = (TextView) view.findViewById(R.id.dutyStatusTextView);
+        TextView statusDetailText = (TextView) view.findViewById(R.id.statusDetailTextView);
         if (objects.get(position) instanceof Resident) {
             Drawable personDrawable;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -57,19 +57,12 @@ public class SearchResultArrayAdapter extends ArrayAdapter<SearchResultItem> {
                 personDrawable = context.getResources().getDrawable(R.drawable.ic_person);
             }
 
-
-            if (objects.get(position) instanceof Employee) {
-                Employee emp = (Employee) objects.get(position);
-                nameText.setText(emp.getName());
-                roomText.setText(emp.getFloor());
-                statusText.setText(emp.getLocation());
-                statusText.setVisibility(View.VISIBLE);
-            } else {
-                Resident res = (Resident) objects.get(position);
-                nameText.setText(res.getName());
-                roomText.setText(res.getRoom());
-                statusText.setVisibility(View.GONE);
-            }
+            Employee emp = (Employee) objects.get(position);
+            nameText.setText(emp.getName());
+            roomText.setText(String.valueOf(emp.getFloor()));
+            statusText.setText(emp.getStatus());
+            statusDetailText.setText(emp.getStatusDetail());
+            roomText.setText(String.valueOf(emp.getRoom()));
             typeIcon.setBackground(personDrawable);
         } else {
             Drawable hallDrawable;

@@ -15,17 +15,10 @@ public class RoomEntry {
     public RoomEntry() {
 
     }
-    public RoomEntry(Resident[] residents, String hallName, String roomNumber){
-        this.residents=residents;
-        this.hallName=hallName;
-        this.roomNumber=roomNumber;
-    }
 
-    public Resident[] getResidents() {
-        return residents;
-    }
-
-    public void setResidents(Resident[] residents) {
+    public RoomEntry(String hallName, String roomNumber, Resident... residents) {
+        this.hallName = hallName;
+        this.roomNumber = roomNumber;
         this.residents = residents;
     }
 
@@ -43,6 +36,14 @@ public class RoomEntry {
 
     public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
+    }
+
+    public Resident[] getResidents() {
+        return residents;
+    }
+
+    public void setResidents(Resident[] residents) {
+        this.residents = residents;
     }
 
     public static class Lobby extends RoomEntry {
