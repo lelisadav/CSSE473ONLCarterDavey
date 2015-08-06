@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="default_statuses">
+        <item>Around %s</item>
         <item>In My Room</item>
         <item>In Class</item>
         <item>Around Campus</item>
-        <item>Around My Hall</item> <!-- TODO: change this to the RA's hall -->
         <item>Out of Town</item>
         <item>In Terre Haute</item>
         <item>At Home</item>
         <item>At Lunch</item>
         <item>In a Meeting</item>
         <item>At the SRC</item>
+        <item>Other</item>
     </string-array>
 
     <string-array name="nav_drawer_student">
@@ -18,8 +19,6 @@
         <item>My RA</item>
         <item>Emergency Contacts</item>
         <item>Duty Roster</item>
-        <!--<item>Settings</item>-->
-        <!--<item>Feedback</item>-->
     </string-array>
 
     <string-array name="nav_drawer_ra">
@@ -28,7 +27,5 @@
         <item>Emergency Contacts</item>
         <item>Duty Roster</item>
         <item>Hall Roster</item>
-        <!--<item>Settings</item>-->
-        <!--<item>Feedback</item>-->
     </string-array>
 </resources>

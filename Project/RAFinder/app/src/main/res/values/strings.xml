@@ -27,6 +27,8 @@
     <string name="feedback">Anonymous Feedback</string>
     <string name="phone_default">+1 (555) 555–5555</string>
     <string name="email_default">publicjq@rose-hulman.edu</string>
+    <string name="profile_email_format">Email: %s</string>
+    <string name="profile_phone_format">Phone: %s</string>
     <string name="status_detail_prompt">Enter a detailed status</string>
     <string name="done_button">Done</string>
     <string name="room_default_short">Apts E 201</string>
@@ -45,4 +47,12 @@
     <string name="dates_default">Fri 7/10 - Sun 7/12</string>
     <string name="hall_roster_room_default">101</string>
     <string name="hall_roster">Hall Roster</string>
+    <string name="profile_pic_content_description">The profile picture</string>
+
+    <string name="profile_edit_message_format">Enter a new %s:</string>
+    <string name="profile_edit_email">email address</string>
+    <string name="profile_edit_phone">phone number</string>
+    <string name="profile_edit_status_detail">status message</string>
+    <string name="profile_edit_message_default">Enter a new status:</string>
+    <string name="edit_prompt">Long press the image or the status, status detail, phone, or email fields to change them.</string>
 </resources>

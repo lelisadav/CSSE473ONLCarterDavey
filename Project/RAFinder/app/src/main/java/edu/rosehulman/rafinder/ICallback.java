@@ -5,10 +5,9 @@ import edu.rosehulman.rafinder.controller.HomeFragment;
 import edu.rosehulman.rafinder.controller.HomeFragmentSubsectionMyHallRAs;
 import edu.rosehulman.rafinder.controller.HomeFragmentSubsectionMyRA;
 import edu.rosehulman.rafinder.controller.HomeFragmentSubsectionMySAs;
+import edu.rosehulman.rafinder.controller.ProfileFragment;
 import edu.rosehulman.rafinder.controller.reslife.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
-import edu.rosehulman.rafinder.controller.reslife.ProfileFragment;
-import edu.rosehulman.rafinder.controller.student.StudentProfileFragment;
 
 /**
  * Superinterface for Fragment callbacks.
@@ -16,11 +15,10 @@ import edu.rosehulman.rafinder.controller.student.StudentProfileFragment;
 public interface ICallback
         extends NavigationDrawerFragment.NavigationDrawerCallbacks,
                 HomeFragment.HomeListener,
-                ProfileFragment.ProfileListener,
                 EmergencyContactsFragment.EmergencyContactsListener,
                 DutyRosterFragment.DutyRosterListener,
                 HallRosterFragment.HallRosterListener,
-                StudentProfileFragment.StudentProfileListener,
+                ProfileFragment.StudentProfileListener,
                 HomeFragmentSubsectionMyHallRAs.HomeMyHallListener,
                 HomeFragmentSubsectionMyRA.HomeMyRAListener,
                 HomeFragmentSubsectionMySAs.HomeMySAListener {

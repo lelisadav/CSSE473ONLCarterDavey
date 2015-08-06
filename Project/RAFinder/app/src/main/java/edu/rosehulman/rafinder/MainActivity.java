@@ -17,21 +17,28 @@ import edu.rosehulman.rafinder.controller.EmergencyContactsFragment;
 import edu.rosehulman.rafinder.controller.HomeFragment;
 import edu.rosehulman.rafinder.controller.reslife.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
-import edu.rosehulman.rafinder.controller.student.StudentProfileFragment;
+import edu.rosehulman.rafinder.controller.ProfileFragment;
 import edu.rosehulman.rafinder.model.dummy.DummyData;
 import edu.rosehulman.rafinder.model.person.Employee;
+import edu.rosehulman.rafinder.model.person.Resident;
 
 /**
  * The container activity for the entire app.
  */
 public class MainActivity extends Activity implements ICallback {
+    public static final String LOG_TAG = "RAF";
     private static final int HOME = 0;
     private static final int MY_RA = 1;
     private static final int EMERGENCY_CONTACTS = 2;
     private static final int DUTY_ROSTER = 3;
     private static final int HALL_ROSTER = 4;
+    // TODO: set this from the login data
+    // CONSIDER replacing this with an enum that has RA, SA, GA, Admin, Resident
+    private static final boolean isUserRA = true;
+
+    private static Resident user = DummyData.getMyRAs().get(0); // TODO: set based on login data
     private Employee selectedResident = DummyData.getMyRAs().get(0);
-    public static boolean isRA = true; // TODO: set this from the login data
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -69,7 +76,7 @@ public class MainActivity extends Activity implements ICallback {
             break;
         case MY_RA:
             switchToProfile(DummyData.getMyRAs().get(0));
-            //fragment = StudentProfileFragment.newInstance();
+            //fragment = ProfileFragment.newInstance();
             //break;
             return;
         case EMERGENCY_CONTACTS:
@@ -79,7 +86,7 @@ public class MainActivity extends Activity implements ICallback {
             fragment = DutyRosterFragment.newInstance();
             break;
         case HALL_ROSTER:
-            if (isRA) {
+            if (isUserRA) {
                 fragment = HallRosterFragment.newInstance();
                 break;
             }
@@ -164,7 +171,7 @@ public class MainActivity extends Activity implements ICallback {
     public void switchToProfile(Employee res) {
         selectedResident = res;
         FragmentManager fragmentManager = getFragmentManager();
-        Fragment fragment = StudentProfileFragment.newInstance();
+        Fragment fragment = ProfileFragment.newInstance();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
@@ -173,5 +180,13 @@ public class MainActivity extends Activity implements ICallback {
     @Override
     public Employee getSelectedResident() {
         return selectedResident;
+    }
+
+    public static Resident getUser() {
+        return user;
+    }
+
+    public static boolean isUserRA() {
+        return isUserRA;
     }
 }

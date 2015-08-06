@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "rh.rosehulmanreslife"
+        applicationId "edu.rosehulman.rafinder"
         minSdkVersion 17
         targetSdkVersion 22
         versionCode 1
