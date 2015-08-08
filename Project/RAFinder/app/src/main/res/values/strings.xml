@@ -17,18 +17,16 @@
     <string name="name_default">John Public</string>
     <string name="room_default">Room: Apartments East 201</string>
     <string name="room_format">Room: %s</string>
-    <string name="location_default">Location: Apartments East 201</string>
-    <string name="location_format">Location: %s</string>
     <string name="status_default">Status: In my room</string>
-    <string name="status_prompt">Status:</string>
     <string name="status_format">Status: %s</string>
     <string name="status_detail_default">\"In my apartment. Come hang out with me!\"</string>
     <string name="status_detail_format">\"%s\"</string>
     <string name="feedback">Anonymous Feedback</string>
-    <string name="phone_default">+1 (555) 555–5555</string>
+    <string name="phone_default">(555) 555–5555</string>
     <string name="email_default">publicjq@rose-hulman.edu</string>
     <string name="profile_email_format">Email: %s</string>
     <string name="profile_phone_format">Phone: %s</string>
+    <string name="profile_room_format">Room: %s %d</string>
     <string name="status_detail_prompt">Enter a detailed status</string>
     <string name="done_button">Done</string>
     <string name="room_default_short">Apts E 201</string>
@@ -67,4 +65,5 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="welcome_message">Welcome to RA Finder</string>
 </resources>

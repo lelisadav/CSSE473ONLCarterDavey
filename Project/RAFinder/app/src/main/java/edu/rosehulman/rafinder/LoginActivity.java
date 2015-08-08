@@ -1,12 +1,8 @@
 package edu.rosehulman.rafinder;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,15 +14,12 @@ import android.content.Loader;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -38,9 +31,9 @@ import android.widget.TextView;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 
-import edu.rosehulman.rafinder.Login;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A login screen that offers login via email/password.
@@ -51,9 +44,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * A dialog that displays during the authentication process saying "Authenticating with Firebase..."
      */
     private ProgressDialog mAuthProgressDialog;
-
-    /* A tag that is used for logging statements */
-    private static final String TAG = "LoginDemo";
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -74,35 +64,33 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mLogin = new Login(ref, this);
 
         ActionBar actionBar = getActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(0x268bd2));
 
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_login);
-        this.mAuthProgressDialog = new ProgressDialog(this);
-        this.mAuthProgressDialog.setTitle("Loading");
-        this.mAuthProgressDialog.setMessage("Authenticating with Firebase...");
-        this.mAuthProgressDialog.setCancelable(false);
-        if (!((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE)) {
-            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        mAuthProgressDialog = new ProgressDialog(this);
+        mAuthProgressDialog.setTitle("Loading");
+        mAuthProgressDialog.setMessage("Authenticating with Firebase...");
+        mAuthProgressDialog.setCancelable(false);
+        if (!((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
+              Configuration.SCREENLAYOUT_SIZE_LARGE)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
-
         // Set up the login form.
-        this.mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
-        this.mPasswordView = (EditText) findViewById(R.id.password);
-        this.mPasswordView
-                .setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    public boolean onEditorAction(TextView textView, int id,
-                                                  KeyEvent keyEvent) {
-                        if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                            attemptLogin();
-                            return true;
-                        }
-                        return false;
-                    }
-                });
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView textView, int id,
+                                          KeyEvent keyEvent) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    attemptLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -118,20 +106,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             }
         });
 
-        this.mLoginFormView = findViewById(R.id.login_form);
-        this.mProgressView = findViewById(R.id.login_progress);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
     }
 
     /**
@@ -141,32 +117,32 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      */
     public void attemptLogin() {
         // Reset errors.
-        this.mEmailView.setError(null);
-        this.mPasswordView.setError(null);
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = this.mEmailView.getText().toString();
-        String password = this.mPasswordView.getText().toString();
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !mLogin.isPasswordValid(password)) {
-            this.mPasswordView
+            mPasswordView
                     .setError(getString(R.string.error_invalid_password));
-            focusView = this.mPasswordView;
+            focusView = mPasswordView;
             cancel = true;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            this.mEmailView.setError(getString(R.string.error_field_required));
-            focusView = this.mEmailView;
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
             cancel = true;
         } else if (!mLogin.isEmailValid(email)) {
-            this.mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = this.mEmailView;
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
             cancel = true;
         }
 
@@ -178,7 +154,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            this.mAuthProgressDialog.show();
+            mAuthProgressDialog.show();
             mLogin.loginWithPassword(email, password);
             showProgress(false);
         }
@@ -190,7 +166,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * @param authdata
      */
     public void openProjectListView(AuthData authdata) {
-
+        // TODO
 //        this.mAuthProgressDialog.hide();
 //        Intent intent = new Intent(this, WelcomeActivity.class);
 //        intent.putExtra("user",
@@ -202,7 +178,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     /**
      * Shows the progress UI and hides the login form.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
@@ -211,34 +186,32 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             int shortAnimTime = getResources().getInteger(
                     android.R.integer.config_shortAnimTime);
 
-            this.mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            this.mLoginFormView.animate().setDuration(shortAnimTime)
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime)
                     .alpha(show ? 0 : 1)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            LoginActivity.this.mLoginFormView
-                                    .setVisibility(show ? View.GONE
-                                            : View.VISIBLE);
+                            mLoginFormView.setVisibility(show ? View.GONE
+                                                              : View.VISIBLE);
                         }
                     });
 
-            this.mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            this.mProgressView.animate().setDuration(shortAnimTime)
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime)
                     .alpha(show ? 1 : 0)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            LoginActivity.this.mProgressView
-                                    .setVisibility(show ? View.VISIBLE
-                                            : View.GONE);
+                            mProgressView.setVisibility(show ? View.VISIBLE
+                                                             : View.GONE);
                         }
                     });
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
-            this.mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            this.mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -254,7 +227,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
                 // Select only email addresses.
                 ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
+                new String[] { ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE },
 
                 // Show primary email addresses first. Note that there won't be
                 // a primary email address if the user hasn't specified one.
@@ -308,19 +281,19 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      */
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                LoginActivity.this,
+                this,
                 android.R.layout.simple_dropdown_item_1line,
                 emailAddressCollection);
 
-        this.mEmailView.setAdapter(adapter);
+        mEmailView.setAdapter(adapter);
     }
 
     /**
      * Gets the primary email address associated with this phone in order to add it to the autocomplete list
      */
     private interface ProfileQuery {
-        String[] PROJECTION = {ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,};
+        String[] PROJECTION = { ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY, };
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
@@ -332,9 +305,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * @param view
      */
     private void registerNewUser(View view) {
+        // TODO: make a registration page intent here instead
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://henry-staging.firebaseio.com"));
         startActivity(browserIntent);
-
     }
 
     public void showError(String errorMessage) {

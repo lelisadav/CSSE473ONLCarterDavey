@@ -62,16 +62,15 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
         ImageView imageView = (ImageView) view.findViewById(R.id.profileImageView);
 
         nameTextView.setText(employee.getName());
-        roomTextView.setText("Room: " + employee.getHall() + " " + employee.getRoom());
-        emailTextView.setText("Email: " + employee.getEmail());
-        phoneTextView.setText("Phone: " + employee.getPhoneNumber());
-        statusTextView.setText("Status: " + employee.getStatus());
-        statusDetailTextView.setText("\"" + employee.getStatusDetail() + "\"");
+        roomTextView.setText(getString(R.string.profile_room_format, employee.getHall(), employee.getRoom()));
+        emailTextView.setText(getString(R.string.profile_email_format, employee.getEmail()));
+        phoneTextView.setText(getString(R.string.profile_phone_format, employee.getPhoneNumber()));
+        statusTextView.setText(getString(R.string.status_format, employee.getStatus()));
+        statusDetailTextView.setText(getString(R.string.status_detail_format, employee.getStatusDetail()));
         getEmployeeImageFromFirebase();
 
         // Set editable fields based on MainActivity.isUserRA
         if (MainActivity.isUserRA()) {
-            emailTextView.setOnLongClickListener(this);
             phoneTextView.setOnLongClickListener(this);
             statusTextView.setOnLongClickListener(this);
             statusDetailTextView.setOnLongClickListener(this);
@@ -93,7 +92,7 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
         try {
             mListener = (StudentProfileListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(activity.toString() + " must implement StudentProfileListener");
         }
     }
 
@@ -106,7 +105,6 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
     @Override
     public boolean onLongClick(View v) {
         switch (v.getId()) {
-        case R.id.emailTextView:
         case R.id.phoneTextView:
         case R.id.statusDetailTextView:
             // intentional fallthrough
@@ -178,10 +176,6 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
     private void setMessageAndType(AlertDialog.Builder builder, EditText editText, int id) {
         final String hint;
         switch (id) {
-        case R.id.emailTextView:
-            hint = getString(R.string.profile_edit_email);
-            editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-            break;
         case R.id.phoneTextView:
             hint = getString(R.string.profile_edit_phone);
             editText.setInputType(InputType.TYPE_CLASS_PHONE);
@@ -201,10 +195,6 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
 
     private void setTextAndEmployeeField(TextView v, String s) {
         switch (v.getId()) {
-        case R.id.emailTextView:
-            v.setText(getString(R.string.profile_email_format, s));
-            employee.setEmail(s);
-            break;
         case R.id.phoneTextView:
             v.setText(getString(R.string.profile_phone_format, s));
             employee.setPhoneNumber(s);

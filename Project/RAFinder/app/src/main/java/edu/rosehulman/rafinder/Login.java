@@ -1,10 +1,11 @@
 package edu.rosehulman.rafinder;
+
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
 
-public class Login  {
+public class Login {
 
     private Firebase mFirebaseRef;
 
@@ -14,8 +15,8 @@ public class Login  {
     private AuthData authData;
 
     public Login(Firebase firebaseRef, LoginActivity loginActivity) {
-        this.mFirebaseRef = firebaseRef;
-        this.mActivity = loginActivity;
+        mFirebaseRef = firebaseRef;
+        mActivity = loginActivity;
     }
 
     /**
@@ -25,7 +26,7 @@ public class Login  {
      * @param password
      */
     public void loginWithPassword(String username, String password) {
-        this.mFirebaseRef.authWithPassword(username, password, new AuthResultHandler(
+        mFirebaseRef.authWithPassword(username, password, new AuthResultHandler(
                 "password"));
     }
 
@@ -37,7 +38,7 @@ public class Login  {
     private void setAuthenticatedUser(AuthData authData) {
         if (authData != null) {
             this.authData = authData;
-            this.mActivity.openProjectListView(this.authData);
+            mActivity.openProjectListView(this.authData);
         }
     }
 
