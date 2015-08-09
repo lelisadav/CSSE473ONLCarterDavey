@@ -1,5 +1,10 @@
 package edu.rosehulman.rafinder.model.person;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+
 /**
  * Any Residence Life employee.
  */
@@ -12,6 +17,12 @@ public class Employee extends Resident {
     private int room;
     private String status;
     private String statusDetail;
+    private Firebase firebase;
+
+    public Employee(String url){
+        super(url);
+        this.firebase=new Firebase(url);
+    }
 
     public Employee(String name,
                     String email,
@@ -33,6 +44,14 @@ public class Employee extends Resident {
 
     public String getEmail() {
         return email;
+    }
+
+    public Firebase getFirebase() {
+        return firebase;
+    }
+
+    public void setFirebase(Firebase firebase) {
+        this.firebase = firebase;
     }
 
     public void setEmail(String email) {
@@ -85,6 +104,97 @@ public class Employee extends Resident {
 
     public void setStatusDetail(String statusDetail) {
         this.statusDetail = statusDetail;
+    }
+
+
+//    public static ResidentAssistant convertToRA(Employee e){
+//        ResidentAssistant ra= new ResidentAssistant(e.getFirebase().toString());
+//        ra.setEmail(e.getEmail());
+//        ra.setFloor(e.getFloor());
+//        ra.setHall(e.getHall());
+//        ra.setPhoneNumber(e.getPhoneNumber());
+//        ra.setStatus(e.getStatus());
+//        ra.setStatusDetail(e.getStatusDetail());
+//        ra.setName(e.getName());
+//        return ra;
+//    }
+    /**
+     * Milestone listener
+     */
+    class ChildrenListener implements ChildEventListener {
+        private Employee employee;
+
+        public ChildrenListener(Employee employee) {
+            this.employee = employee;
+        }
+
+        /**
+         * Do nothing
+         */
+        public void onCancelled(FirebaseError arg0) {
+            // TODO Auto-generated method stub.
+        }
+
+        /**
+         * Fills in the new milestone's properties including the milestone name,
+         * description and list of tasks for that milestone
+         */
+        public void onChildAdded(DataSnapshot arg0, String arg1) {
+
+
+//            if (arg0.getKey().equals("name")) {
+//                this.milestone.setName(arg0.getValue(String.class));
+//                if (this.milestone.getChangeNotifier() != null) {
+//                    this.milestone.getChangeNotifier().onChange();
+//                }
+//            } else if (arg0.getKey().equals("description")) {
+//                this.milestone.setDescription(arg0.getValue(String.class));
+//            } else if (arg0.getKey().equals("due_date")) {
+//                this.milestone.setDueDate(new DueDate(arg0.getValue(String.class)));
+//            } else if (arg0.getKey().equals("task_percent")) {
+//                this.milestone.setTaskPercent(arg0.getValue(Integer.class));
+//            } else if (arg0.getKey().equals("tasks")) {
+//                for (DataSnapshot child : arg0.getChildren()) {
+//                    Task t = new Task(child.getRef().toString());
+//
+//                    if (!this.milestone.tasks.contains(t)) {
+//                        t.setParentNames(this.milestone.parentProjectName, this.milestone.getName());
+//                        this.milestone.tasks.add(t);
+//                    }
+//                }
+//            }else if (arg0.getKey().equals("burndown_data")){
+//                for (DataSnapshot child : arg0.getChildren()){
+//                    BurndownObject bo=new BurndownObject(child.getRef().toString());
+//                    bo.setTimeStamp(new Long(child.getKey()));
+//                    bo.setChangeNotifier(this.milestone.burndownObjectChangeNotifier);
+//                    if (!this.milestone.burndownData.getBurndownObjects().contains(bo)){
+//                        this.milestone.burndownData.addBurndownObject(bo);
+//                    }
+//                }
+//            }
+        }
+
+        /**
+         * This will be called when the milestone data in Firebased is updated
+         */
+        public void onChildChanged(DataSnapshot arg0, String arg1) {
+            // TODO Auto-generated method stub.
+
+        }
+
+        /**
+         * Might do something here for the tablet
+         */
+        public void onChildMoved(DataSnapshot arg0, String arg1) {
+            // nothing
+        }
+
+        /**
+         * Do nothing
+         */
+        public void onChildRemoved(DataSnapshot arg0) {
+            // nothing
+        }
     }
 
 

@@ -4,9 +4,10 @@ import edu.rosehulman.rafinder.model.SearchResultItem;
 
 public class Resident implements SearchResultItem {
     private String name;
+    private String firebaseURL;
 
-    public Resident(String name) {
-        this.name = name;
+    public Resident(String fireBaseUrl){
+        this.firebaseURL=fireBaseUrl;
     }
 
     public String getName() {

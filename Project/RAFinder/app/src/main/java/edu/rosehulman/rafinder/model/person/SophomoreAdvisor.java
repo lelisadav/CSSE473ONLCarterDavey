@@ -5,6 +5,9 @@ package edu.rosehulman.rafinder.model.person;
  * TODO: extend {@link ResidentAssistant} instead?
  */
 public class SophomoreAdvisor extends Employee {
+    public SophomoreAdvisor(String url){
+        super(url);
+    }
     public SophomoreAdvisor(String name,
                             String email,
                             int floor,

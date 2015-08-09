@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.rosehulman.rafinder.controller.EmergencyContactsFragment;
@@ -26,18 +27,24 @@ import edu.rosehulman.rafinder.model.person.Resident;
  * The container activity for the entire app.
  */
 public class MainActivity extends Activity implements ICallback {
+    public static final String firebaseURL="https://ra-finder.firebaseio.com";
     public static final String LOG_TAG = "RAF";
     private static final int HOME = 0;
     private static final int MY_RA = 1;
     private static final int EMERGENCY_CONTACTS = 2;
     private static final int DUTY_ROSTER = 3;
     private static final int HALL_ROSTER = 4;
+    private List<Employee> myRAs;
+    private EmployeeLoader loader=new EmployeeLoader(firebaseURL+"/Employees");
     // TODO: set this from the login data
     // CONSIDER replacing this with an enum that has RA, SA, GA, Admin, Resident
     private static final boolean isUserRA = true;
 
     private static Resident user = DummyData.getMyRAs().get(0); // TODO: set based on login data
     private Employee selectedResident = DummyData.getMyRAs().get(0);
+
+    private static int myFloor=3;
+    private static String myHall="Lakeside";
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -175,6 +182,17 @@ public class MainActivity extends Activity implements ICallback {
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
+    }
+
+    @Override
+    public List<Employee> getMyRAs() {
+        if (myRAs!=null){
+            return myRAs;
+        }
+        List<Employee> ras=new ArrayList<>();
+        ras=loader.getRAs();
+        //TODO: fix
+        return ras;
     }
 
     @Override
