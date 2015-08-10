@@ -3,7 +3,6 @@ package edu.rosehulman.rafinder;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -19,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,11 +29,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.rosehulman.rafinder.model.Login;
 
 /**
  * A login screen that offers login via email/password.
@@ -51,21 +52,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private View mProgressView;
     private View mLoginFormView;
 
-
     private Login mLogin;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //mGlobalVariables = ((GlobalVariables) getApplicationContext());
-        Firebase ref = new Firebase("ra-finder.firebaseio.com");
-        mLogin = new Login(ref, this);
-
-        ActionBar actionBar = getActionBar();
-
         Firebase.setAndroidContext(this);
+
+        Firebase firebase = new Firebase(getString(R.string.firebase_url));
+        mLogin = new Login(firebase, this);
+
         setContentView(R.layout.activity_login);
         mAuthProgressDialog = new ProgressDialog(this);
         mAuthProgressDialog.setTitle("Loading");
@@ -161,18 +157,19 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     /**
-     * Opens up a list list of projects after logging in.
-     *
-     * @param authdata
+     * Opens up a list of projects after logging in.
      */
-    public void openProjectListView(AuthData authdata) {
-        // TODO
-//        this.mAuthProgressDialog.hide();
-//        Intent intent = new Intent(this, WelcomeActivity.class);
-//        intent.putExtra("user",
-//                mGlobalVariables.getFirebaseUrl() + "users/" + authdata.getUid());
-//        this.startActivity(intent);
-//        this.finish();
+    public void launchMainActivity(UserType userType, String raEmail) {
+        mAuthProgressDialog.hide();
+        Intent intent = new Intent(this, MainActivity.class);
+
+        Log.d(MainActivity.LOG_TAG, "starting Main with userType <" + userType + "> and raEmail <" + raEmail + ">");
+
+        intent.putExtra(MainActivity.KEY_USER_TYPE, userType.name());
+        intent.putExtra(MainActivity.KEY_RA_EMAIL, raEmail);
+
+        startActivity(intent);
+        finish();
     }
 
     /**
@@ -264,20 +261,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     /**
      * Displays an alert dialog that contains the specified error message
-     *
-     * @param message
      */
     private void showErrorDialog(String message) {
         new AlertDialog.Builder(this).setTitle("Error").setMessage(message)
                 .setPositiveButton(android.R.string.ok, null)
-                .setIcon(android.R.drawable.ic_dialog_alert).show();
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     /**
      * Create adapter to tell the AutoCompleteTextView what to show in its
      * dropdown list.
-     *
-     * @param emailAddressCollection
      */
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
@@ -301,18 +295,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     /**
      * Opens a browser activity that loads the page that allows the user to create a new account
-     *
-     * @param view
      */
     private void registerNewUser(View view) {
         // TODO: make a registration page intent here instead
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://henry-staging.firebaseio.com"));
-        startActivity(browserIntent);
+//        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://henry-staging.firebaseio.com"));
+//        startActivity(browserIntent);
     }
 
     public void showError(String errorMessage) {
         showErrorDialog(errorMessage);
         mAuthProgressDialog.hide();
     }
-
 }

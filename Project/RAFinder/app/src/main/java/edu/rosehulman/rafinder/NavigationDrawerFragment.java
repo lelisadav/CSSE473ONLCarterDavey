@@ -96,13 +96,8 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                getResources().getStringArray((MainActivity.isUserRA()) ? R.array.nav_drawer_ra : R.array.nav_drawer_student)
-        ));
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+        updateDrawerList(((MainActivity) mDrawerListView.getContext()).getUserType());
         return mDrawerListView;
     }
 
@@ -199,6 +194,23 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
+    public void updateDrawerList(UserType userType) {
+        int items;
+        if (userType.equals(UserType.RESIDENT)) {
+            items = R.array.nav_drawer_student;
+        } else {
+            items = R.array.nav_drawer_ra;
+        }
+
+        mDrawerListView.setAdapter(new ArrayAdapter<>(
+                getActionBar().getThemedContext(),
+                android.R.layout.simple_list_item_activated_1,
+                android.R.id.text1,
+                getResources().getStringArray(items)
+        ));
+        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -244,13 +256,6 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
-/*
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-*/
 
         return super.onOptionsItemSelected(item);
     }

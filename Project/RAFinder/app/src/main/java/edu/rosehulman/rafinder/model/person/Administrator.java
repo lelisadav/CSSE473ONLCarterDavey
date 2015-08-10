@@ -4,9 +4,10 @@ package edu.rosehulman.rafinder.model.person;
  * A Residence Life administrator (an employee of the Office of Residence Life)
  */
 public class Administrator extends Employee {
-    public Administrator(String url){
+    public Administrator(String url) {
         super(url);
     }
+
     public Administrator(String name,
                          String email,
                          String hall,

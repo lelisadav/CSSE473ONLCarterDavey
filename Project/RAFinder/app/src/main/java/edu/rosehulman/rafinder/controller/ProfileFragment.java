@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.R;
+import edu.rosehulman.rafinder.UserType;
 import edu.rosehulman.rafinder.model.person.Employee;
 
 /**
@@ -69,13 +70,12 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
         statusDetailTextView.setText(getString(R.string.status_detail_format, employee.getStatusDetail()));
         getEmployeeImageFromFirebase();
 
-        // Set editable fields based on MainActivity.isUserRA
-        if (MainActivity.isUserRA()) {
+        // Set editable fields based on MainActivity.getUserType
+        if (!((MainActivity) view.getContext()).getUserType().equals(UserType.RESIDENT)) {
             phoneTextView.setOnLongClickListener(this);
             statusTextView.setOnLongClickListener(this);
             statusDetailTextView.setOnLongClickListener(this);
             imageView.setOnLongClickListener(this);
-
             showEditPromptDialog();
         }
 

@@ -11,41 +11,39 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
+import com.firebase.client.Firebase;
+
 import java.util.List;
 
 import edu.rosehulman.rafinder.controller.EmergencyContactsFragment;
 import edu.rosehulman.rafinder.controller.HomeFragment;
+import edu.rosehulman.rafinder.controller.ProfileFragment;
 import edu.rosehulman.rafinder.controller.reslife.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
-import edu.rosehulman.rafinder.controller.ProfileFragment;
 import edu.rosehulman.rafinder.model.dummy.DummyData;
 import edu.rosehulman.rafinder.model.person.Employee;
-import edu.rosehulman.rafinder.model.person.Resident;
+import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 
 /**
  * The container activity for the entire app.
  */
 public class MainActivity extends Activity implements ICallback {
-    public static final String firebaseURL="https://ra-finder.firebaseio.com";
     public static final String LOG_TAG = "RAF";
     private static final int HOME = 0;
     private static final int MY_RA = 1;
     private static final int EMERGENCY_CONTACTS = 2;
     private static final int DUTY_ROSTER = 3;
-    private static final int HALL_ROSTER = 4;
-    private List<Employee> myRAs;
-    private EmployeeLoader loader=new EmployeeLoader(firebaseURL+"/Employees");
-    // TODO: set this from the login data
-    // CONSIDER replacing this with an enum that has RA, SA, GA, Admin, Resident
-    private static final boolean isUserRA = true;
-
-    private static Resident user = DummyData.getMyRAs().get(0); // TODO: set based on login data
-    private Employee selectedResident = DummyData.getMyRAs().get(0);
-
-    private static int myFloor=3;
-    private static String myHall="Lakeside";
-
+    private static final int HALL_ROSTER_OR_RESIDENT_LOGOUT = 4;
+    private static final int RA_LOGOUT = 5;
+    protected static final String KEY_USER_TYPE = "KEY_USER_TYPE";
+    protected static final String KEY_RA_EMAIL = "KEY_RA_EMAIL";
+    private static int myFloor = 3;
+    private static String myHall = "Lakeside";
+    private List<Employee> allRAs;
+    private EmployeeLoader loader;
+    private UserType mUserType = UserType.RESIDENT;
+    private Employee selectedResident;
+    private ResidentAssistant mUserRA;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -61,9 +59,17 @@ public class MainActivity extends Activity implements ICallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loader = new EmployeeLoader(getString(R.string.firebase_url) + "/Employees");
+
+        mUserType = UserType.valueOf(getIntent().getStringExtra(KEY_USER_TYPE));
+        mUserRA = getRA(getIntent().getStringExtra(KEY_RA_EMAIL));
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
+
+        // updateDrawerList the drawer with the right list for either Employee or Resident
+        mNavigationDrawerFragment.updateDrawerList(mUserType);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -71,9 +77,18 @@ public class MainActivity extends Activity implements ICallback {
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
+    private ResidentAssistant getRA(String email) {
+        for (Employee ra : getAllRAs()) {
+            if (ra.getEmail().equals(email)) {
+                return (ResidentAssistant) ra;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
+        // updateDrawerList the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragment;
 
@@ -82,9 +97,7 @@ public class MainActivity extends Activity implements ICallback {
             fragment = HomeFragment.newInstance();
             break;
         case MY_RA:
-            switchToProfile(DummyData.getMyRAs().get(0));
-            //fragment = ProfileFragment.newInstance();
-            //break;
+            switchToProfile(mUserRA);
             return;
         case EMERGENCY_CONTACTS:
             fragment = EmergencyContactsFragment.newInstance();
@@ -92,19 +105,34 @@ public class MainActivity extends Activity implements ICallback {
         case DUTY_ROSTER:
             fragment = DutyRosterFragment.newInstance();
             break;
-        case HALL_ROSTER:
-            if (isUserRA) {
+        case HALL_ROSTER_OR_RESIDENT_LOGOUT:
+            if (mUserType.equals(UserType.RESIDENT)) {
+                logout();
+                return;
+            } else {
                 fragment = HallRosterFragment.newInstance();
                 break;
             }
+        case RA_LOGOUT:
+            logout();
+            return;
         default:
-            // intentional fallthrough
             fragment = HomeFragment.newInstance();
         }
 
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
+    }
+
+    private void logout() {
+        // TODO: logout da Firebase
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        Firebase ref = new Firebase(getString(R.string.firebase_url));
+        ref.unauth();
+
+        startActivity(loginIntent);
+        finish();
     }
 
     public void onSectionAttached(int number) {
@@ -185,14 +213,12 @@ public class MainActivity extends Activity implements ICallback {
     }
 
     @Override
-    public List<Employee> getMyRAs() {
-        if (myRAs!=null){
-            return myRAs;
+    public List<Employee> getAllRAs() {
+        if (allRAs == null) {
+            allRAs = loader.getRAs();
         }
-        List<Employee> ras=new ArrayList<>();
-        ras=loader.getRAs();
         //TODO: fix
-        return ras;
+        return allRAs;
     }
 
     @Override
@@ -200,11 +226,7 @@ public class MainActivity extends Activity implements ICallback {
         return selectedResident;
     }
 
-    public static Resident getUser() {
-        return user;
-    }
-
-    public static boolean isUserRA() {
-        return isUserRA;
+    public UserType getUserType() {
+        return mUserType;
     }
 }
