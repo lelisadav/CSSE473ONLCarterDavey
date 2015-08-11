@@ -219,6 +219,7 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
                     public void onClick(DialogInterface dialog, int which) {
                         String status = statuses[which];
                         v.setText(getString(R.string.status_format, status));
+                        employee.setStatus(status);
                     }
                 });
                 return builder.create();
