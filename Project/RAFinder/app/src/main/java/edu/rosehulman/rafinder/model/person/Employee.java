@@ -22,6 +22,7 @@ public class Employee extends Resident {
     public Employee(String url){
         super(url);
         this.firebase=new Firebase(url);
+        this.firebase.addChildEventListener(new ChildrenListener(this));
     }
 
     public Employee(String name,
@@ -140,6 +141,29 @@ public class Employee extends Resident {
          * description and list of tasks for that milestone
          */
         public void onChildAdded(DataSnapshot arg0, String arg1) {
+            if (arg0.getKey().equals("email")){
+                this.employee.setEmail(arg0.getValue(String.class));
+            }
+            else if (arg0.getKey().equals("floor")){
+                this.employee.setFloor(arg0.getValue(int.class));
+            }
+            else if (arg0.getKey().equals("hall")){
+                this.employee.setHall(arg0.getValue(String.class));
+            }
+            else if (arg0.getKey().equals("phoneNumber")){
+                this.employee.setPhoneNumber(arg0.getValue(String.class));
+            }
+            else if (arg0.getKey().equals("room")){
+                this.employee.setRoom(arg0.getValue(int.class));
+            }
+            else if (arg0.getKey().equals("status")){
+                this.employee.setStatus(arg0.getValue(String.class));
+            }
+            else if (arg0.getKey().equals("statusDetail")){
+                this.employee.setStatusDetail(arg0.getValue(String.class));
+            }
+
+
 
 
 //            if (arg0.getKey().equals("name")) {

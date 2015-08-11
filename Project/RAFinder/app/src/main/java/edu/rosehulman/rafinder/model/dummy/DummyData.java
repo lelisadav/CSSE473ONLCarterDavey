@@ -146,6 +146,7 @@ public class DummyData {
         return Arrays.asList(resfe, resff, resfq, resmi, resmj);
     }
 
+
     public static List<Employee> getMyHallResLife() {
         return Arrays.asList(RA1, RA1b, RA2, RA3);
     }

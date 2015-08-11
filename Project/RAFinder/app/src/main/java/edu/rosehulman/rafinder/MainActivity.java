@@ -215,7 +215,8 @@ public class MainActivity extends Activity implements ICallback {
     @Override
     public List<Employee> getAllRAs() {
         if (allRAs == null) {
-            allRAs = loader.getRAs();
+            //allRAs = loader.getRAs();
+            allRAs=DummyData.getMyRAs();
         }
         //TODO: fix
         return allRAs;
