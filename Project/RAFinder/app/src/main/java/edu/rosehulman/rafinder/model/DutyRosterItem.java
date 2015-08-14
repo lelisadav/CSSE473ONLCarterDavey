@@ -8,7 +8,6 @@ import com.firebase.client.ValueEventListener;
 import org.joda.time.LocalDate;
 
 import edu.rosehulman.rafinder.MainActivity;
-import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 
@@ -84,10 +83,10 @@ public class DutyRosterItem {
         public void onDataChange(DataSnapshot dataSnapshot) {
             for (DataSnapshot child : dataSnapshot.getChildren()){
                 if (child.getKey().equals("friday")){
-                    friDuty=new ResidentAssistant(MainActivity.URL+"/Employees/Resident Assistants/"+child.getValue(String.class));
+                    friDuty=new ResidentAssistant(MainActivity.FIREBASE_ROOT_URL +"/Employees/Resident Assistants/"+child.getValue(String.class));
                 }
                 else if (child.getKey().equals("saturday")){
-                    satDuty=new ResidentAssistant(MainActivity.URL+"/Employees/Resident Assistants/"+child.getValue(String.class));
+                    satDuty=new ResidentAssistant(MainActivity.FIREBASE_ROOT_URL +"/Employees/Resident Assistants/"+child.getValue(String.class));
                 }
             }
 

@@ -8,6 +8,8 @@ import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.rosehulman.rafinder.MainActivity;
+
 /**
  * An entire floor of {@link RoomEntry} objects.
  */
@@ -75,7 +77,8 @@ public class Floor {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             for (DataSnapshot room: dataSnapshot.getChildren()){
-                RoomEntry roomEntry=new RoomEntry(room.getRef().getPath().toString());
+                String firebaseURL = MainActivity.FIREBASE_ROOT_URL + room.getRef().getPath().toString();
+                RoomEntry roomEntry=new RoomEntry(firebaseURL);
                 floor.getRooms().add(roomEntry);
             }
         }

@@ -30,7 +30,7 @@ public class EmergencyContactLoader {
                 contactList.add(new EmergencyContact(employee, false));
             }
         }
-        Firebase firebaseContact=new Firebase(MainActivity.URL+"/EmergencyContacts");
+        Firebase firebaseContact=new Firebase(MainActivity.FIREBASE_ROOT_URL +"/EmergencyContacts");
         firebaseContact.addListenerForSingleValueEvent(new LoaderListener(this));
 
 
@@ -56,7 +56,8 @@ public class EmergencyContactLoader {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             for (DataSnapshot child: dataSnapshot.getChildren()){
-                EmergencyContact contact=new EmergencyContact(child.getRef().getPath().toString());
+                String firebaseURL = MainActivity.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
+                EmergencyContact contact=new EmergencyContact(firebaseURL);
                 loader.getContactList().add(contact);
             }
         }

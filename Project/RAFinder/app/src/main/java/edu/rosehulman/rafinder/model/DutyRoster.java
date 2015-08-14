@@ -9,7 +9,6 @@ import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
 import java.util.HashMap;
-import java.util.List;
 
 import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.model.person.Employee;
@@ -72,7 +71,8 @@ public class DutyRoster {
             for (DataSnapshot child: dataSnapshot.getChildren()){
                 LocalDate rosterDate=LocalDate.parse(child.getKey(), MainActivity.formatter);
                 if (!rosterDate.isBefore(roster.getStartDate())){
-                    DutyRosterItem item=new DutyRosterItem(child.getRef().getPath().toString());
+                    String fireBaseUrl = MainActivity.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
+                    DutyRosterItem item=new DutyRosterItem(fireBaseUrl);
                     roster.getRoster().put(rosterDate, item);
                 }
             }

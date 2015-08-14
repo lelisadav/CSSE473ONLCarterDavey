@@ -6,9 +6,10 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import edu.rosehulman.rafinder.MainActivity;
 
 /**
  * A Residence Hall.
@@ -72,7 +73,8 @@ public class Hall implements SearchResultItem {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             for (DataSnapshot floor : dataSnapshot.getChildren()){
-                Floor flr=new Floor(floor.getRef().getPath().toString());
+                String url = MainActivity.FIREBASE_ROOT_URL + floor.getRef().getPath().toString();
+                Floor flr = new Floor(url);
                 hall.getFloors().add(flr);
             }
         }

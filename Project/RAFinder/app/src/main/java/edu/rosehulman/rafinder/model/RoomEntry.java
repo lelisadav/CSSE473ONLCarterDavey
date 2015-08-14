@@ -5,12 +5,10 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
 import edu.rosehulman.rafinder.model.person.Resident;
 
@@ -80,7 +78,8 @@ public class RoomEntry {
         public void onDataChange(DataSnapshot dataSnapshot) {
             roomEntry.setRoomNumber(dataSnapshot.getKey());
             for (DataSnapshot child: dataSnapshot.getChildren()){
-                Resident res=new Resident(child.getRef().getPath().toString());
+                String fireBaseUrl = MainActivity.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
+                Resident res=new Resident(fireBaseUrl);
                 roomEntry.residents.add(res);
             }
         }
