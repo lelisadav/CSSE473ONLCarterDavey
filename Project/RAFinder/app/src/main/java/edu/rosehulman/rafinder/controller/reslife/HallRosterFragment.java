@@ -14,11 +14,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.FloorRosterArrayAdapter;
 import edu.rosehulman.rafinder.model.Hall;
 import edu.rosehulman.rafinder.model.RoomEntry;
-import edu.rosehulman.rafinder.model.dummy.DummyData;
+
 
 /**
  * The RA's view of a listing for a floor's residents
@@ -27,8 +28,11 @@ public class HallRosterFragment extends Fragment
         implements AbsListView.OnItemClickListener, HallHeader.HallHeaderListener {
 
     private Hall hall;
+    private String hallName;
+
     private int floorIndex; //not necessarily the floor number
-    private List<RoomEntry> rooms = DummyData.getRooms();
+    private String floorName;
+    private List<RoomEntry> rooms;
 
     private HallRosterListener mListener;
 
@@ -42,8 +46,13 @@ public class HallRosterFragment extends Fragment
      */
     private ListAdapter mAdapter;
 
-    public static HallRosterFragment newInstance() {
-        return new HallRosterFragment();
+    public static HallRosterFragment newInstance(String hallName, String floorName) {
+        HallRosterFragment fragment=new HallRosterFragment();
+        Bundle args=new Bundle();
+        args.putString(MainActivity.HALL, hallName);
+        args.putString(MainActivity.FLOOR, floorName);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public HallRosterFragment() {
@@ -52,6 +61,18 @@ public class HallRosterFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState!=null){
+            hallName=savedInstanceState.getString(MainActivity.HALL, null);
+            floorName=savedInstanceState.getString(MainActivity.FLOOR, null);
+        }
+        else if (getArguments()!=null){
+            hallName=getArguments().getString(MainActivity.HALL, null);
+            floorName=getArguments().getString(MainActivity.FLOOR, null);
+        }
+        if (mListener!=null){
+            hall=mListener.getHall(hallName);
+
+        }
 
         mAdapter = new FloorRosterArrayAdapter(getActivity(), android.R.id.text1, rooms);
     }
@@ -118,13 +139,13 @@ public class HallRosterFragment extends Fragment
     public int getCurrentFloorIndex() {
         return floorIndex;
     }
-
     @Override
     public void setCurrentFloorIndex(int index) {
         this.floorIndex = index;
     }
 
     public interface HallRosterListener {
+        public Hall getHall(String hallName);
     }
 
 }

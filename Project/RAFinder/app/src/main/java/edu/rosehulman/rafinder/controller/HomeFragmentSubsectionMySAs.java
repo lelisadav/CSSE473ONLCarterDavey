@@ -16,7 +16,6 @@ import java.util.List;
 
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.RAListArrayAdapter;
-import edu.rosehulman.rafinder.model.dummy.DummyData;
 import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.Resident;
 
@@ -86,7 +85,7 @@ public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArray
                 return false;
             }
         });
-        List<Employee> hallSAs= DummyData.getMySAs();
+        List<Employee> hallSAs= mListener.getMySAs();
         RAListArrayAdapter<Employee> mAdapter2= new RAListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallSAs, this);
         listView.setAdapter(mAdapter2);
         setListViewHeightBasedOnChildren(listView);
@@ -152,6 +151,7 @@ public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArray
 
     public interface HomeMySAListener {
         public void switchToProfile(Employee res);
+        public List<Employee> getMySAs();
 
     }
 

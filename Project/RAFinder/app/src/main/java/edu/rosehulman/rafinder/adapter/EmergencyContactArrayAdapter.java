@@ -12,6 +12,7 @@ import java.util.List;
 
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.model.person.Administrator;
+import edu.rosehulman.rafinder.model.person.EmergencyContact;
 import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.GraduateAssistant;
 import edu.rosehulman.rafinder.model.person.ResidentAssistant;
@@ -20,14 +21,15 @@ import edu.rosehulman.rafinder.model.person.SophomoreAdvisor;
 /**
  * Created by daveyle on 7/26/2015.
  */
-public class EmergencyContactArrayAdapter  extends ArrayAdapter<Employee> {
+public class EmergencyContactArrayAdapter  extends ArrayAdapter<EmergencyContact> {
 
     private final Context context;
-    private final List<Employee> objects;
+    private final List<EmergencyContact> objects;
     private final int layout;
     private EmergencyContactCallbacks mCallbacks;
 
-    public EmergencyContactArrayAdapter(Context context, int textViewResourceId, List<Employee> objects, EmergencyContactCallbacks callbacks ) {
+    public EmergencyContactArrayAdapter(Context context, int textViewResourceId,
+                                        List<EmergencyContact> objects, EmergencyContactCallbacks callbacks ) {
         super(context, R.layout.layout_emergency_contact, textViewResourceId, objects);
         this.layout = R.layout.layout_emergency_contact;
         this.context = context;
@@ -49,32 +51,39 @@ public class EmergencyContactArrayAdapter  extends ArrayAdapter<Employee> {
         TextView nameTV= (TextView) view.findViewById(R.id.nameTextView);
         Button callButton= (Button) view.findViewById(R.id.callButton);
         Button emailButton = (Button) view.findViewById(R.id.emailButton);
-        final Employee selected=objects.get(position);
+        final EmergencyContact selected=objects.get(position);
         String name= selected.getName();
-        if (selected instanceof ResidentAssistant){
-            name=name+" (RA)";
+        switch (selected.getPosition()){
+            case ResA:
+                name=name+" (RA)";
+                if (selected.getPriority()== EmergencyContact.Priority.ONDUTY){
+                    name=name+" (On Duty)";
+                }
+                break;
+            case SA:
+                name=name+" (SA)";
+                break;
+            case GA:
+                name=name+" (GA)";
+                break;
+            case ADMIN:
+                name=name+" (Office of ResLife)";
+                break;
+
         }
-        else if (selected instanceof SophomoreAdvisor){
-            name=name+" (SA)";
-        }
-        else if (selected instanceof GraduateAssistant){
-            name=name+" (GA)";
-        }
-        else if (selected instanceof Administrator){
-            name=name+" (Office of ResLife)";
-        }
+
 
         nameTV.setText(name);
 
         TextView callTV= (TextView) view.findViewById(R.id.callTextView);
         TextView emailTV= (TextView) view.findViewById(R.id.emailTextView);
-        callTV.setText(selected.getPhoneNumber());
+        callTV.setText(selected.getPhone());
         emailTV.setText(selected.getEmail());
 
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.makePhoneCall(selected.getPhoneNumber());
+                mCallbacks.makePhoneCall(selected.getPhone());
             }
         });
         emailButton.setOnClickListener(new View.OnClickListener() {

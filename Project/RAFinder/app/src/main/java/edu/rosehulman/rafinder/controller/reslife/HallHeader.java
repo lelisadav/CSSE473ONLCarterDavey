@@ -37,11 +37,11 @@ public class HallHeader extends Fragment {
         if (mListener != null) {
             this.hall = mListener.getHall();
             this.currentFloor = mListener.getCurrentFloorIndex();
-            int[] floorNumbers = hall.getFloorNumbers();
+            String[] floorNumbers = hall.getFloorNumbers();
             for (int i = 0; i < floorNumbers.length; i++) {
                 final int floorNum = i;
                 ToggleButton b = new ToggleButton(this.getActivity());
-                b.setText(floorNumbers[i] + "");
+                b.setText(floorNumbers[i]);
                 b.setPadding(5, 5, 5, 5);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override

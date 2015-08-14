@@ -162,6 +162,9 @@ public class Employee extends Resident {
             else if (arg0.getKey().equals("statusDetail")){
                 this.employee.setStatusDetail(arg0.getValue(String.class));
             }
+            else if (arg0.getKey().equals("name")){
+                this.employee.setName(arg0.getValue(String.class));
+            }
 
 
 

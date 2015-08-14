@@ -14,12 +14,15 @@ import android.widget.TextView;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.DutyRosterArrayAdapter;
+import edu.rosehulman.rafinder.model.DutyRoster;
 import edu.rosehulman.rafinder.model.DutyRosterItem;
-import edu.rosehulman.rafinder.model.dummy.DummyData;
+;
 
 
 /**
@@ -29,8 +32,11 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
 
     private String firebaseURL;
 
-    private List<DutyRosterItem> rosterItems= DummyData.getDutyRoster();
-    private OnFragmentInteractionListener mListener;
+    private DutyRoster roster;
+    private DutyRosterListener mListener;
+    private String hallName;
+    private LocalDate date;
+    public static final String DATE="DATE";
 
     /**
      * The fragment's ListView/GridView.
@@ -43,8 +49,12 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
     private ListAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
-    public static StudentDutyRosterFragment newInstance(String param1, String param2) {
-        StudentDutyRosterFragment fragment = new StudentDutyRosterFragment();
+    public static StudentDutyRosterFragment newInstance(String hall, LocalDate date) {
+        StudentDutyRosterFragment fragment= new StudentDutyRosterFragment();
+        Bundle args=new Bundle();
+        args.putString(MainActivity.HALL, hall);
+        args.putString(DATE, date.toString(MainActivity.dateFormatter));
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -54,18 +64,34 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState!=null){
+            hallName=savedInstanceState.getString(MainActivity.HALL, null);
+            String dateStr=savedInstanceState.getString(DATE, null);
+            if (dateStr!=null) {
 
+                date = LocalDate.parse(dateStr, MainActivity.formatter);
+            }
+        }
+        else if(getArguments()!=null){
+            hallName=getArguments().getString(MainActivity.HALL, null);
+            String dateStr=getArguments().getString(DATE, null);
+            if (dateStr!=null) {
 
-        // TODO: Change Adapter to display your content
-        mAdapter = new DutyRosterArrayAdapter(getActivity(),
-                android.R.id.text1, rosterItems);
+                date = LocalDate.parse(dateStr, MainActivity.formatter);
+            }
+        }
+        if (mListener!=null){
+            roster=mListener.getDutyRoster(hallName, date);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_student_duty_roster_widget, container, false);
-
+        List<DutyRosterItem> rosterItems=new ArrayList<>();
+        rosterItems.addAll(roster.getRoster().values());
+        mAdapter = new DutyRosterArrayAdapter(this.getActivity(), R.layout.fragment_student_duty_roster_widget, rosterItems);
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         (mListView).setAdapter(mAdapter);
@@ -80,7 +106,7 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (DutyRosterListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
@@ -119,9 +145,8 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
      * "http://developer.android.com/training/basics/fragments/communicating.html" >Communicating
      * with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+    public interface DutyRosterListener {
+        public DutyRoster getDutyRoster(String hall, LocalDate date);
     }
 
     private LocalDate getNextFriday(LocalDate date) {

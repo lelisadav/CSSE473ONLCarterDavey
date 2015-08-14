@@ -1,5 +1,10 @@
 package edu.rosehulman.rafinder.model;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +15,16 @@ public class Floor {
 
     private int lobbyAfterRoomNumber;
 
-    private int number;
+    private String number;
     private List<RoomEntry> rooms;
 
-    public Floor(int number, List<RoomEntry> rooms, int lobbyAfterRoomNumber) {
+    public Floor(String url){
+        rooms=new ArrayList<>();
+        Firebase firebase=new Firebase(url);
+        firebase.addListenerForSingleValueEvent(new FloorListener(this));
+    }
+
+    public Floor(String number, List<RoomEntry> rooms, int lobbyAfterRoomNumber) {
         this.number = number;
         this.rooms = rooms;
         this.lobbyAfterRoomNumber = lobbyAfterRoomNumber;
@@ -27,11 +38,11 @@ public class Floor {
         this.rooms = rooms;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -52,6 +63,26 @@ public class Floor {
             roomList.add(new RoomEntry.Lobby());
             //add two to play nice with two column grid view.
             roomList.add(new RoomEntry.Lobby());
+        }
+    }
+    private class FloorListener implements ValueEventListener{
+        Floor floor;
+
+        public FloorListener(Floor f){
+            floor=f;
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            for (DataSnapshot room: dataSnapshot.getChildren()){
+                RoomEntry roomEntry=new RoomEntry(room.getRef().getPath().toString());
+                floor.getRooms().add(roomEntry);
+            }
+        }
+
+        @Override
+        public void onCancelled(FirebaseError firebaseError) {
+
         }
     }
 

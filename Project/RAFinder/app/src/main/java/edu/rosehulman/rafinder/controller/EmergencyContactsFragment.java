@@ -8,10 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.EmergencyContactArrayAdapter;
+import edu.rosehulman.rafinder.model.person.EmergencyContact;
 import edu.rosehulman.rafinder.model.person.Employee;
 
 /**
@@ -19,7 +22,7 @@ import edu.rosehulman.rafinder.model.person.Employee;
  */
 public class EmergencyContactsFragment extends Fragment implements EmergencyContactArrayAdapter.EmergencyContactCallbacks {
     private EmergencyContactsListener mListener;
-    private List<Employee> emergencyContacts;
+    private List<EmergencyContact> emergencyContacts;
 
     /**
      * Use this factory method to create a new instance of this fragment using the provided parameters.
@@ -48,6 +51,13 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyCont
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_emergency_contacts, container, false);
         ListView listView= (ListView) view.findViewById(R.id.emergencyContactsListView);
+        Comparator<EmergencyContact> c=new Comparator<EmergencyContact>() {
+            @Override
+            public int compare(EmergencyContact lhs, EmergencyContact rhs) {
+                return lhs.compareTo(rhs);
+            }
+        };
+        Collections.sort(emergencyContacts,c);
         EmergencyContactArrayAdapter mAdapter= new EmergencyContactArrayAdapter(this.getActivity(), R.layout.fragment_emergency_contacts, emergencyContacts, this);
         listView.setAdapter(mAdapter);
         return view;
@@ -90,7 +100,7 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyCont
     public interface EmergencyContactsListener {
         public void dialPhoneNumber(String phoneNumber);
         public void sendEmail(String emailAddress);
-        public List<Employee> getEmergencyContacts();
+        public List<EmergencyContact> getEmergencyContacts();
     }
 
 }

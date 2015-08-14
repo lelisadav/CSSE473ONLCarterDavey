@@ -20,8 +20,11 @@ public class EmployeeLoader {
     private List<Employee> ras = new ArrayList<>();
     private List<Employee> gas = new ArrayList<>();
     private List<Employee> sas = new ArrayList<>();
+    private LoaderCallbacks callbacks;
 
-    public EmployeeLoader(String url) {
+
+    public EmployeeLoader(String url, LoaderCallbacks cb) {
+        this.callbacks=cb;
         this.url = url;
         Firebase firebase = new Firebase(this.url);
         firebase.addListenerForSingleValueEvent(new EmployeeValueEventListener());
@@ -57,6 +60,29 @@ public class EmployeeLoader {
 
     public void setSAs(List<Employee> sas) {
         this.sas = sas;
+    }
+
+
+    public List<Employee> getMyRAs(){
+        List<Employee> myRAs=new ArrayList<>();
+        for(Employee ra : ras){
+            if (ra.getHall().equals(callbacks.getMyHall())){
+                myRAs.add(ra);
+            }
+        }
+        return myRAs;
+    }
+    public List<Employee> getMySAs(){
+        List<Employee> mySAs=new ArrayList<>();
+        for (Employee sa: sas){
+            if (sa.getHall().equals(callbacks.getMyHall())){
+                mySAs.add(sa);
+            }
+        }
+        return mySAs;
+    }
+    public interface LoaderCallbacks{
+        public String getMyHall();
     }
 
     public class EmployeeValueEventListener implements ValueEventListener {

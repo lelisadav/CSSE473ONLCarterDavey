@@ -13,6 +13,11 @@ import android.view.MenuItem;
 
 import com.firebase.client.Firebase;
 
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.List;
 
 import edu.rosehulman.rafinder.controller.EmergencyContactsFragment;
@@ -20,7 +25,12 @@ import edu.rosehulman.rafinder.controller.HomeFragment;
 import edu.rosehulman.rafinder.controller.ProfileFragment;
 import edu.rosehulman.rafinder.controller.reslife.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
-import edu.rosehulman.rafinder.model.dummy.DummyData;
+import edu.rosehulman.rafinder.controller.student.StudentDutyRosterFragment;
+import edu.rosehulman.rafinder.model.DutyRoster;
+import edu.rosehulman.rafinder.model.DutyRosterItem;
+import edu.rosehulman.rafinder.model.Hall;
+import edu.rosehulman.rafinder.model.RoomEntry;
+import edu.rosehulman.rafinder.model.person.EmergencyContact;
 import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 
@@ -37,13 +47,20 @@ public class MainActivity extends Activity implements ICallback {
     private static final int RA_LOGOUT = 5;
     protected static final String KEY_USER_TYPE = "KEY_USER_TYPE";
     protected static final String KEY_RA_EMAIL = "KEY_RA_EMAIL";
+    public static String HALL="HALL";
+    public static String FLOOR="FLOOR";
     private static int myFloor = 3;
     private static String myHall = "Lakeside";
+    private Hall currHall;
+    public static String URL="https://ra-finder.firebaseio.com";
     private List<Employee> allRAs;
     private EmployeeLoader loader;
+    private EmergencyContactLoader ecLoader;
     private UserType mUserType = UserType.RESIDENT;
     private Employee selectedResident;
     private ResidentAssistant mUserRA;
+    public static String dateFormatter="yyyy-MM-dd";
+    public static DateTimeFormatter formatter= DateTimeFormat.forPattern(dateFormatter);
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -59,7 +76,9 @@ public class MainActivity extends Activity implements ICallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loader = new EmployeeLoader(getString(R.string.firebase_url) + "/Employees");
+        loader = new EmployeeLoader(URL + "/Employees", this);
+        ecLoader=new EmergencyContactLoader(this);
+        currHall=new Hall(URL+"/ResHalls/"+myHall);
 
         mUserType = UserType.valueOf(getIntent().getStringExtra(KEY_USER_TYPE));
         mUserRA = getRA(getIntent().getStringExtra(KEY_RA_EMAIL));
@@ -103,14 +122,27 @@ public class MainActivity extends Activity implements ICallback {
             fragment = EmergencyContactsFragment.newInstance();
             break;
         case DUTY_ROSTER:
-            fragment = DutyRosterFragment.newInstance();
+            LocalDate date=LocalDate.now();
+            int DoW=date.getDayOfWeek();
+            if (DoW<DateTimeConstants.FRIDAY){
+                date.plusDays(DateTimeConstants.FRIDAY-DoW);
+            }
+            if (DoW>DateTimeConstants.FRIDAY){
+                date.minusDays(DoW-DateTimeConstants.FRIDAY);
+            }
+            if (mUserType==UserType.RESIDENT){
+                fragment= StudentDutyRosterFragment.newInstance(myHall, date);
+            }
+            else {
+                fragment = DutyRosterFragment.newInstance(myHall, date);
+            }
             break;
         case HALL_ROSTER_OR_RESIDENT_LOGOUT:
             if (mUserType.equals(UserType.RESIDENT)) {
                 logout();
                 return;
             } else {
-                fragment = HallRosterFragment.newInstance();
+                fragment = HallRosterFragment.newInstance(myHall, myFloor+"");
                 break;
             }
         case RA_LOGOUT:
@@ -198,8 +230,9 @@ public class MainActivity extends Activity implements ICallback {
     }
 
     @Override
-    public List<Employee> getEmergencyContacts() {
-        return DummyData.getEmergencyContacts();
+    public List<EmergencyContact> getEmergencyContacts() {
+
+        return ecLoader.getContactList();
     }
 
     @Override
@@ -213,12 +246,16 @@ public class MainActivity extends Activity implements ICallback {
     }
 
     @Override
+    public List<Employee> getMySAs() {
+       return loader.getMySAs();
+    }
+
+    @Override
     public List<Employee> getAllRAs() {
         if (allRAs == null) {
-            //allRAs = loader.getRAs();
-            allRAs=DummyData.getMyRAs();
+            allRAs = loader.getRAs();
+            //allRAs=DummyData.getMyRAs();
         }
-        //TODO: fix
         return allRAs;
     }
 
@@ -229,5 +266,30 @@ public class MainActivity extends Activity implements ICallback {
 
     public UserType getUserType() {
         return mUserType;
+    }
+
+    @Override
+    public String getMyHall() {
+        return myHall;
+    }
+
+    @Override
+    public DutyRoster getRoster() {
+        return new DutyRoster(URL+"/DutyRosters/"+myHall, LocalDate.now());
+    }
+
+    @Override
+    public List<Employee> getMyRAs(){
+        return loader.getMyRAs();
+    }
+
+    @Override
+    public Hall getHall(String hall){
+       return new Hall(URL+"/ResHalls/"+hall);
+    }
+
+    @Override
+    public DutyRoster getDutyRoster(String hall, LocalDate date) {
+        return new DutyRoster(URL+"/DutyRosters/"+hall, date);
     }
 }
