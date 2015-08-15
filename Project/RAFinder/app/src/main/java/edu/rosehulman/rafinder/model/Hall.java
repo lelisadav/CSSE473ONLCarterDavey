@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.rosehulman.rafinder.Configs;
 import edu.rosehulman.rafinder.MainActivity;
 
 /**
@@ -19,11 +20,20 @@ public class Hall implements SearchResultItem {
     private HashMap<String, Floor> floors;
     private Firebase firebase;
 
-    public Hall(String url){
+    public Hall(DataSnapshot ds){
+        name=ds.getKey();
         floors=new HashMap<>();
-        firebase=new Firebase(url);
-        firebase.addListenerForSingleValueEvent(new HallListener(this));
+        for(DataSnapshot child: ds.child(Configs.roster).getChildren()){
+            floors.put(child.getKey(), new Floor(child, name));
+        }
+
     }
+
+//    public Hall(String url){
+//        floors=new HashMap<>();
+//        firebase=new Firebase(url);
+//        firebase.addListenerForSingleValueEvent(new HallListener(this));
+//    }
 
 //    public Hall(String name, Floor... floors) {
 //        this.name = name;
@@ -58,30 +68,33 @@ public class Hall implements SearchResultItem {
         }
         return floorNumbers;
     }
+    public Floor getFloor(String floorName){
+        return floors.get(floorName);
+    }
 
     public int getFloorCount() {
         return floors.size();
     }
 
-    private class HallListener implements ValueEventListener{
-        private Hall hall;
-
-        public HallListener(Hall hall){
-            this.hall=hall;
-        }
-
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            for (DataSnapshot floor : dataSnapshot.getChildren()){
-                String url = MainActivity.FIREBASE_ROOT_URL + floor.getRef().getPath().toString();
-                Floor flr = new Floor(url);
-                hall.getFloors().add(flr);
-            }
-        }
-
-        @Override
-        public void onCancelled(FirebaseError firebaseError) {
-
-        }
-    }
+//    private class HallListener implements ValueEventListener{
+//        private Hall hall;
+//
+//        public HallListener(Hall hall){
+//            this.hall=hall;
+//        }
+//
+//        @Override
+//        public void onDataChange(DataSnapshot dataSnapshot) {
+//            for (DataSnapshot floor : dataSnapshot.getChildren()){
+//                String url = Configs.FIREBASE_ROOT_URL + floor.getRef().getPath().toString();
+//                Floor flr = new Floor(url);
+//                hall.getFloors().add(flr);
+//            }
+//        }
+//
+//        @Override
+//        public void onCancelled(FirebaseError firebaseError) {
+//
+//        }
+//    }
 }

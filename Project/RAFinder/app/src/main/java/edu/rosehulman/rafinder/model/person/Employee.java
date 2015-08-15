@@ -12,6 +12,7 @@ import com.firebase.client.FirebaseError;
 
 import java.util.Arrays;
 
+import edu.rosehulman.rafinder.Configs;
 import edu.rosehulman.rafinder.MainActivity;
 
 /**
@@ -37,17 +38,17 @@ public class Employee extends Resident {
 
     public Employee(DataSnapshot ds) {
         this(
-                ds.child("name").getValue(String.class),
-                ds.child("email").getValue(String.class),
-                ds.child("floor").getValue(int.class),
-                ds.child("hall").getValue(String.class),
-                ds.child("phoneNumber").getValue(String.class),
-                ds.child("room").getValue(int.class),
-                ds.child("status").getValue(String.class),
-                ds.child("statusDetail").getValue(String.class),
-                convertToBitmap(ds.child("profilePicture").getValue(String.class))
+                ds.child(Configs.employeeName).getValue(String.class),
+                ds.child(Configs.employeeEmail).getValue(String.class),
+                ds.child(Configs.employeeFloor).getValue(int.class),
+                ds.child(Configs.employeeHall).getValue(String.class),
+                ds.child(Configs.employeePhone).getValue(String.class),
+                ds.child(Configs.employeeRoom).getValue(int.class),
+                ds.child(Configs.employeeStatus).getValue(String.class),
+                ds.child(Configs.employeeStatusDetail).getValue(String.class),
+                convertToBitmap(ds.child(Configs.employeePicture).getValue(String.class))
         );
-        firebase = new Firebase(MainActivity.FIREBASE_ROOT_URL + ds.getRef().getPath().toString());
+        firebase = new Firebase(Configs.FIREBASE_ROOT_URL + ds.getRef().getPath().toString());
         firebase.addChildEventListener(new ChildrenListener());
     }
 
@@ -60,14 +61,14 @@ public class Employee extends Resident {
             byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
             return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         } catch (Exception e) {
-            Log.w(MainActivity.LOG_TAG, "Error decoding image");
+            Log.w(Configs.LOG_TAG, "Error decoding image");
             return null;
         }
     }
 
     public Employee(String firebaseUrl) {
         super("");
-        firebase = new Firebase(MainActivity.FIREBASE_ROOT_URL + firebaseUrl);
+        firebase = new Firebase(Configs.FIREBASE_ROOT_URL + firebaseUrl);
         firebase.addChildEventListener(new ChildrenListener());
     }
 
@@ -174,28 +175,28 @@ public class Employee extends Resident {
 
         public void onChildChanged(DataSnapshot arg0, String arg1) {
             switch (arg0.getKey()) {
-            case "email":
+            case Configs.employeeEmail:
                 setEmail(arg0.getValue(String.class));
                 break;
-            case "floor":
+            case Configs.employeeFloor:
                 setFloor(arg0.getValue(int.class));
                 break;
-            case "hall":
+            case Configs.employeeHall:
                 setHall(arg0.getValue(String.class));
                 break;
-            case "phoneNumber":
+            case Configs.employeePhone:
                 setPhoneNumber(arg0.getValue(String.class));
                 break;
-            case "room":
+            case Configs.employeeRoom:
                 setRoom(arg0.getValue(int.class));
                 break;
-            case "status":
+            case Configs.employeeStatus:
                 setStatus(arg0.getValue(String.class));
                 break;
-            case "statusDetail":
+            case Configs.employeeStatusDetail:
                 setStatusDetail(arg0.getValue(String.class));
                 break;
-            case "name":
+            case Configs.employeeName:
                 setName(arg0.getValue(String.class));
                 break;
             }

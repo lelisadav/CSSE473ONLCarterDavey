@@ -25,5 +25,9 @@ public interface ICallback
                 HomeFragmentSubsectionMyRA.HomeMyRAListener,
                 HomeFragmentSubsectionMySAs.HomeMySAListener,
                 EmployeeLoader.LoaderCallbacks,
-                EmergencyContactLoader.ContactLoaderListener{
+                EmergencyContactLoader.ContactLoaderListener,
+                HallLoader.LoaderCallbacks,
+                DutyRosterLoader.LoaderCallbacks
+
+{
 }

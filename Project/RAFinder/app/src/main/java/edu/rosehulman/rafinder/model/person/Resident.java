@@ -2,6 +2,7 @@ package edu.rosehulman.rafinder.model.person;
 
 import com.firebase.client.DataSnapshot;
 
+import edu.rosehulman.rafinder.Configs;
 import edu.rosehulman.rafinder.model.SearchResultItem;
 
 public class Resident implements SearchResultItem {
@@ -13,7 +14,7 @@ public class Resident implements SearchResultItem {
     }
 
     public Resident(DataSnapshot ds) {
-        name = ds.child("name").getValue(String.class);
+        name = ds.child(Configs.employeeName).getValue(String.class);
     }
 
     public String getName() {

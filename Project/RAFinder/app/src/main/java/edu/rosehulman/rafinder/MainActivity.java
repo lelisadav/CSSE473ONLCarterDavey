@@ -41,12 +41,9 @@ import edu.rosehulman.rafinder.model.person.ResidentAssistant;
  * The container activity for the entire app.
  */
 public class MainActivity extends Activity implements ICallback {
-    public static final String LOG_TAG = "RAF";
 
-    protected static final String KEY_SHARED_PREFS = "RA_FINDER_SHARED_PREFERENCES";
-    protected static final String KEY_USER_TYPE = "KEY_USER_TYPE";
-    protected static final String KEY_RA_EMAIL = "KEY_RA_EMAIL";
-    protected static final String KEY_USER_EMAIL = "KEY_USER_EMAIL";
+
+
 
     private static final int HOME = 0;
     private static final int MY_RA = 1;
@@ -56,11 +53,7 @@ public class MainActivity extends Activity implements ICallback {
     private static final int RA_LOGOUT = 5;
     private static final int LOADING = -1;
 
-    public static String HALL = "HALL";
-    public static String FLOOR = "FLOOR";
-    public static String FIREBASE_ROOT_URL = "https://ra-finder.firebaseio.com";
-    public static String dateFormatter = "yyyy-MM-dd";
-    public static DateTimeFormatter formatter = DateTimeFormat.forPattern(dateFormatter);
+
 
     private int mFloor;
     private String mHall;
@@ -68,6 +61,9 @@ public class MainActivity extends Activity implements ICallback {
     private List<Employee> allRAs;
     private EmployeeLoader loader;
     private EmergencyContactLoader ecLoader;
+    private DutyRosterLoader dutyRosterLoader;
+    private DutyRoster roster;
+    private HallLoader hallLoader;
     private UserType mUserType = UserType.RESIDENT;
     private Employee selectedResident;
     private ResidentAssistant mUserRA;
@@ -87,13 +83,14 @@ public class MainActivity extends Activity implements ICallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loader = new EmployeeLoader(FIREBASE_ROOT_URL, this);
+        loader = new EmployeeLoader(Configs.FIREBASE_ROOT_URL, this);
+
 //        ecLoader = new EmergencyContactLoader(this);
 
-        mRaEmail = getIntent().getStringExtra(KEY_RA_EMAIL);
-        mUserType = UserType.valueOf(getIntent().getStringExtra(KEY_USER_TYPE));
+        mRaEmail = getIntent().getStringExtra(Configs.KEY_RA_EMAIL);
+        mUserType = UserType.valueOf(getIntent().getStringExtra(Configs.KEY_USER_TYPE));
 
-        Log.d(LOG_TAG, "Main got UserType <" + mUserType + "> and raEmail <" + mRaEmail + ">");
+        Log.d(Configs.LOG_TAG, "Main got UserType <" + mUserType + "> and raEmail <" + mRaEmail + ">");
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -115,44 +112,34 @@ public class MainActivity extends Activity implements ICallback {
         Fragment fragment;
 
         switch (position) {
-        case LOADING:
+        case LOADING: //-1
             fragment = LoadingFragment.newInstance();
             break;
-        case HOME:
+        case HOME: //0
             fragment = HomeFragment.newInstance();
             break;
-        case MY_RA:
+        case MY_RA: //1
             switchToProfile(mUserRA);
             return;
-        case EMERGENCY_CONTACTS:
+        case EMERGENCY_CONTACTS: //2
             fragment = EmergencyContactsFragment.newInstance();
             break;
-        case DUTY_ROSTER:
+        case DUTY_ROSTER://3
             // TODO: kick off DutyRosterLoader, set to loading fragment, move logic to loadingComplete callback
-            LocalDate date = LocalDate.now();
-            int DoW = date.getDayOfWeek();
-            if (DoW < DateTimeConstants.FRIDAY) {
-                date.plusDays(DateTimeConstants.FRIDAY - DoW);
-            }
-            if (DoW > DateTimeConstants.FRIDAY) {
-                date.minusDays(DoW - DateTimeConstants.FRIDAY);
-            }
-            if (mUserType == UserType.RESIDENT) {
-                fragment = StudentDutyRosterFragment.newInstance(mHall, date);
-            } else {
-                fragment = DutyRosterFragment.newInstance(mHall, date);
-            }
+
+            dutyRosterLoader=new DutyRosterLoader(Configs.FIREBASE_ROOT_URL, mHall, this);
+            fragment=new LoadingFragment();
             break;
-        case HALL_ROSTER_OR_RESIDENT_LOGOUT:
+        case HALL_ROSTER_OR_RESIDENT_LOGOUT: //4
             if (mUserType.equals(UserType.RESIDENT)) {
                 logout();
                 return;
             } else {
-                // TODO: kick off HallRosterLoader, set to loading fragment
-                fragment = HallRosterFragment.newInstance(mHall, mFloor + "");
+                hallLoader=new HallLoader(Configs.FIREBASE_ROOT_URL, mHall, this);
+                fragment=new LoadingFragment();
                 break;
             }
-        case RA_LOGOUT:
+        case RA_LOGOUT: //5
             logout();
             return;
         default:
@@ -166,10 +153,10 @@ public class MainActivity extends Activity implements ICallback {
 
     private void logout() {
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        new Firebase(FIREBASE_ROOT_URL).unauth();
+        new Firebase(Configs.FIREBASE_ROOT_URL).unauth();
 
         // clear persistent data
-        SharedPreferences.Editor editor = getSharedPreferences(KEY_SHARED_PREFS, MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = getSharedPreferences(Configs.KEY_SHARED_PREFS, MODE_PRIVATE).edit();
         editor.clear();
         editor.apply();
 
@@ -308,17 +295,35 @@ public class MainActivity extends Activity implements ICallback {
         mUserRA = getRA(mRaEmail);
         mHall = mUserRA.getHall();
         mFloor = mUserRA.getFloor();
-        currHall = new Hall(FIREBASE_ROOT_URL + "/ResHalls/" + mHall);
-        onNavigationDrawerItemSelected(0);
+        //currHall = new Hall(FIREBASE_ROOT_URL + "/ResHalls/" + mHall);
+
+        onNavigationDrawerItemSelected(HOME);
+    }
+    public void onHallLoadingComplete(){
+        //currHall=hallLoader.getHall();
+        Fragment fragment = HallRosterFragment.newInstance(mHall, mFloor + "");
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
+    }
+    public void onDutyRosterLoadingComplete(){
+        //roster=dutyRosterLoader.getDutyRoster();
+        Fragment fragment;
+        if (mUserType == UserType.RESIDENT) {
+             fragment = StudentDutyRosterFragment.newInstance(mHall, dutyRosterLoader.getDate());
+        } else {
+            fragment = DutyRosterFragment.newInstance(mHall, dutyRosterLoader.getDate());
+        }
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
     }
 
-    // TODO: onHallRosterLoadingComplete - fragment logic and startup here
 
-    // TODO: onDutyRosterLoadingComplete - fragment logic and startup here
 
     @Override
-    public DutyRoster getRoster() {
-        return new DutyRoster(FIREBASE_ROOT_URL + "/DutyRosters/" + mHall, LocalDate.now());
+    public DutyRoster getDutyRoster() {
+        return dutyRosterLoader.getDutyRoster();
     }
 
     @Override
@@ -328,11 +333,11 @@ public class MainActivity extends Activity implements ICallback {
 
     @Override
     public Hall getHall(String hall) {
-        return new Hall(FIREBASE_ROOT_URL + "/ResHalls/" + hall);
+        return hallLoader.getHall();
     }
 
-    @Override
-    public DutyRoster getDutyRoster(String hall, LocalDate date) {
-        return new DutyRoster(FIREBASE_ROOT_URL + "/DutyRosters/" + hall, date);
-    }
+//    @Override
+//    public DutyRoster getDutyRoster(String hall, LocalDate date) {
+//        return new DutyRoster(Configs.FIREBASE_ROOT_URL + "/"+Configs.DutyRosters+"/" + hall, date);
+//    }
 }

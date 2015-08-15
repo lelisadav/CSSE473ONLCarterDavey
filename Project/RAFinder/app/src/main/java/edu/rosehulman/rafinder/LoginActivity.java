@@ -59,7 +59,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
 
-        Firebase firebase = new Firebase(MainActivity.FIREBASE_ROOT_URL);
+        Firebase firebase = new Firebase(Configs.FIREBASE_ROOT_URL);
         mLogin = new Login(firebase, this);
 
         setContentView(R.layout.activity_login);
@@ -105,9 +105,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        SharedPreferences prefs = getSharedPreferences(MainActivity.KEY_SHARED_PREFS, MODE_PRIVATE);
-        UserType userType = UserType.valueOf(prefs.getString(MainActivity.KEY_USER_TYPE, UserType.NONE.toString()));
-        String raEmail = prefs.getString(MainActivity.KEY_RA_EMAIL, "");
+        SharedPreferences prefs = getSharedPreferences(Configs.KEY_SHARED_PREFS, MODE_PRIVATE);
+        UserType userType = UserType.valueOf(prefs.getString(Configs.KEY_USER_TYPE, UserType.NONE.toString()));
+        String raEmail = prefs.getString(Configs.KEY_RA_EMAIL, "");
 
         // Skip login screen if we're still authorized and have data.
         if (firebase.getAuth() != null && !userType.equals(UserType.NONE) && !raEmail.equals("")) {
@@ -170,17 +170,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      */
     public void launchMainActivity(UserType userType, String raEmail) {
         mAuthProgressDialog.hide();
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(MainActivity.KEY_USER_TYPE, userType.name());
-        intent.putExtra(MainActivity.KEY_RA_EMAIL, raEmail);
+        Intent intent = new Intent(this, Configs.class);
+        intent.putExtra(Configs.KEY_USER_TYPE, userType.name());
+        intent.putExtra(Configs.KEY_RA_EMAIL, raEmail);
 
         // Store data for persistence
-        SharedPreferences.Editor editor = getSharedPreferences(MainActivity.KEY_SHARED_PREFS, MODE_PRIVATE).edit();
-        editor.putString(MainActivity.KEY_USER_TYPE, userType.name());
-        editor.putString(MainActivity.KEY_RA_EMAIL, raEmail);
+        SharedPreferences.Editor editor = getSharedPreferences(Configs.KEY_SHARED_PREFS, MODE_PRIVATE).edit();
+        editor.putString(Configs.KEY_USER_TYPE, userType.name());
+        editor.putString(Configs.KEY_RA_EMAIL, raEmail);
         editor.apply();
 
-        Log.d(MainActivity.LOG_TAG, "starting Main with userType <" + userType + "> and raEmail <" + raEmail + ">");
+        Log.d(Configs.LOG_TAG, "starting Main with userType <" + userType + "> and raEmail <" + raEmail + ">");
         startActivity(intent);
         finish();
     }

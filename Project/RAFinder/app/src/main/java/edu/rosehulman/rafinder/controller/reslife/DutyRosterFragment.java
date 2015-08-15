@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.rosehulman.rafinder.Configs;
 import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.DutyRosterArrayAdapter;
@@ -34,14 +35,14 @@ public class DutyRosterFragment extends Fragment {
     private String hallName;
     private LocalDate date;
     private DutyRoster roster;
-    public static final String DATE="DATE";
+
 
 
     public static DutyRosterFragment newInstance(String hall, LocalDate date) {
         DutyRosterFragment fragment= new DutyRosterFragment();
         Bundle args=new Bundle();
-        args.putString(MainActivity.HALL, hall);
-        args.putString(DATE, date.toString(MainActivity.dateFormatter));
+        args.putString(Configs.HALL, hall);
+        args.putString(Configs.DATE, date.toString(Configs.dateFormatter));
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,23 +68,23 @@ public class DutyRosterFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState!=null){
-            hallName=savedInstanceState.getString(MainActivity.HALL, null);
-            String dateStr=savedInstanceState.getString(DATE, null);
+            hallName=savedInstanceState.getString(Configs.HALL, null);
+            String dateStr=savedInstanceState.getString(Configs.DATE, null);
             if (dateStr!=null) {
 
-                date = LocalDate.parse(dateStr, MainActivity.formatter);
+                date = LocalDate.parse(dateStr, Configs.formatter);
             }
         }
         else if(getArguments()!=null){
-            hallName=getArguments().getString(MainActivity.HALL, null);
-            String dateStr=getArguments().getString(DATE, null);
+            hallName=getArguments().getString(Configs.HALL, null);
+            String dateStr=getArguments().getString(Configs.DATE, null);
             if (dateStr!=null) {
 
-                date = LocalDate.parse(dateStr, MainActivity.formatter);
+                date = LocalDate.parse(dateStr, Configs.formatter);
             }
         }
         if (mListener!=null){
-            roster=mListener.getDutyRoster(hallName, date);
+            roster=mListener.getDutyRoster();
         }
     }
 
@@ -104,6 +105,6 @@ public class DutyRosterFragment extends Fragment {
     }
 
     public interface DutyRosterListener {
-        public DutyRoster getDutyRoster(String hall, LocalDate date);
+        public DutyRoster getDutyRoster();
     }
 }

@@ -17,6 +17,7 @@ import org.joda.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.rosehulman.rafinder.Configs;
 import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.DutyRosterArrayAdapter;
@@ -30,13 +31,13 @@ import edu.rosehulman.rafinder.model.DutyRosterItem;
  */
 public class StudentDutyRosterFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    private String firebaseURL;
+   
 
     private DutyRoster roster;
     private DutyRosterListener mListener;
     private String hallName;
     private LocalDate date;
-    public static final String DATE="DATE";
+  ;
 
     /**
      * The fragment's ListView/GridView.
@@ -52,8 +53,8 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
     public static StudentDutyRosterFragment newInstance(String hall, LocalDate date) {
         StudentDutyRosterFragment fragment= new StudentDutyRosterFragment();
         Bundle args=new Bundle();
-        args.putString(MainActivity.HALL, hall);
-        args.putString(DATE, date.toString(MainActivity.dateFormatter));
+        args.putString(Configs.HALL, hall);
+        args.putString(Configs.DATE, date.toString(Configs.dateFormatter));
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,23 +66,23 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState!=null){
-            hallName=savedInstanceState.getString(MainActivity.HALL, null);
-            String dateStr=savedInstanceState.getString(DATE, null);
+            hallName=savedInstanceState.getString(Configs.HALL, null);
+            String dateStr=savedInstanceState.getString(Configs.DATE, null);
             if (dateStr!=null) {
 
-                date = LocalDate.parse(dateStr, MainActivity.formatter);
+                date = LocalDate.parse(dateStr, Configs.formatter);
             }
         }
         else if(getArguments()!=null){
-            hallName=getArguments().getString(MainActivity.HALL, null);
-            String dateStr=getArguments().getString(DATE, null);
+            hallName=getArguments().getString(Configs.HALL, null);
+            String dateStr=getArguments().getString(Configs.DATE, null);
             if (dateStr!=null) {
 
-                date = LocalDate.parse(dateStr, MainActivity.formatter);
+                date = LocalDate.parse(dateStr, Configs.formatter);
             }
         }
         if (mListener!=null){
-            roster=mListener.getDutyRoster(hallName, date);
+            roster=mListener.getDutyRoster();
         }
     }
 
@@ -146,7 +147,7 @@ public class StudentDutyRosterFragment extends Fragment implements AbsListView.O
      * with Other Fragments</a> for more information.
      */
     public interface DutyRosterListener {
-        public DutyRoster getDutyRoster(String hall, LocalDate date);
+        public DutyRoster getDutyRoster();
     }
 
     private LocalDate getNextFriday(LocalDate date) {

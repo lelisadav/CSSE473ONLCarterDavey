@@ -27,14 +27,6 @@ import edu.rosehulman.rafinder.model.person.Employee;
  * create an instance of this fragment.
  */
 public class HomeFragmentSubsectionMyRA extends Fragment implements RAListArrayAdapter.RAListArrayAdapterCallbacks{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private HomeMyRAListener mListener;
 
@@ -47,12 +39,9 @@ public class HomeFragmentSubsectionMyRA extends Fragment implements RAListArrayA
      * @return A new instance of fragment HomeFragmentSubsectionMyRA.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragmentSubsectionMyRA newInstance(String param1, String param2) {
+    public static HomeFragmentSubsectionMyRA newInstance() {
         HomeFragmentSubsectionMyRA fragment = new HomeFragmentSubsectionMyRA();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -63,10 +52,7 @@ public class HomeFragmentSubsectionMyRA extends Fragment implements RAListArrayA
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override

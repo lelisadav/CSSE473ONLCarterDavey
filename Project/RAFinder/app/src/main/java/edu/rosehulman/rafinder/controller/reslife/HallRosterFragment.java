@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import edu.rosehulman.rafinder.Configs;
 import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.FloorRosterArrayAdapter;
@@ -49,8 +50,8 @@ public class HallRosterFragment extends Fragment
     public static HallRosterFragment newInstance(String hallName, String floorName) {
         HallRosterFragment fragment=new HallRosterFragment();
         Bundle args=new Bundle();
-        args.putString(MainActivity.HALL, hallName);
-        args.putString(MainActivity.FLOOR, floorName);
+        args.putString(Configs.HALL, hallName);
+        args.putString(Configs.FLOOR, floorName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,15 +63,17 @@ public class HallRosterFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState!=null){
-            hallName=savedInstanceState.getString(MainActivity.HALL, null);
-            floorName=savedInstanceState.getString(MainActivity.FLOOR, null);
+            hallName=savedInstanceState.getString(Configs.HALL, null);
+            floorName=savedInstanceState.getString(Configs.FLOOR, null);
         }
         else if (getArguments()!=null){
-            hallName=getArguments().getString(MainActivity.HALL, null);
-            floorName=getArguments().getString(MainActivity.FLOOR, null);
+            hallName=getArguments().getString(Configs.HALL, null);
+            floorName=getArguments().getString(Configs.FLOOR, null);
         }
         if (mListener!=null){
             hall=mListener.getHall(hallName);
+            rooms=hall.getFloor(floorName).getRooms();
+
 
         }
 

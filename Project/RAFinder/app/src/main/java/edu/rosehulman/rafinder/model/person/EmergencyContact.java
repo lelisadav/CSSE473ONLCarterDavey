@@ -5,6 +5,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import edu.rosehulman.rafinder.Configs;
+
 /**
  * Created by daveyle on 8/14/2015.
  */
@@ -116,9 +118,9 @@ public class EmergencyContact implements Comparable<EmergencyContact>{
             contact.setPriority(Priority.STAFF);
             contact.setPosition(Position.ADMIN);
             for (DataSnapshot child : dataSnapshot.getChildren()){
-                if (child.getKey().equals("Email")){
+                if (child.getKey().equals(Configs.ecEmail)){
                     contact.setEmail(child.getValue(String.class));
-                }else if (child.getKey().equals("Phone")){
+                }else if (child.getKey().equals(Configs.ecPhone)){
                     contact.setPhone(child.getValue(String.class));
                 }
 

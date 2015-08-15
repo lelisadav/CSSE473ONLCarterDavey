@@ -10,6 +10,7 @@ import org.joda.time.LocalDate;
 
 import java.util.HashMap;
 
+import edu.rosehulman.rafinder.Configs;
 import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.model.person.Employee;
 
@@ -19,11 +20,22 @@ import edu.rosehulman.rafinder.model.person.Employee;
 public class DutyRoster {
     HashMap<LocalDate,DutyRosterItem> roster;
     private LocalDate startDate;
-    public DutyRoster(String firebaseURL, LocalDate startDate){
-        Firebase firebase=new Firebase(firebaseURL);
+    public DutyRoster(DataSnapshot ds, LocalDate startDate){
         this.startDate=startDate;
-        firebase.addListenerForSingleValueEvent(new DutyRosterListener(this));
+        for (DataSnapshot child: ds.getChildren()){
+            LocalDate rosterDate=LocalDate.parse(child.getKey(), Configs.formatter);
+            if (!rosterDate.isBefore(getStartDate())){
+                String fireBaseUrl = Configs.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
+                DutyRosterItem item=new DutyRosterItem(child);
+                roster.put(rosterDate, item);
+            }
+        }
     }
+//    public DutyRoster(String firebaseURL, LocalDate startDate){
+//        Firebase firebase=new Firebase(firebaseURL);
+//        this.startDate=startDate;
+//        firebase.addListenerForSingleValueEvent(new DutyRosterListener(this));
+//    }
     public Employee getOnDutyNow(){
         LocalDate now=LocalDate.now();
         if (now.getDayOfWeek()!= DateTimeConstants.FRIDAY && now.getDayOfWeek()!=DateTimeConstants.SATURDAY){
@@ -60,28 +72,28 @@ public class DutyRoster {
         this.startDate = startDate;
     }
 
-    private class DutyRosterListener implements ValueEventListener{
-
-        DutyRoster roster;
-        public DutyRosterListener(DutyRoster roster){
-            this.roster=roster;
-        }
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            for (DataSnapshot child: dataSnapshot.getChildren()){
-                LocalDate rosterDate=LocalDate.parse(child.getKey(), MainActivity.formatter);
-                if (!rosterDate.isBefore(roster.getStartDate())){
-                    String fireBaseUrl = MainActivity.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
-                    DutyRosterItem item=new DutyRosterItem(fireBaseUrl);
-                    roster.getRoster().put(rosterDate, item);
-                }
-            }
-
-        }
-
-        @Override
-        public void onCancelled(FirebaseError firebaseError) {
-
-        }
-    }
+//    private class DutyRosterListener implements ValueEventListener{
+//
+//        DutyRoster roster;
+//        public DutyRosterListener(DutyRoster roster){
+//            this.roster=roster;
+//        }
+//        @Override
+//        public void onDataChange(DataSnapshot dataSnapshot) {
+//            for (DataSnapshot child: dataSnapshot.getChildren()){
+//                LocalDate rosterDate=LocalDate.parse(child.getKey(), Configs.formatter);
+//                if (!rosterDate.isBefore(roster.getStartDate())){
+//                    String fireBaseUrl = Configs.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
+//                    DutyRosterItem item=new DutyRosterItem(fireBaseUrl);
+//                    roster.getRoster().put(rosterDate, item);
+//                }
+//            }
+//
+//        }
+//
+//        @Override
+//        public void onCancelled(FirebaseError firebaseError) {
+//
+//        }
+//    }
 }

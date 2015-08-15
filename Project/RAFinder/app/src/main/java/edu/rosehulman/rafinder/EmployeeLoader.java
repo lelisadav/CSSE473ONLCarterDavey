@@ -26,7 +26,7 @@ public class EmployeeLoader {
 
     public EmployeeLoader(String url, LoaderCallbacks cb) {
         callbacks = cb;
-        Firebase firebase = new Firebase(url + "/Employees");
+        Firebase firebase = new Firebase(url + "/"+Configs.Employees);
         firebase.addListenerForSingleValueEvent(new EmployeeValueEventListener());
     }
 
@@ -58,28 +58,28 @@ public class EmployeeLoader {
     public class EmployeeValueEventListener implements ValueEventListener {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            Log.d(MainActivity.LOG_TAG, "Loading Employee data...");
+            Log.d(Configs.LOG_TAG, "Loading Employee data...");
             for (DataSnapshot child : dataSnapshot.getChildren()) {
                 switch (child.getKey()) {
-                case "Administrators":
+                case Configs.Administrators:
                     for (DataSnapshot adminDS : child.getChildren()) {
                         Administrator admin = new Administrator(adminDS);
                         admins.add(admin);
                     }
                     break;
-                case "Graduate Assistants":
+                case Configs.GraduateAssistants:
                     for (DataSnapshot gaDS : child.getChildren()) {
                         GraduateAssistant ga = new GraduateAssistant(gaDS);
                         gas.add(ga);
                     }
                     break;
-                case "Resident Assistants":
+                case Configs.ResidentAssistants:
                     for (DataSnapshot raDS : child.getChildren()) {
                         ResidentAssistant ra = new ResidentAssistant(raDS);
                         ras.add(ra);
                     }
                     break;
-                case "Sophomore Advisors":
+                case Configs.SophomoreAdvisors:
                     for (DataSnapshot saDS : child.getChildren()) {
                         SophomoreAdvisor sa = new SophomoreAdvisor(saDS);
                         sas.add(sa);
@@ -87,7 +87,7 @@ public class EmployeeLoader {
                     break;
                 }
             }
-            Log.d(MainActivity.LOG_TAG, "Finished loading Employee data.");
+            Log.d(Configs.LOG_TAG, "Finished loading Employee data.");
             callbacks.onEmployeeLoadingComplete();
         }
 

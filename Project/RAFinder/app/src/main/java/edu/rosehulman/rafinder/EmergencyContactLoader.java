@@ -21,7 +21,7 @@ public class EmergencyContactLoader {
     public EmergencyContactLoader(ContactLoaderListener listener){
         this.listener=listener;
         if (listener!=null){
-            Employee raOnDuty=listener.getRoster().getOnDutyNow();
+            Employee raOnDuty=listener.getDutyRoster().getOnDutyNow();
             if (raOnDuty!=null){
                 contactList.add(new EmergencyContact(raOnDuty, true));
             }
@@ -30,7 +30,7 @@ public class EmergencyContactLoader {
                 contactList.add(new EmergencyContact(employee, false));
             }
         }
-        Firebase firebaseContact=new Firebase(MainActivity.FIREBASE_ROOT_URL +"/EmergencyContacts");
+        Firebase firebaseContact=new Firebase(Configs.FIREBASE_ROOT_URL +"/"+Configs.EmergencyContacts);
         firebaseContact.addListenerForSingleValueEvent(new LoaderListener(this));
 
 
@@ -44,7 +44,7 @@ public class EmergencyContactLoader {
         this.contactList = contactList;
     }
     public interface ContactLoaderListener{
-        public DutyRoster getRoster();
+        public DutyRoster getDutyRoster();
         public List<Employee> getMyRAs();
     }
     private class LoaderListener implements ValueEventListener{
@@ -56,7 +56,7 @@ public class EmergencyContactLoader {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             for (DataSnapshot child: dataSnapshot.getChildren()){
-                String firebaseURL = MainActivity.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
+                String firebaseURL = Configs.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
                 EmergencyContact contact=new EmergencyContact(firebaseURL);
                 loader.getContactList().add(contact);
             }

@@ -8,6 +8,7 @@ import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.rosehulman.rafinder.Configs;
 import edu.rosehulman.rafinder.MainActivity;
 
 /**
@@ -20,17 +21,25 @@ public class Floor {
     private String number;
     private List<RoomEntry> rooms;
 
-    public Floor(String url){
+    public Floor(DataSnapshot ds, String hallName){
+        number=ds.getKey();
         rooms=new ArrayList<>();
-        Firebase firebase=new Firebase(url);
-        firebase.addListenerForSingleValueEvent(new FloorListener(this));
+        for (DataSnapshot child: ds.getChildren()){
+            rooms.add(new RoomEntry(child, hallName));
+        }
     }
 
-    public Floor(String number, List<RoomEntry> rooms, int lobbyAfterRoomNumber) {
-        this.number = number;
-        this.rooms = rooms;
-        this.lobbyAfterRoomNumber = lobbyAfterRoomNumber;
-    }
+//    public Floor(String url){
+//        rooms=new ArrayList<>();
+//        Firebase firebase=new Firebase(url);
+//        firebase.addListenerForSingleValueEvent(new FloorListener(this));
+//    }
+//
+//    public Floor(String number, List<RoomEntry> rooms, int lobbyAfterRoomNumber) {
+//        this.number = number;
+//        this.rooms = rooms;
+//        this.lobbyAfterRoomNumber = lobbyAfterRoomNumber;
+//    }
 
     public List<RoomEntry> getRooms() {
         return rooms;
@@ -56,38 +65,38 @@ public class Floor {
         this.lobbyAfterRoomNumber = lobbyAfterRoomNumber;
     }
 
-    private void populateRooms() {
-        //do Firebase calls here for rooms;
-        List<RoomEntry> roomList = new ArrayList<RoomEntry>();
-        boolean dummyIsLobby = true;
-        //find position of lobby
-        if (dummyIsLobby) {
-            roomList.add(new RoomEntry.Lobby());
-            //add two to play nice with two column grid view.
-            roomList.add(new RoomEntry.Lobby());
-        }
-    }
-    private class FloorListener implements ValueEventListener{
-        Floor floor;
-
-        public FloorListener(Floor f){
-            floor=f;
-        }
-
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            for (DataSnapshot room: dataSnapshot.getChildren()){
-                String firebaseURL = MainActivity.FIREBASE_ROOT_URL + room.getRef().getPath().toString();
-                RoomEntry roomEntry=new RoomEntry(firebaseURL);
-                floor.getRooms().add(roomEntry);
-            }
-        }
-
-        @Override
-        public void onCancelled(FirebaseError firebaseError) {
-
-        }
-    }
+//    private void populateRooms() {
+//        //do Firebase calls here for rooms;
+//        List<RoomEntry> roomList = new ArrayList<RoomEntry>();
+//        boolean dummyIsLobby = true;
+//        //find position of lobby
+//        if (dummyIsLobby) {
+//            roomList.add(new RoomEntry.Lobby());
+//            //add two to play nice with two column grid view.
+//            roomList.add(new RoomEntry.Lobby());
+//        }
+//    }
+//    private class FloorListener implements ValueEventListener{
+//        Floor floor;
+//
+//        public FloorListener(Floor f){
+//            floor=f;
+//        }
+//
+//        @Override
+//        public void onDataChange(DataSnapshot dataSnapshot) {
+//            for (DataSnapshot room: dataSnapshot.getChildren()){
+//                String firebaseURL = Configs.FIREBASE_ROOT_URL + room.getRef().getPath().toString();
+//                RoomEntry roomEntry=new RoomEntry(firebaseURL);
+//                floor.getRooms().add(roomEntry);
+//            }
+//        }
+//
+//        @Override
+//        public void onCancelled(FirebaseError firebaseError) {
+//
+//        }
+//    }
 
 
 }

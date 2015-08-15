@@ -8,8 +8,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import edu.rosehulman.rafinder.Configs;
 import edu.rosehulman.rafinder.LoginActivity;
-import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.UserType;
 
 
@@ -43,7 +43,7 @@ public class Login {
     private void setAuthenticatedUser(AuthData authData) {
         if (authData != null) {
             this.authData = authData;
-            mFirebaseRef.child("Employees").addListenerForSingleValueEvent(new EmployeeListener(authData.getUid()));
+            mFirebaseRef.child(Configs.Employees).addListenerForSingleValueEvent(new EmployeeListener(authData.getUid()));
 
 //            mActivity.launchMainActivity(this.authData);
         }
@@ -101,10 +101,10 @@ public class Login {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            Log.d(MainActivity.LOG_TAG, "In Resident callback for user <" + uid + ">");
+            Log.d(Configs.LOG_TAG, "In Resident callback for user <" + uid + ">");
             if (dataSnapshot.hasChild(uid)) {
                 mUserType = UserType.RESIDENT;
-                mRAEmail = dataSnapshot.child(uid).child("myRA").getValue().toString();
+                mRAEmail = dataSnapshot.child(uid).child(Configs.myRA).getValue().toString();
                 mActivity.launchMainActivity(mUserType, mRAEmail);
             }
         }
@@ -124,30 +124,30 @@ public class Login {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            Log.d(MainActivity.LOG_TAG, "in Employees callback for user <" + uid + ">");
-            Log.d(MainActivity.LOG_TAG, "DataSnapshot url = " + dataSnapshot.getRef().getPath().toString());
+            Log.d(Configs.LOG_TAG, "in Employees callback for user <" + uid + ">");
+            Log.d(Configs.LOG_TAG, "DataSnapshot url = " + dataSnapshot.getRef().getPath().toString());
             if (dataSnapshot.getChildrenCount() != 4) {
-                Log.wtf(MainActivity.LOG_TAG, "Employees table had wrong number of children");
+                Log.wtf(Configs.LOG_TAG, "Employees table had wrong number of children");
             }
             DataSnapshot table;
-            if (dataSnapshot.child("Administrators").hasChild(uid)) {
+            if (dataSnapshot.child(Configs.Administrators).hasChild(uid)) {
                 mUserType = UserType.ADMINISTRATOR;
-                table = dataSnapshot.child("Administrators");
-            } else if (dataSnapshot.child("Resident Assistants").hasChild(uid)) {
+                table = dataSnapshot.child(Configs.Administrators);
+            } else if (dataSnapshot.child(Configs.ResidentAssistants).hasChild(uid)) {
                 mUserType = UserType.RESIDENT_ASSISTANT;
-                table = dataSnapshot.child("Resident Assistants");
-            } else if (dataSnapshot.child("Sophomore Advisors").hasChild(uid)) {
+                table = dataSnapshot.child(Configs.ResidentAssistants);
+            } else if (dataSnapshot.child(Configs.SophomoreAdvisors).hasChild(uid)) {
                 mUserType = UserType.SOPHOMORE_ADVISOR;
-                table = dataSnapshot.child("Sophomore Advisors");
-            } else if (dataSnapshot.child("Graduate Assistants").hasChild(uid)) {
+                table = dataSnapshot.child(Configs.SophomoreAdvisors);
+            } else if (dataSnapshot.child(Configs.GraduateAssistants).hasChild(uid)) {
                 mUserType = UserType.GRADUATE_ASSISTANT;
-                table = dataSnapshot.child("Graduate Assistants");
+                table = dataSnapshot.child(Configs.GraduateAssistants);
             } else {
-                mFirebaseRef.child("Residents").addListenerForSingleValueEvent(new ResidentListener(uid));
-                Log.d(MainActivity.LOG_TAG, "User <" + uid + "> not found in employees");
+                mFirebaseRef.child(Configs.Residents).addListenerForSingleValueEvent(new ResidentListener(uid));
+                Log.d(Configs.LOG_TAG, "User <" + uid + "> not found in employees");
                 return;
             }
-            mRAEmail = table.child(uid).child("email").getValue().toString();
+            mRAEmail = table.child(uid).child(Configs.employeeEmail).getValue().toString();
             mActivity.launchMainActivity(mUserType, mRAEmail);
         }
 

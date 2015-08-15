@@ -7,7 +7,7 @@ import com.firebase.client.ValueEventListener;
 
 import org.joda.time.LocalDate;
 
-import edu.rosehulman.rafinder.MainActivity;
+import edu.rosehulman.rafinder.Configs;
 import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 
@@ -25,19 +25,34 @@ public class DutyRosterItem {
     private Employee satDuty;
     private LocalDate friday;
 
-    public DutyRosterItem(String fireBaseUrl) {
-        this.firebaseURL = fireBaseUrl;
-        Firebase firebase = new Firebase(firebaseURL);
-        firebase.addListenerForSingleValueEvent(new DutyRosterListener(this));
-//        this.friDuty = getFridayWorker();
-//        this.satDuty = getSaturdayWorker();
+    public DutyRosterItem(DataSnapshot ds){
+        friday=LocalDate.parse(ds.getKey(), Configs.formatter);
+        for (DataSnapshot child : ds.getChildren()) {
+            if (child.getKey().equals(Configs.friday)) {
+                friDuty = new ResidentAssistant(Configs.FIREBASE_ROOT_URL +
+                        "/"+Configs.Employees +"/"+Configs.ResidentAssistants+"/" +
+                        child.getValue(String.class));
+            } else if (child.getKey().equals(Configs.saturday)) {
+                satDuty = new ResidentAssistant(Configs.FIREBASE_ROOT_URL +
+                        "/"+Configs.Employees +"/"+Configs.ResidentAssistants+"/" +
+                        child.getValue(String.class));
+            }
+        }
     }
 
-    public DutyRosterItem(LocalDate friday, Employee friDuty, Employee satDuty) {
-        this.friday = friday;
-        this.friDuty = friDuty;
-        this.satDuty = satDuty;
-    }
+//    public DutyRosterItem(String fireBaseUrl) {
+//        this.firebaseURL = fireBaseUrl;
+//        Firebase firebase = new Firebase(firebaseURL);
+//        firebase.addListenerForSingleValueEvent(new DutyRosterListener(this));
+////        this.friDuty = getFridayWorker();
+////        this.satDuty = getSaturdayWorker();
+//    }
+//
+//    public DutyRosterItem(LocalDate friday, Employee friDuty, Employee satDuty) {
+//        this.friday = friday;
+//        this.friDuty = friDuty;
+//        this.satDuty = satDuty;
+//    }
 
 //    private Employee getFridayWorker() {
 //        //use firebase url to pull friday worker
@@ -73,34 +88,34 @@ public class DutyRosterItem {
         this.friday = friday;
     }
 
-    public class DutyRosterListener implements ValueEventListener {
-        private DutyRosterItem item;
-
-        public DutyRosterListener(DutyRosterItem item) {
-            this.item = item;
-        }
-
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            for (DataSnapshot child : dataSnapshot.getChildren()) {
-                if (child.getKey().equals("friday")) {
-                    friDuty = new ResidentAssistant(MainActivity.FIREBASE_ROOT_URL +
-                                                    "/Employees/Resident Assistants/" +
-                                                    child.getValue(String.class));
-                } else if (child.getKey().equals("saturday")) {
-                    satDuty = new ResidentAssistant(MainActivity.FIREBASE_ROOT_URL +
-                                                    "/Employees/Resident Assistants/" +
-                                                    child.getValue(String.class));
-                }
-            }
-
-        }
-
-        @Override
-        public void onCancelled(FirebaseError firebaseError) {
-
-        }
-    }
+//    public class DutyRosterListener implements ValueEventListener {
+//        private DutyRosterItem item;
+//
+//        public DutyRosterListener(DutyRosterItem item) {
+//            this.item = item;
+//        }
+//
+//        @Override
+//        public void onDataChange(DataSnapshot dataSnapshot) {
+//            for (DataSnapshot child : dataSnapshot.getChildren()) {
+//                if (child.getKey().equals(Configs.friday)) {
+//                    friDuty = new ResidentAssistant(Configs.FIREBASE_ROOT_URL +
+//                                                    "/"+Configs.Employees +"/"+Configs.ResidentAssistants+"/" +
+//                                                    child.getValue(String.class));
+//                } else if (child.getKey().equals(Configs.saturday)) {
+//                    satDuty = new ResidentAssistant(Configs.FIREBASE_ROOT_URL +
+//                                                    "/"+Configs.Employees +"/"+Configs.ResidentAssistants+"/" +
+//                                                    child.getValue(String.class));
+//                }
+//            }
+//
+//        }
+//
+//        @Override
+//        public void onCancelled(FirebaseError firebaseError) {
+//
+//        }
+//    }
 
 }
 
