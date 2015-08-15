@@ -1,5 +1,7 @@
 package edu.rosehulman.rafinder;
 
+import android.util.Log;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -15,7 +17,6 @@ import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 import edu.rosehulman.rafinder.model.person.SophomoreAdvisor;
 
 public class EmployeeLoader {
-    private String url;
     private List<Employee> admins = new ArrayList<>();
     private List<Employee> ras = new ArrayList<>();
     private List<Employee> gas = new ArrayList<>();
@@ -24,10 +25,75 @@ public class EmployeeLoader {
 
 
     public EmployeeLoader(String url, LoaderCallbacks cb) {
-        this.callbacks=cb;
-        this.url = url;
-        Firebase firebase = new Firebase(this.url);
+        callbacks = cb;
+        Firebase firebase = new Firebase(url + "/Employees");
         firebase.addListenerForSingleValueEvent(new EmployeeValueEventListener());
+    }
+
+    public List<Employee> getMyRAs() {
+        List<Employee> myRAs = new ArrayList<>();
+        for (Employee ra : ras) {
+            if (ra.getHall().equals(callbacks.getMyHall())) {
+                myRAs.add(ra);
+            }
+        }
+        return myRAs;
+    }
+
+    public List<Employee> getMySAs() {
+        List<Employee> mySAs = new ArrayList<>();
+        for (Employee sa : sas) {
+            if (sa.getHall().equals(callbacks.getMyHall())) {
+                mySAs.add(sa);
+            }
+        }
+        return mySAs;
+    }
+
+    public interface LoaderCallbacks {
+        public String getMyHall();
+    }
+
+    public class EmployeeValueEventListener implements ValueEventListener {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            Log.d(MainActivity.LOG_TAG, "Loading Employee data...");
+            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                switch (child.getKey()) {
+                case "Administrators":
+                    for (DataSnapshot adminDS : child.getChildren()) {
+                        Administrator admin = new Administrator(adminDS);
+                        admins.add(admin);
+                    }
+                    break;
+                case "Graduate Assistants":
+                    for (DataSnapshot gaDS : child.getChildren()) {
+                        GraduateAssistant ga = new GraduateAssistant(gaDS);
+                        gas.add(ga);
+                    }
+                    break;
+                case "Resident Assistants":
+                    for (DataSnapshot raDS : child.getChildren()) {
+                        ResidentAssistant ra = new ResidentAssistant(raDS);
+                        ras.add(ra);
+                    }
+                    break;
+                case "Sophomore Advisors":
+                    for (DataSnapshot saDS : child.getChildren()) {
+                        SophomoreAdvisor sa = new SophomoreAdvisor(saDS);
+                        sas.add(sa);
+                    }
+                    break;
+                }
+            }
+            Log.d(MainActivity.LOG_TAG, "Finished loading Employee data.");
+            ((MainActivity) callbacks).updateInitialData();
+        }
+
+        @Override
+        public void onCancelled(FirebaseError firebaseError) {
+
+        }
     }
 
     public List<Employee> getAdmins() {
@@ -60,68 +126,5 @@ public class EmployeeLoader {
 
     public void setSAs(List<Employee> sas) {
         this.sas = sas;
-    }
-
-
-    public List<Employee> getMyRAs(){
-        List<Employee> myRAs=new ArrayList<>();
-        for(Employee ra : ras){
-            if (ra.getHall().equals(callbacks.getMyHall())){
-                myRAs.add(ra);
-            }
-        }
-        return myRAs;
-    }
-    public List<Employee> getMySAs(){
-        List<Employee> mySAs=new ArrayList<>();
-        for (Employee sa: sas){
-            if (sa.getHall().equals(callbacks.getMyHall())){
-                mySAs.add(sa);
-            }
-        }
-        return mySAs;
-    }
-    public interface LoaderCallbacks{
-        public String getMyHall();
-    }
-
-    public class EmployeeValueEventListener implements ValueEventListener {
-
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            for (DataSnapshot child : dataSnapshot.getChildren()) {
-                switch (child.getKey()) {
-                case "Administrators":
-                    for (DataSnapshot adminDS : child.getChildren()) {
-                        Administrator admin = new Administrator(url + adminDS.getRef().getPath());
-                        admins.add(admin);
-                    }
-                    break;
-                case "Graduate Assistants":
-                    for (DataSnapshot gaDS : child.getChildren()) {
-                        GraduateAssistant ga = new GraduateAssistant(url + gaDS.getRef().getPath());
-                        gas.add(ga);
-                    }
-                    break;
-                case "Resident Assistants":
-                    for (DataSnapshot raDS : child.getChildren()) {
-                        ResidentAssistant ra = new ResidentAssistant(url + raDS.getRef().getPath());
-                        ras.add(ra);
-                    }
-                    break;
-                case "Sophomore Advisors":
-                    for (DataSnapshot saDS : child.getChildren()) {
-                        SophomoreAdvisor sa = new SophomoreAdvisor(url + saDS.getRef().getPath());
-                        sas.add(sa);
-                    }
-                    break;
-                }
-            }
-        }
-
-        @Override
-        public void onCancelled(FirebaseError firebaseError) {
-
-        }
     }
 }

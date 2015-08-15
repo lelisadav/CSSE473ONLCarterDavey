@@ -1,20 +1,16 @@
 package edu.rosehulman.rafinder.model.person;
 
+import com.firebase.client.DataSnapshot;
+
 /**
  * A Residence Life administrator (an employee of the Office of Residence Life)
  */
 public class Administrator extends Employee {
-    public Administrator(String url) {
-        super(url);
+    public Administrator(DataSnapshot ds) {
+        super(ds);
     }
 
-    public Administrator(String name,
-                         String email,
-                         String hall,
-                         String phoneNumber,
-                         int room,
-                         String status,
-                         String statusDetail) {
-        super(name, email, 0, hall, phoneNumber, room, status, statusDetail);
+    public Administrator(String firebaseUrl) {
+        super(firebaseUrl);
     }
 }

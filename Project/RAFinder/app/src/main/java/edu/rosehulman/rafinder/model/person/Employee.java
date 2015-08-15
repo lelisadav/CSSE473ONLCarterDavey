@@ -5,6 +5,10 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
+import java.util.Arrays;
+
+import edu.rosehulman.rafinder.MainActivity;
+
 /**
  * Any Residence Life employee.
  */
@@ -19,10 +23,25 @@ public class Employee extends Resident {
     private String statusDetail;
     private Firebase firebase;
 
-    public Employee(String url){
-        super(url);
-        this.firebase=new Firebase(url);
-        this.firebase.addChildEventListener(new ChildrenListener(this));
+    public Employee(DataSnapshot ds) {
+        this(
+            ds.child("name").getValue(String.class),
+            ds.child("email").getValue(String.class),
+            ds.child("floor").getValue(int.class),
+            ds.child("hall").getValue(String.class),
+            ds.child("phoneNumber").getValue(String.class),
+            ds.child("room").getValue(int.class),
+            ds.child("status").getValue(String.class),
+            ds.child("statusDetail").getValue(String.class)
+        );
+        firebase = new Firebase(MainActivity.FIREBASE_ROOT_URL + ds.getRef().getPath().toString());
+        firebase.addChildEventListener(new ChildrenListener());
+    }
+
+    public Employee(String firebaseUrl) {
+        super("");
+        firebase = new Firebase(MainActivity.FIREBASE_ROOT_URL + firebaseUrl);
+        firebase.addChildEventListener(new ChildrenListener());
     }
 
     public Employee(String name,
@@ -107,122 +126,63 @@ public class Employee extends Resident {
         this.statusDetail = statusDetail;
     }
 
-
-//    public static ResidentAssistant convertToRA(Employee e){
-//        ResidentAssistant ra= new ResidentAssistant(e.getFirebase().toString());
-//        ra.setEmail(e.getEmail());
-//        ra.setFloor(e.getFloor());
-//        ra.setHall(e.getHall());
-//        ra.setPhoneNumber(e.getPhoneNumber());
-//        ra.setStatus(e.getStatus());
-//        ra.setStatusDetail(e.getStatusDetail());
-//        ra.setName(e.getName());
-//        return ra;
-//    }
-    /**
-     * Milestone listener
-     */
     class ChildrenListener implements ChildEventListener {
-        private Employee employee;
-
-        public ChildrenListener(Employee employee) {
-            this.employee = employee;
-        }
-
-        /**
-         * Do nothing
-         */
         public void onCancelled(FirebaseError arg0) {
-            // TODO Auto-generated method stub.
+            // ignored
         }
 
-        /**
-         * Fills in the new milestone's properties including the milestone name,
-         * description and list of tasks for that milestone
-         */
         public void onChildAdded(DataSnapshot arg0, String arg1) {
-            if (arg0.getKey().equals("email")){
-                this.employee.setEmail(arg0.getValue(String.class));
-            }
-            else if (arg0.getKey().equals("floor")){
-                this.employee.setFloor(arg0.getValue(int.class));
-            }
-            else if (arg0.getKey().equals("hall")){
-                this.employee.setHall(arg0.getValue(String.class));
-            }
-            else if (arg0.getKey().equals("phoneNumber")){
-                this.employee.setPhoneNumber(arg0.getValue(String.class));
-            }
-            else if (arg0.getKey().equals("room")){
-                this.employee.setRoom(arg0.getValue(int.class));
-            }
-            else if (arg0.getKey().equals("status")){
-                this.employee.setStatus(arg0.getValue(String.class));
-            }
-            else if (arg0.getKey().equals("statusDetail")){
-                this.employee.setStatusDetail(arg0.getValue(String.class));
-            }
-            else if (arg0.getKey().equals("name")){
-                this.employee.setName(arg0.getValue(String.class));
-            }
-
-
-
-
-//            if (arg0.getKey().equals("name")) {
-//                this.milestone.setName(arg0.getValue(String.class));
-//                if (this.milestone.getChangeNotifier() != null) {
-//                    this.milestone.getChangeNotifier().onChange();
-//                }
-//            } else if (arg0.getKey().equals("description")) {
-//                this.milestone.setDescription(arg0.getValue(String.class));
-//            } else if (arg0.getKey().equals("due_date")) {
-//                this.milestone.setDueDate(new DueDate(arg0.getValue(String.class)));
-//            } else if (arg0.getKey().equals("task_percent")) {
-//                this.milestone.setTaskPercent(arg0.getValue(Integer.class));
-//            } else if (arg0.getKey().equals("tasks")) {
-//                for (DataSnapshot child : arg0.getChildren()) {
-//                    Task t = new Task(child.getRef().toString());
-//
-//                    if (!this.milestone.tasks.contains(t)) {
-//                        t.setParentNames(this.milestone.parentProjectName, this.milestone.getName());
-//                        this.milestone.tasks.add(t);
-//                    }
-//                }
-//            }else if (arg0.getKey().equals("burndown_data")){
-//                for (DataSnapshot child : arg0.getChildren()){
-//                    BurndownObject bo=new BurndownObject(child.getRef().toString());
-//                    bo.setTimeStamp(new Long(child.getKey()));
-//                    bo.setChangeNotifier(this.milestone.burndownObjectChangeNotifier);
-//                    if (!this.milestone.burndownData.getBurndownObjects().contains(bo)){
-//                        this.milestone.burndownData.addBurndownObject(bo);
-//                    }
-//                }
-//            }
+            // ignored
         }
 
-        /**
-         * This will be called when the milestone data in Firebased is updated
-         */
         public void onChildChanged(DataSnapshot arg0, String arg1) {
-            // TODO Auto-generated method stub.
-
+            switch (arg0.getKey()) {
+            case "email":
+                setEmail(arg0.getValue(String.class));
+                break;
+            case "floor":
+                setFloor(arg0.getValue(int.class));
+                break;
+            case "hall":
+                setHall(arg0.getValue(String.class));
+                break;
+            case "phoneNumber":
+                setPhoneNumber(arg0.getValue(String.class));
+                break;
+            case "room":
+                setRoom(arg0.getValue(int.class));
+                break;
+            case "status":
+                setStatus(arg0.getValue(String.class));
+                break;
+            case "statusDetail":
+                setStatusDetail(arg0.getValue(String.class));
+                break;
+            case "name":
+                setName(arg0.getValue(String.class));
+                break;
+            }
         }
 
-        /**
-         * Might do something here for the tablet
-         */
         public void onChildMoved(DataSnapshot arg0, String arg1) {
-            // nothing
+            // ignored
         }
 
-        /**
-         * Do nothing
-         */
         public void onChildRemoved(DataSnapshot arg0) {
-            // nothing
+            // ignored
         }
     }
 
-
+    @Override
+    public String toString() {
+        return Arrays.asList(
+                getName(),
+                email,
+                floor,
+                hall,
+                phoneNumber,
+                room,
+                status,
+                statusDetail).toString();
+    }
 }

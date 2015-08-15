@@ -5,6 +5,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,15 +22,16 @@ public class RoomEntry {
     private List<Resident> residents;
     private String hallName;
     private String roomNumber;
-    public RoomEntry(){
 
+    public RoomEntry() {
+        residents = new ArrayList<>();
     }
 
     public RoomEntry(String firebaseURL) {
-        this.firebaseURL=firebaseURL;
-        Firebase firebase=new Firebase(firebaseURL);
+        this();
+        this.firebaseURL = firebaseURL;
+        Firebase firebase = new Firebase(firebaseURL);
         firebase.addListenerForSingleValueEvent(new RoomEntryListener(this));
-
     }
 
     public RoomEntry(String hallName, String roomNumber, Resident... residents) {
@@ -67,19 +69,21 @@ public class RoomEntry {
             super.roomNumber = "Lobby";
         }
     }
-    public class RoomEntryListener implements ValueEventListener{
+
+    public class RoomEntryListener implements ValueEventListener {
 
         private RoomEntry roomEntry;
-        public RoomEntryListener(RoomEntry roomEntry){
-            this.roomEntry=roomEntry;
+
+        public RoomEntryListener(RoomEntry roomEntry) {
+            this.roomEntry = roomEntry;
         }
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             roomEntry.setRoomNumber(dataSnapshot.getKey());
-            for (DataSnapshot child: dataSnapshot.getChildren()){
+            for (DataSnapshot child : dataSnapshot.getChildren()) {
                 String fireBaseUrl = MainActivity.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
-                Resident res=new Resident(fireBaseUrl);
+                Resident res = new Resident(fireBaseUrl);
                 roomEntry.residents.add(res);
             }
         }

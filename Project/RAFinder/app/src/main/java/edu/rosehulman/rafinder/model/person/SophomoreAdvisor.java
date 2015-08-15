@@ -1,21 +1,17 @@
 package edu.rosehulman.rafinder.model.person;
 
+import com.firebase.client.DataSnapshot;
+
 /**
  * An SA (like an RA, but with limited privileges).
  * TODO: extend {@link ResidentAssistant} instead?
  */
 public class SophomoreAdvisor extends Employee {
-    public SophomoreAdvisor(String url){
-        super(url);
+    public SophomoreAdvisor(DataSnapshot ds){
+        super(ds);
     }
-    public SophomoreAdvisor(String name,
-                            String email,
-                            int floor,
-                            String hall,
-                            String phoneNumber,
-                            int room,
-                            String status,
-                            String statusDetail) {
-        super(name, email, floor, hall, phoneNumber, room, status, statusDetail);
+
+    public SophomoreAdvisor(String firebaseUrl) {
+        super(firebaseUrl);
     }
 }

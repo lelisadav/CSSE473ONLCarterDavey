@@ -75,18 +75,22 @@ public class DutyRosterItem {
 
     public class DutyRosterListener implements ValueEventListener {
         private DutyRosterItem item;
-        public DutyRosterListener(DutyRosterItem item){
-            this.item=item;
+
+        public DutyRosterListener(DutyRosterItem item) {
+            this.item = item;
         }
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            for (DataSnapshot child : dataSnapshot.getChildren()){
-                if (child.getKey().equals("friday")){
-                    friDuty=new ResidentAssistant(MainActivity.FIREBASE_ROOT_URL +"/Employees/Resident Assistants/"+child.getValue(String.class));
-                }
-                else if (child.getKey().equals("saturday")){
-                    satDuty=new ResidentAssistant(MainActivity.FIREBASE_ROOT_URL +"/Employees/Resident Assistants/"+child.getValue(String.class));
+            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                if (child.getKey().equals("friday")) {
+                    friDuty = new ResidentAssistant(MainActivity.FIREBASE_ROOT_URL +
+                                                    "/Employees/Resident Assistants/" +
+                                                    child.getValue(String.class));
+                } else if (child.getKey().equals("saturday")) {
+                    satDuty = new ResidentAssistant(MainActivity.FIREBASE_ROOT_URL +
+                                                    "/Employees/Resident Assistants/" +
+                                                    child.getValue(String.class));
                 }
             }
 
