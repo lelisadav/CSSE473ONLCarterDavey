@@ -8,18 +8,22 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.InputType;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.ByteArrayOutputStream;
 
 import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.R;
@@ -68,7 +72,13 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
         phoneTextView.setText(getString(R.string.profile_phone_format, employee.getPhoneNumber()));
         statusTextView.setText(getString(R.string.status_format, employee.getStatus()));
         statusDetailTextView.setText(getString(R.string.status_detail_format, employee.getStatusDetail()));
-        getEmployeeImageFromFirebase();
+
+        Bitmap profilePicture = employee.getProfilePicture();
+        if (profilePicture != null) {
+            imageView.setImageBitmap(profilePicture);
+        } else {
+            imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_person));
+        }
 
         // Set editable fields based on MainActivity.getUserType
         if (!((MainActivity) view.getContext()).getUserType().equals(UserType.RESIDENT)) {
@@ -80,10 +90,6 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
         }
 
         return view;
-    }
-
-    private void getEmployeeImageFromFirebase() {
-        // TODO: load image from Firebase and load it into the ImageView
     }
 
     @Override
@@ -198,10 +204,12 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
         case R.id.phoneTextView:
             v.setText(getString(R.string.profile_phone_format, s));
             employee.setPhoneNumber(s);
+            employee.getFirebase().child("phoneNumber").setValue(employee.getPhoneNumber()); // async
             break;
         case R.id.statusDetailTextView:
             v.setText(getString(R.string.status_detail_format, s));
             employee.setStatusDetail(s);
+            employee.getFirebase().child("statusDetail").setValue(employee.getStatusDetail()); // async
             break;
         }
     }
@@ -220,6 +228,7 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
                         String status = statuses[which];
                         v.setText(getString(R.string.status_format, status));
                         employee.setStatus(status);
+                        employee.getFirebase().child("status").setValue(employee.getStatus()); // async
                     }
                 });
                 return builder.create();
@@ -232,6 +241,15 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, SELECT_IMAGE_REQUEST_CODE);
+    }
+
+    private void saveProfilePictureToDatabase() {
+        Bitmap bmp = employee.getProfilePicture();
+        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
+        byte[] byteArray = bYtE.toByteArray();
+        String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        employee.getFirebase().child("profilePicture").setValue(imageFile); // async
     }
 
     @Override
@@ -250,11 +268,11 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
                 String picturePath = cursor.getString(columnIndex);
                 cursor.close();
 
+                Bitmap bmp = BitmapFactory.decodeFile(picturePath);
+                employee.setProfilePicture(bmp);
                 ((ImageView) getActivity().findViewById(R.id.profileImageView))
-                        .setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
-                // TODO: upload that image to a datastore, replacing the user's previous picture (POST).
-
+                        .setImageBitmap(bmp);
+                saveProfilePictureToDatabase();
             }
         }
     }
@@ -262,5 +280,4 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
     public interface StudentProfileListener {
         public Employee getSelectedResident();
     }
-
 }

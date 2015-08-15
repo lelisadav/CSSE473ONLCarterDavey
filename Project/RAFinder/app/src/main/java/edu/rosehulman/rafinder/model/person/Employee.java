@@ -1,5 +1,10 @@
 package edu.rosehulman.rafinder.model.person;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
+
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -14,6 +19,12 @@ import edu.rosehulman.rafinder.MainActivity;
  */
 public class Employee extends Resident {
 
+    public static final String STATUS_DETAIL = "statusDetail";
+    public static final String STATUS = "status";
+    public static final String ROOM = "room";
+    public static final String PHONE_NUMBER = "phoneNumber";
+    public static final String HALL = "hall";
+    public static final String FLOOR = "floor";
     private String email;
     private int floor;
     private String hall;
@@ -21,21 +32,37 @@ public class Employee extends Resident {
     private int room;
     private String status;
     private String statusDetail;
+    private Bitmap profilePicture;
     private Firebase firebase;
 
     public Employee(DataSnapshot ds) {
         this(
-            ds.child("name").getValue(String.class),
-            ds.child("email").getValue(String.class),
-            ds.child("floor").getValue(int.class),
-            ds.child("hall").getValue(String.class),
-            ds.child("phoneNumber").getValue(String.class),
-            ds.child("room").getValue(int.class),
-            ds.child("status").getValue(String.class),
-            ds.child("statusDetail").getValue(String.class)
+                ds.child("name").getValue(String.class),
+                ds.child("email").getValue(String.class),
+                ds.child("floor").getValue(int.class),
+                ds.child("hall").getValue(String.class),
+                ds.child("phoneNumber").getValue(String.class),
+                ds.child("room").getValue(int.class),
+                ds.child("status").getValue(String.class),
+                ds.child("statusDetail").getValue(String.class),
+                convertToBitmap(ds.child("profilePicture").getValue(String.class))
         );
         firebase = new Firebase(MainActivity.FIREBASE_ROOT_URL + ds.getRef().getPath().toString());
         firebase.addChildEventListener(new ChildrenListener());
+    }
+
+    private static Bitmap convertToBitmap(String image) {
+        if (image.equals("")) {
+            // no profile image
+            return null;
+        }
+        try {
+            byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+        } catch (Exception e) {
+            Log.w(MainActivity.LOG_TAG, "Error decoding image");
+            return null;
+        }
     }
 
     public Employee(String firebaseUrl) {
@@ -51,7 +78,8 @@ public class Employee extends Resident {
                     String phoneNumber,
                     int room,
                     String status,
-                    String statusDetail) {
+                    String statusDetail,
+                    Bitmap profilePicture) {
         super(name);
         this.email = email;
         this.floor = floor;
@@ -60,6 +88,7 @@ public class Employee extends Resident {
         this.room = room;
         this.status = status;
         this.statusDetail = statusDetail;
+        this.profilePicture = profilePicture;
     }
 
     public String getEmail() {
@@ -126,7 +155,15 @@ public class Employee extends Resident {
         this.statusDetail = statusDetail;
     }
 
-    class ChildrenListener implements ChildEventListener {
+    public Bitmap getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(Bitmap profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    private class ChildrenListener implements ChildEventListener {
         public void onCancelled(FirebaseError arg0) {
             // ignored
         }

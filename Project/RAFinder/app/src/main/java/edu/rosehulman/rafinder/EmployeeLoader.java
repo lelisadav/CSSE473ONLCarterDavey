@@ -52,6 +52,7 @@ public class EmployeeLoader {
 
     public interface LoaderCallbacks {
         public String getMyHall();
+        public void onEmployeeLoadingComplete(); // TODO: similar for other loaders
     }
 
     public class EmployeeValueEventListener implements ValueEventListener {
@@ -87,7 +88,7 @@ public class EmployeeLoader {
                 }
             }
             Log.d(MainActivity.LOG_TAG, "Finished loading Employee data.");
-            ((MainActivity) callbacks).updateInitialData();
+            callbacks.onEmployeeLoadingComplete();
         }
 
         @Override
