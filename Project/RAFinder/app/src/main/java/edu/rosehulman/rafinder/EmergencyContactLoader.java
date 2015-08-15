@@ -12,10 +12,8 @@ import edu.rosehulman.rafinder.model.DutyRoster;
 import edu.rosehulman.rafinder.model.person.EmergencyContact;
 import edu.rosehulman.rafinder.model.person.Employee;
 
-/**
- * Created by daveyle on 8/14/2015.
- */
 public class EmergencyContactLoader {
+    private static final String EmergencyContacts = "EmergencyContacts";
     List<EmergencyContact> contactList=new ArrayList<>();
     ContactLoaderListener listener;
     public EmergencyContactLoader(ContactLoaderListener listener){
@@ -30,7 +28,7 @@ public class EmergencyContactLoader {
                 contactList.add(new EmergencyContact(employee, false));
             }
         }
-        Firebase firebaseContact=new Firebase(Configs.FIREBASE_ROOT_URL +"/"+Configs.EmergencyContacts);
+        Firebase firebaseContact=new Firebase(ConfigKeys.FIREBASE_ROOT_URL +"/"+ EmergencyContacts);
         firebaseContact.addListenerForSingleValueEvent(new LoaderListener(this));
 
 
@@ -56,7 +54,7 @@ public class EmergencyContactLoader {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             for (DataSnapshot child: dataSnapshot.getChildren()){
-                String firebaseURL = Configs.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
+                String firebaseURL = ConfigKeys.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
                 EmergencyContact contact=new EmergencyContact(firebaseURL);
                 loader.getContactList().add(contact);
             }

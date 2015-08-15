@@ -10,16 +10,14 @@ import org.joda.time.LocalDate;
 
 import edu.rosehulman.rafinder.model.DutyRoster;
 
-/**
- * Created by daveyle on 8/15/2015.
- */
 public class DutyRosterLoader {
+    private static final String DutyRosters = "DutyRosters";
     private DutyRoster roster;
     private LoaderCallbacks callbacks;
     private LocalDate date;
     public DutyRosterLoader(String url, String hallName, LoaderCallbacks cb){
         callbacks=cb;
-        Firebase firebase=new Firebase(url+"/"+Configs.DutyRosters+"/"+hallName);
+        Firebase firebase=new Firebase(url+"/"+ DutyRosters+"/"+hallName);
         firebase.addListenerForSingleValueEvent(new DutyRosterValueEventListener());
 
     }

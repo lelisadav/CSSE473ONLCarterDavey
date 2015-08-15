@@ -8,19 +8,20 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-import edu.rosehulman.rafinder.Configs;
+import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.LoginActivity;
 import edu.rosehulman.rafinder.UserType;
 
 
 public class Login {
+    // Resident Firebase key
+    private static final String myRA = "myRA";
+
+    private static final String Residents = "Residents";
 
     private Firebase mFirebaseRef;
-
     private LoginActivity mActivity;
 
-    /* Data from the authenticated user */
-    private AuthData authData;
     private UserType mUserType;
     private String mRAEmail = "";
 
@@ -42,24 +43,21 @@ public class Login {
      */
     private void setAuthenticatedUser(AuthData authData) {
         if (authData != null) {
-            this.authData = authData;
-            mFirebaseRef.child(Configs.Employees).addListenerForSingleValueEvent(new EmployeeListener(authData.getUid()));
-
-//            mActivity.launchMainActivity(this.authData);
+            mFirebaseRef.child(ConfigKeys.Employees).addListenerForSingleValueEvent(new EmployeeListener(authData.getUid()));
         }
     }
 
     /**
      * Verifies the user provided a valid email.
      */
-    public boolean isEmailValid(String email) {
-        return email.contains("@"); // TODO eventually: ensure it's a rose address
+    public static boolean isEmailValid(String email) {
+        return email.matches(".*?@.*?\\..*"); // TODO eventually: ensure it's a rose address
     }
 
     /**
      * Verifies the password is longer than 4 characters.
      */
-    public boolean isPasswordValid(String password) {
+    public static boolean isPasswordValid(String password) {
         return password.length() > 4;
     }
 
@@ -101,11 +99,13 @@ public class Login {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            Log.d(Configs.LOG_TAG, "In Resident callback for user <" + uid + ">");
+            Log.d(ConfigKeys.LOG_TAG, "In Resident callback for user <" + uid + ">");
             if (dataSnapshot.hasChild(uid)) {
                 mUserType = UserType.RESIDENT;
-                mRAEmail = dataSnapshot.child(uid).child(Configs.myRA).getValue().toString();
+                mRAEmail = dataSnapshot.child(uid).child(myRA).getValue().toString();
                 mActivity.launchMainActivity(mUserType, mRAEmail);
+            } else {
+                Log.e(ConfigKeys.LOG_TAG, "No resident found with uid <" + uid + ">");
             }
         }
 
@@ -124,30 +124,30 @@ public class Login {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            Log.d(Configs.LOG_TAG, "in Employees callback for user <" + uid + ">");
-            Log.d(Configs.LOG_TAG, "DataSnapshot url = " + dataSnapshot.getRef().getPath().toString());
+            Log.d(ConfigKeys.LOG_TAG, "in Employees callback for user <" + uid + ">");
+            Log.d(ConfigKeys.LOG_TAG, "DataSnapshot url = " + dataSnapshot.getRef().getPath().toString());
             if (dataSnapshot.getChildrenCount() != 4) {
-                Log.wtf(Configs.LOG_TAG, "Employees table had wrong number of children");
+                Log.wtf(ConfigKeys.LOG_TAG, "Employees table had wrong number of children");
             }
             DataSnapshot table;
-            if (dataSnapshot.child(Configs.Administrators).hasChild(uid)) {
+            if (dataSnapshot.child(ConfigKeys.Administrators).hasChild(uid)) {
                 mUserType = UserType.ADMINISTRATOR;
-                table = dataSnapshot.child(Configs.Administrators);
-            } else if (dataSnapshot.child(Configs.ResidentAssistants).hasChild(uid)) {
+                table = dataSnapshot.child(ConfigKeys.Administrators);
+            } else if (dataSnapshot.child(ConfigKeys.ResidentAssistants).hasChild(uid)) {
                 mUserType = UserType.RESIDENT_ASSISTANT;
-                table = dataSnapshot.child(Configs.ResidentAssistants);
-            } else if (dataSnapshot.child(Configs.SophomoreAdvisors).hasChild(uid)) {
+                table = dataSnapshot.child(ConfigKeys.ResidentAssistants);
+            } else if (dataSnapshot.child(ConfigKeys.SophomoreAdvisors).hasChild(uid)) {
                 mUserType = UserType.SOPHOMORE_ADVISOR;
-                table = dataSnapshot.child(Configs.SophomoreAdvisors);
-            } else if (dataSnapshot.child(Configs.GraduateAssistants).hasChild(uid)) {
+                table = dataSnapshot.child(ConfigKeys.SophomoreAdvisors);
+            } else if (dataSnapshot.child(ConfigKeys.GraduateAssistants).hasChild(uid)) {
                 mUserType = UserType.GRADUATE_ASSISTANT;
-                table = dataSnapshot.child(Configs.GraduateAssistants);
+                table = dataSnapshot.child(ConfigKeys.GraduateAssistants);
             } else {
-                mFirebaseRef.child(Configs.Residents).addListenerForSingleValueEvent(new ResidentListener(uid));
-                Log.d(Configs.LOG_TAG, "User <" + uid + "> not found in employees");
+                mFirebaseRef.child(Residents).addListenerForSingleValueEvent(new ResidentListener(uid));
+                Log.d(ConfigKeys.LOG_TAG, "User <" + uid + "> not found in employees");
                 return;
             }
-            mRAEmail = table.child(uid).child(Configs.employeeEmail).getValue().toString();
+            mRAEmail = table.child(uid).child(ConfigKeys.employeeEmail).getValue().toString();
             mActivity.launchMainActivity(mUserType, mRAEmail);
         }
 

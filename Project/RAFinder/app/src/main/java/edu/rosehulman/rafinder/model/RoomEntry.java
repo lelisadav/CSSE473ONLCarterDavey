@@ -1,16 +1,11 @@
 package edu.rosehulman.rafinder.model;
 
 import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.rosehulman.rafinder.Configs;
-import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
 import edu.rosehulman.rafinder.model.person.GraduateAssistant;
 import edu.rosehulman.rafinder.model.person.Resident;
@@ -21,32 +16,35 @@ import edu.rosehulman.rafinder.model.person.SophomoreAdvisor;
  * An entry for one room of the {@link HallRosterFragment}.
  */
 public class RoomEntry {
-    private String firebaseURL;
+    private static final String ResidentAssistant = "Resident Assistant";
+    private static final String SophomoreAdvisor = "Sophomore Advisor";
+    private static final String GraduateAssistant = "Graduate Assistant";
+    private static final String Resident = "Resident";
 
     private List<Resident> residents;
     private String hallName;
     private String roomNumber;
 
-    public RoomEntry(DataSnapshot ds, String hallName){
-        this.hallName=hallName;
-        roomNumber=ds.getKey();
-        this.residents=new ArrayList<>();
-        for (DataSnapshot child: ds.getChildren()){
-            switch(child.getValue(String.class)){
-                case Configs.Resident:
-                    residents.add(new Resident(child));
-                    break;
-                case Configs.SophomoreAdvisor:
-                    residents.add(new SophomoreAdvisor(child));
-                    break;
-                case Configs.ResidentAssistant:
-                    residents.add(new ResidentAssistant(child));
-                    break;
-                case Configs.GraduateAssistant:
-                    residents.add(new GraduateAssistant(child));
-                    break;
-                default:
-                    break;
+    public RoomEntry(DataSnapshot ds, String hallName) {
+        this.hallName = hallName;
+        roomNumber = ds.getKey();
+        residents = new ArrayList<>();
+        for (DataSnapshot child : ds.getChildren()) {
+            switch (child.getValue(String.class)) {
+            case Resident:
+                residents.add(new Resident(child));
+                break;
+            case SophomoreAdvisor:
+                residents.add(new SophomoreAdvisor(child));
+                break;
+            case ResidentAssistant:
+                residents.add(new ResidentAssistant(child));
+                break;
+            case GraduateAssistant:
+                residents.add(new GraduateAssistant(child));
+                break;
+            default:
+                break;
             }
         }
 
@@ -111,7 +109,7 @@ public class RoomEntry {
 //        public void onDataChange(DataSnapshot dataSnapshot) {
 //            roomEntry.setRoomNumber(dataSnapshot.getKey());
 //            for (DataSnapshot child : dataSnapshot.getChildren()) {
-//                String fireBaseUrl = Configs.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
+//                String fireBaseUrl = ConfigKeys.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
 //                Resident res = new Resident(fireBaseUrl);
 //                roomEntry.residents.add(res);
 //            }

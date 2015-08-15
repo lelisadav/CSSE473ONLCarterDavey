@@ -18,15 +18,15 @@ import edu.rosehulman.rafinder.model.DutyRosterItem;
 import edu.rosehulman.rafinder.model.person.Employee;
 
 public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
-    private final Context context;
-    private final List<DutyRosterItem> objects;
-    private final int layout;
+    private final Context mContext;
+    private final List<DutyRosterItem> mObjects;
+    private final int mLayout;
 
     public DutyRosterArrayAdapter(Context context, int textViewResourceId, List<DutyRosterItem> objects) {
         super(context, R.layout.fragment_student_duty_roster_widget, textViewResourceId, objects);
-        this.layout = R.layout.fragment_student_duty_roster_widget;
-        this.context = context;
-        this.objects = objects;
+        mLayout = R.layout.fragment_student_duty_roster_widget;
+        mContext = context;
+        mObjects = objects;
     }
 
 
@@ -41,9 +41,9 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
+        LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(layout, parent, false);
+        View view = inflater.inflate(mLayout, parent, false);
         TextView weekendText = (TextView) view.findViewById(R.id.weekendTextView);
         TextView friNameText = (TextView) view.findViewById(R.id.friNameTextView);
         ImageButton friButton = (ImageButton) view.findViewById(R.id.friCallButton);
@@ -63,26 +63,26 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
         friNameText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) context).switchToProfile(fridayDuty);
+                ((MainActivity) mContext).switchToProfile(fridayDuty);
             }
         });
         friButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) context).dialPhoneNumber(fridayDuty.getPhoneNumber());
+                ((MainActivity) mContext).dialPhoneNumber(fridayDuty.getPhoneNumber());
             }
         });
         satNameText.setText(saturdayDuty.getName());
         satButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) context).dialPhoneNumber(saturdayDuty.getPhoneNumber());
+                ((MainActivity) mContext).dialPhoneNumber(saturdayDuty.getPhoneNumber());
             }
         });
         satNameText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) context).switchToProfile(saturdayDuty);
+                ((MainActivity) mContext).switchToProfile(saturdayDuty);
             }
         });
         view.refreshDrawableState();

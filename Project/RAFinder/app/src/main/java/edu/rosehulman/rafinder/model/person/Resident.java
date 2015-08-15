@@ -2,19 +2,21 @@ package edu.rosehulman.rafinder.model.person;
 
 import com.firebase.client.DataSnapshot;
 
-import edu.rosehulman.rafinder.Configs;
+import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.model.SearchResultItem;
 
 public class Resident implements SearchResultItem {
     private String name;
 
     public Resident(String name) {
-        if (name.equals("")) return;
+        if (name.equals("")) {
+            return;
+        }
         this.name = name;
     }
 
     public Resident(DataSnapshot ds) {
-        name = ds.child(Configs.employeeName).getValue(String.class);
+        name = ds.child(ConfigKeys.employeeName).getValue(String.class);
     }
 
     public String getName() {

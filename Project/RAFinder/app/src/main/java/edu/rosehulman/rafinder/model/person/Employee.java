@@ -12,20 +12,12 @@ import com.firebase.client.FirebaseError;
 
 import java.util.Arrays;
 
-import edu.rosehulman.rafinder.Configs;
-import edu.rosehulman.rafinder.MainActivity;
+import edu.rosehulman.rafinder.ConfigKeys;
 
 /**
  * Any Residence Life employee.
  */
 public class Employee extends Resident {
-
-    public static final String STATUS_DETAIL = "statusDetail";
-    public static final String STATUS = "status";
-    public static final String ROOM = "room";
-    public static final String PHONE_NUMBER = "phoneNumber";
-    public static final String HALL = "hall";
-    public static final String FLOOR = "floor";
     private String email;
     private int floor;
     private String hall;
@@ -38,17 +30,17 @@ public class Employee extends Resident {
 
     public Employee(DataSnapshot ds) {
         this(
-                ds.child(Configs.employeeName).getValue(String.class),
-                ds.child(Configs.employeeEmail).getValue(String.class),
-                ds.child(Configs.employeeFloor).getValue(int.class),
-                ds.child(Configs.employeeHall).getValue(String.class),
-                ds.child(Configs.employeePhone).getValue(String.class),
-                ds.child(Configs.employeeRoom).getValue(int.class),
-                ds.child(Configs.employeeStatus).getValue(String.class),
-                ds.child(Configs.employeeStatusDetail).getValue(String.class),
-                convertToBitmap(ds.child(Configs.employeePicture).getValue(String.class))
+                ds.child(ConfigKeys.employeeName).getValue(String.class),
+                ds.child(ConfigKeys.employeeEmail).getValue(String.class),
+                ds.child(ConfigKeys.employeeFloor).getValue(int.class),
+                ds.child(ConfigKeys.employeeHall).getValue(String.class),
+                ds.child(ConfigKeys.employeePhone).getValue(String.class),
+                ds.child(ConfigKeys.employeeRoom).getValue(int.class),
+                ds.child(ConfigKeys.employeeStatus).getValue(String.class),
+                ds.child(ConfigKeys.employeeStatusDetail).getValue(String.class),
+                convertToBitmap(ds.child(ConfigKeys.employeePicture).getValue(String.class))
         );
-        firebase = new Firebase(Configs.FIREBASE_ROOT_URL + ds.getRef().getPath().toString());
+        firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + ds.getRef().getPath().toString());
         firebase.addChildEventListener(new ChildrenListener());
     }
 
@@ -61,14 +53,14 @@ public class Employee extends Resident {
             byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
             return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         } catch (Exception e) {
-            Log.w(Configs.LOG_TAG, "Error decoding image");
+            Log.w(ConfigKeys.LOG_TAG, "Error decoding image");
             return null;
         }
     }
 
     public Employee(String firebaseUrl) {
         super("");
-        firebase = new Firebase(Configs.FIREBASE_ROOT_URL + firebaseUrl);
+        firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + firebaseUrl);
         firebase.addChildEventListener(new ChildrenListener());
     }
 
@@ -175,28 +167,28 @@ public class Employee extends Resident {
 
         public void onChildChanged(DataSnapshot arg0, String arg1) {
             switch (arg0.getKey()) {
-            case Configs.employeeEmail:
+            case ConfigKeys.employeeEmail:
                 setEmail(arg0.getValue(String.class));
                 break;
-            case Configs.employeeFloor:
+            case ConfigKeys.employeeFloor:
                 setFloor(arg0.getValue(int.class));
                 break;
-            case Configs.employeeHall:
+            case ConfigKeys.employeeHall:
                 setHall(arg0.getValue(String.class));
                 break;
-            case Configs.employeePhone:
+            case ConfigKeys.employeePhone:
                 setPhoneNumber(arg0.getValue(String.class));
                 break;
-            case Configs.employeeRoom:
+            case ConfigKeys.employeeRoom:
                 setRoom(arg0.getValue(int.class));
                 break;
-            case Configs.employeeStatus:
+            case ConfigKeys.employeeStatus:
                 setStatus(arg0.getValue(String.class));
                 break;
-            case Configs.employeeStatusDetail:
+            case ConfigKeys.employeeStatusDetail:
                 setStatusDetail(arg0.getValue(String.class));
                 break;
-            case Configs.employeeName:
+            case ConfigKeys.employeeName:
                 setName(arg0.getValue(String.class));
                 break;
             }

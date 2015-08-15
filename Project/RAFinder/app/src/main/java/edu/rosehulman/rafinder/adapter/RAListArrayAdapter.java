@@ -14,17 +14,17 @@ import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.model.person.Employee;
 
 public class RAListArrayAdapter<T extends Employee> extends ArrayAdapter<T> {
-    private final Context context;
-    private final List<T> objects;
-    private final int layout;
+    private final Context mContext;
+    private final List<T> mObjects;
+    private final int mLayout;
     private RAListArrayAdapterCallbacks mListener;
 
     public RAListArrayAdapter(Context context, int textViewResourceId, List<T> objects, RAListArrayAdapterCallbacks callbacks) {
         super(context, R.layout.layout_ra_item, textViewResourceId, objects);
-        this.layout = R.layout.layout_ra_item;
-        this.context = context;
-        this.objects = objects;
-        this.mListener= callbacks;
+        mLayout = R.layout.layout_ra_item;
+        mContext = context;
+        mObjects = objects;
+        mListener = callbacks;
     }
 
 
@@ -39,13 +39,13 @@ public class RAListArrayAdapter<T extends Employee> extends ArrayAdapter<T> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
+        LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(layout, parent, false);
-        TextView nameTV= (TextView) view.findViewById(R.id.myRATextView);
-        TextView statusTV= (TextView) view.findViewById(R.id.status);
-        ImageButton button= (ImageButton) view.findViewById(R.id.raMoreDetails);
-        final T RA= objects.get(position);
+        View view = inflater.inflate(mLayout, parent, false);
+        TextView nameTV = (TextView) view.findViewById(R.id.myRATextView);
+        TextView statusTV = (TextView) view.findViewById(R.id.status);
+        ImageButton button = (ImageButton) view.findViewById(R.id.raMoreDetails);
+        final T RA = mObjects.get(position);
         nameTV.setText(RA.getName());
         statusTV.setText(RA.getStatus());
         button.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +57,8 @@ public class RAListArrayAdapter<T extends Employee> extends ArrayAdapter<T> {
         view.refreshDrawableState();
         return view;
     }
-    public interface RAListArrayAdapterCallbacks{
+
+    public interface RAListArrayAdapterCallbacks {
         public void moreDetailsRequested(Employee RA);
     }
 }

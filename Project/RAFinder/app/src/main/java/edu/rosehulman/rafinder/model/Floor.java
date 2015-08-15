@@ -1,15 +1,9 @@
 package edu.rosehulman.rafinder.model;
 
 import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.rosehulman.rafinder.Configs;
-import edu.rosehulman.rafinder.MainActivity;
 
 /**
  * An entire floor of {@link RoomEntry} objects.
@@ -21,10 +15,10 @@ public class Floor {
     private String number;
     private List<RoomEntry> rooms;
 
-    public Floor(DataSnapshot ds, String hallName){
-        number=ds.getKey();
-        rooms=new ArrayList<>();
-        for (DataSnapshot child: ds.getChildren()){
+    public Floor(DataSnapshot ds, String hallName) {
+        number = ds.getKey();
+        rooms = new ArrayList<>();
+        for (DataSnapshot child : ds.getChildren()) {
             rooms.add(new RoomEntry(child, hallName));
         }
     }
@@ -86,7 +80,7 @@ public class Floor {
 //        @Override
 //        public void onDataChange(DataSnapshot dataSnapshot) {
 //            for (DataSnapshot room: dataSnapshot.getChildren()){
-//                String firebaseURL = Configs.FIREBASE_ROOT_URL + room.getRef().getPath().toString();
+//                String firebaseURL = Config.FIREBASE_ROOT_URL + room.getRef().getPath().toString();
 //                RoomEntry roomEntry=new RoomEntry(firebaseURL);
 //                floor.getRooms().add(roomEntry);
 //            }

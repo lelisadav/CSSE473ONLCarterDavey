@@ -2,28 +2,25 @@ package edu.rosehulman.rafinder.model;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.rosehulman.rafinder.Configs;
-import edu.rosehulman.rafinder.MainActivity;
-
 /**
  * A Residence Hall.
  */
 public class Hall implements SearchResultItem {
+    // HallRoster Firebase keys
+    private static final String roster = "Roster";
     private String name;
     private HashMap<String, Floor> floors;
     private Firebase firebase;
 
-    public Hall(DataSnapshot ds){
-        name=ds.getKey();
-        floors=new HashMap<>();
-        for(DataSnapshot child: ds.child(Configs.roster).getChildren()){
+    public Hall(DataSnapshot ds) {
+        name = ds.getKey();
+        floors = new HashMap<>();
+        for (DataSnapshot child : ds.child(roster).getChildren()) {
             floors.put(child.getKey(), new Floor(child, name));
         }
 
@@ -49,14 +46,14 @@ public class Hall implements SearchResultItem {
     }
 
     public List<Floor> getFloors() {
-        ArrayList<Floor> f=new ArrayList<Floor>();
+        ArrayList<Floor> f = new ArrayList<Floor>();
         f.addAll(floors.values());
         return f;
     }
 
     public void setFloors(List<Floor> floors) {
         this.floors.clear();
-        for (Floor f: floors){
+        for (Floor f : floors) {
             this.floors.put(f.getNumber(), f);
         }
     }
@@ -68,7 +65,8 @@ public class Hall implements SearchResultItem {
         }
         return floorNumbers;
     }
-    public Floor getFloor(String floorName){
+
+    public Floor getFloor(String floorName) {
         return floors.get(floorName);
     }
 
@@ -86,7 +84,7 @@ public class Hall implements SearchResultItem {
 //        @Override
 //        public void onDataChange(DataSnapshot dataSnapshot) {
 //            for (DataSnapshot floor : dataSnapshot.getChildren()){
-//                String url = Configs.FIREBASE_ROOT_URL + floor.getRef().getPath().toString();
+//                String url = ConfigKeys.FIREBASE_ROOT_URL + floor.getRef().getPath().toString();
 //                Floor flr = new Floor(url);
 //                hall.getFloors().add(flr);
 //            }

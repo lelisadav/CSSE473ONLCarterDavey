@@ -1,13 +1,10 @@
 package edu.rosehulman.rafinder.model;
 
 import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 import org.joda.time.LocalDate;
 
-import edu.rosehulman.rafinder.Configs;
+import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 
@@ -15,6 +12,9 @@ import edu.rosehulman.rafinder.model.person.ResidentAssistant;
  * A single item in the Duty Roster.
  */
 public class DutyRosterItem {
+    // DutyRosterItem Firebase keys
+    private static final String fridayKey = "friday";
+    private static final String saturdayKey = "saturday";
 
     public interface DutyRosterCallbacks {
 
@@ -25,17 +25,17 @@ public class DutyRosterItem {
     private Employee satDuty;
     private LocalDate friday;
 
-    public DutyRosterItem(DataSnapshot ds){
-        friday=LocalDate.parse(ds.getKey(), Configs.formatter);
+    public DutyRosterItem(DataSnapshot ds) {
+        friday = LocalDate.parse(ds.getKey(), ConfigKeys.formatter);
         for (DataSnapshot child : ds.getChildren()) {
-            if (child.getKey().equals(Configs.friday)) {
-                friDuty = new ResidentAssistant(Configs.FIREBASE_ROOT_URL +
-                        "/"+Configs.Employees +"/"+Configs.ResidentAssistants+"/" +
-                        child.getValue(String.class));
-            } else if (child.getKey().equals(Configs.saturday)) {
-                satDuty = new ResidentAssistant(Configs.FIREBASE_ROOT_URL +
-                        "/"+Configs.Employees +"/"+Configs.ResidentAssistants+"/" +
-                        child.getValue(String.class));
+            String firebaseUrl = ConfigKeys.FIREBASE_ROOT_URL +
+                                 "/" + ConfigKeys.Employees +
+                                 "/" + ConfigKeys.ResidentAssistants +
+                                 "/" + child.getValue(String.class);
+            if (child.getKey().equals(fridayKey)) {
+                friDuty = new ResidentAssistant(firebaseUrl);
+            } else if (child.getKey().equals(saturdayKey)) {
+                satDuty = new ResidentAssistant(firebaseUrl);
             }
         }
     }
@@ -98,13 +98,13 @@ public class DutyRosterItem {
 //        @Override
 //        public void onDataChange(DataSnapshot dataSnapshot) {
 //            for (DataSnapshot child : dataSnapshot.getChildren()) {
-//                if (child.getKey().equals(Configs.friday)) {
-//                    friDuty = new ResidentAssistant(Configs.FIREBASE_ROOT_URL +
-//                                                    "/"+Configs.Employees +"/"+Configs.ResidentAssistants+"/" +
+//                if (child.getKey().equals(ConfigKeys.friday)) {
+//                    friDuty = new ResidentAssistant(ConfigKeys.FIREBASE_ROOT_URL +
+//                                                    "/"+ConfigKeys.Employees +"/"+ConfigKeys.ResidentAssistants+"/" +
 //                                                    child.getValue(String.class));
-//                } else if (child.getKey().equals(Configs.saturday)) {
-//                    satDuty = new ResidentAssistant(Configs.FIREBASE_ROOT_URL +
-//                                                    "/"+Configs.Employees +"/"+Configs.ResidentAssistants+"/" +
+//                } else if (child.getKey().equals(ConfigKeys.saturday)) {
+//                    satDuty = new ResidentAssistant(ConfigKeys.FIREBASE_ROOT_URL +
+//                                                    "/"+ConfigKeys.Employees +"/"+ConfigKeys.ResidentAssistants+"/" +
 //                                                    child.getValue(String.class));
 //                }
 //            }

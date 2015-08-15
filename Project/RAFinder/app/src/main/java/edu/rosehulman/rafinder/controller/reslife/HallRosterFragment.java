@@ -14,8 +14,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import edu.rosehulman.rafinder.Configs;
-import edu.rosehulman.rafinder.MainActivity;
+import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.FloorRosterArrayAdapter;
 import edu.rosehulman.rafinder.model.Hall;
@@ -48,10 +47,10 @@ public class HallRosterFragment extends Fragment
     private ListAdapter mAdapter;
 
     public static HallRosterFragment newInstance(String hallName, String floorName) {
-        HallRosterFragment fragment=new HallRosterFragment();
-        Bundle args=new Bundle();
-        args.putString(Configs.HALL, hallName);
-        args.putString(Configs.FLOOR, floorName);
+        HallRosterFragment fragment = new HallRosterFragment();
+        Bundle args = new Bundle();
+        args.putString(ConfigKeys.HALL, hallName);
+        args.putString(ConfigKeys.FLOOR, floorName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,17 +61,16 @@ public class HallRosterFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState!=null){
-            hallName=savedInstanceState.getString(Configs.HALL, null);
-            floorName=savedInstanceState.getString(Configs.FLOOR, null);
+        if (savedInstanceState != null) {
+            hallName = savedInstanceState.getString(ConfigKeys.HALL, null);
+            floorName = savedInstanceState.getString(ConfigKeys.FLOOR, null);
+        } else if (getArguments() != null) {
+            hallName = getArguments().getString(ConfigKeys.HALL, null);
+            floorName = getArguments().getString(ConfigKeys.FLOOR, null);
         }
-        else if (getArguments()!=null){
-            hallName=getArguments().getString(Configs.HALL, null);
-            floorName=getArguments().getString(Configs.FLOOR, null);
-        }
-        if (mListener!=null){
-            hall=mListener.getHall(hallName);
-            rooms=hall.getFloor(floorName).getRooms();
+        if (mListener != null) {
+            hall = mListener.getHall(hallName);
+            rooms = hall.getFloor(floorName).getRooms();
 
 
         }
@@ -142,6 +140,7 @@ public class HallRosterFragment extends Fragment
     public int getCurrentFloorIndex() {
         return floorIndex;
     }
+
     @Override
     public void setCurrentFloorIndex(int index) {
         this.floorIndex = index;

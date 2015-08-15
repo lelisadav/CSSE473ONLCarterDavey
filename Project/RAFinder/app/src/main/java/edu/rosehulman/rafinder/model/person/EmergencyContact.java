@@ -5,51 +5,49 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-import edu.rosehulman.rafinder.Configs;
+public class EmergencyContact implements Comparable<EmergencyContact> {
+    // EmergencyContact Firebase keys
+    private static final String ecEmail = "Email";
+    private static final String ecPhone = "Phone";
 
-/**
- * Created by daveyle on 8/14/2015.
- */
-public class EmergencyContact implements Comparable<EmergencyContact>{
     private String name;
     private String email;
     private String phone;
     private Position position;
     private Priority priority;
-    public enum Position{
+
+    public enum Position {
         ResA, SA, GA, ADMIN
     }
-    public enum Priority{
-        ONDUTY, MYRA,STAFF
+
+    public enum Priority {
+        ONDUTY, MYRA, STAFF
     }
 
-    public EmergencyContact(String firebaseURL){
+    public EmergencyContact(String firebaseURL) {
         Firebase firebase = new Firebase(firebaseURL);
 
-            firebase.addListenerForSingleValueEvent(new EmergencyContactListener(this));
+        firebase.addListenerForSingleValueEvent(new EmergencyContactListener(this));
     }
-    public EmergencyContact(Employee employee, boolean isOnDuty){
-        if (employee instanceof Administrator){
-            position=Position.ADMIN;
+
+    public EmergencyContact(Employee employee, boolean isOnDuty) {
+        if (employee instanceof Administrator) {
+            position = Position.ADMIN;
+        } else if (employee instanceof ResidentAssistant) {
+            position = Position.ResA;
+        } else if (employee instanceof SophomoreAdvisor) {
+            position = Position.SA;
+        } else if (employee instanceof GraduateAssistant) {
+            position = Position.GA;
         }
-        else if (employee instanceof ResidentAssistant){
-            position=Position.ResA;
+        if (isOnDuty) {
+            priority = Priority.ONDUTY;
+        } else {
+            priority = Priority.MYRA;
         }
-        else if (employee instanceof SophomoreAdvisor){
-            position=Position.SA;
-        }
-        else if (employee instanceof GraduateAssistant){
-            position=Position.GA;
-        }
-        if (isOnDuty){
-            priority=Priority.ONDUTY;
-        }
-        else{
-            priority=Priority.MYRA;
-        }
-        name=employee.getName();
-        email=employee.getEmail();
-        phone=employee.getPhoneNumber();
+        name = employee.getName();
+        email = employee.getEmail();
+        phone = employee.getPhoneNumber();
     }
 
     public String getName() {
@@ -97,19 +95,19 @@ public class EmergencyContact implements Comparable<EmergencyContact>{
     //1 this > another
     @Override
     public int compareTo(EmergencyContact another) {
-        if (this.priority.ordinal()>another.getPriority().ordinal()){
+        if (priority.ordinal() > another.getPriority().ordinal()) {
             return -1;
-        }
-        else if (this.priority.ordinal()<another.getPriority().ordinal()){
+        } else if (priority.ordinal() < another.getPriority().ordinal()) {
             return 1;
         }
         return 0;
     }
 
-    public class EmergencyContactListener implements ValueEventListener{
+    public class EmergencyContactListener implements ValueEventListener {
         private EmergencyContact contact;
-        public EmergencyContactListener(EmergencyContact emergencyContact){
-            contact=emergencyContact;
+
+        public EmergencyContactListener(EmergencyContact emergencyContact) {
+            contact = emergencyContact;
         }
 
         @Override
@@ -117,10 +115,10 @@ public class EmergencyContact implements Comparable<EmergencyContact>{
             contact.setName(dataSnapshot.getKey());
             contact.setPriority(Priority.STAFF);
             contact.setPosition(Position.ADMIN);
-            for (DataSnapshot child : dataSnapshot.getChildren()){
-                if (child.getKey().equals(Configs.ecEmail)){
+            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                if (child.getKey().equals(ecEmail)) {
                     contact.setEmail(child.getValue(String.class));
-                }else if (child.getKey().equals(Configs.ecPhone)){
+                } else if (child.getKey().equals(ecPhone)) {
                     contact.setPhone(child.getValue(String.class));
                 }
 

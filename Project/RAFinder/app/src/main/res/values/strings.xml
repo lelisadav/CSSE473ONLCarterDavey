@@ -71,8 +71,11 @@
     <string name="prompt_confirm_email">Confirm Email</string>
     <string name="prompt_ra_email">Your RA\'s Email</string>
     <string name="prompt_confirm_ra_email">Confirm your RA\'s Email</string>
-    <string name="email_mismatch">Your Emails don\'t match</string>
-    <string name="password_mismatch">Your passwords don\'t match</string>
-    <string name="ra_email_mismatch">Your RA\'s Emails don\'t match</string>
-    <string name="invalid_ra_email">Your RA\'s email is invalid.</string>
+    <string name="email_mismatch">Emails don\'t match</string>
+    <string name="password_mismatch">Passwords don\'t match</string>
+    <string name="ra_email_mismatch">RA\'s Emails don\'t match</string>
+    <string name="invalid_ra_email">RA\'s email is invalid.</string>
+    <string name="ra_email_does_not_exist">RA\'s email does not exist</string>
+    <string name="email_in_use">This email is already in use</string>
+    <string name="error_message">An unexpected error occurred.</string>
 </resources>

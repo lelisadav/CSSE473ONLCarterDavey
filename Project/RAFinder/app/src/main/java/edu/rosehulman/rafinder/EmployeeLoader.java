@@ -26,7 +26,7 @@ public class EmployeeLoader {
 
     public EmployeeLoader(String url, LoaderCallbacks cb) {
         callbacks = cb;
-        Firebase firebase = new Firebase(url + "/"+Configs.Employees);
+        Firebase firebase = new Firebase(url + "/"+ ConfigKeys.Employees);
         firebase.addListenerForSingleValueEvent(new EmployeeValueEventListener());
     }
 
@@ -58,28 +58,28 @@ public class EmployeeLoader {
     public class EmployeeValueEventListener implements ValueEventListener {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            Log.d(Configs.LOG_TAG, "Loading Employee data...");
+            Log.d(ConfigKeys.LOG_TAG, "Loading Employee data...");
             for (DataSnapshot child : dataSnapshot.getChildren()) {
                 switch (child.getKey()) {
-                case Configs.Administrators:
+                case ConfigKeys.Administrators:
                     for (DataSnapshot adminDS : child.getChildren()) {
                         Administrator admin = new Administrator(adminDS);
                         admins.add(admin);
                     }
                     break;
-                case Configs.GraduateAssistants:
+                case ConfigKeys.GraduateAssistants:
                     for (DataSnapshot gaDS : child.getChildren()) {
                         GraduateAssistant ga = new GraduateAssistant(gaDS);
                         gas.add(ga);
                     }
                     break;
-                case Configs.ResidentAssistants:
+                case ConfigKeys.ResidentAssistants:
                     for (DataSnapshot raDS : child.getChildren()) {
                         ResidentAssistant ra = new ResidentAssistant(raDS);
                         ras.add(ra);
                     }
                     break;
-                case Configs.SophomoreAdvisors:
+                case ConfigKeys.SophomoreAdvisors:
                     for (DataSnapshot saDS : child.getChildren()) {
                         SophomoreAdvisor sa = new SophomoreAdvisor(saDS);
                         sas.add(sa);
@@ -87,7 +87,7 @@ public class EmployeeLoader {
                     break;
                 }
             }
-            Log.d(Configs.LOG_TAG, "Finished loading Employee data.");
+            Log.d(ConfigKeys.LOG_TAG, "Finished loading Employee data.");
             callbacks.onEmployeeLoadingComplete();
         }
 

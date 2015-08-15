@@ -7,7 +7,7 @@ import com.firebase.client.DataSnapshot;
  * TODO: extend {@link ResidentAssistant} instead?
  */
 public class SophomoreAdvisor extends Employee {
-    public SophomoreAdvisor(DataSnapshot ds){
+    public SophomoreAdvisor(DataSnapshot ds) {
         super(ds);
     }
 

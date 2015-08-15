@@ -59,7 +59,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
 
-        Firebase firebase = new Firebase(Configs.FIREBASE_ROOT_URL);
+        Firebase firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL);
         mLogin = new Login(firebase, this);
 
         setContentView(R.layout.activity_login);
@@ -75,6 +75,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
+
+        String email = getIntent().getStringExtra(ConfigKeys.KEY_USER_EMAIL);
+        if (email != null) {
+            // pre-populate the email address if we're coming from the Registration page
+            mEmailView.setText(email);
+        }
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -97,17 +103,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         Button mEmailRegister = (Button) findViewById(R.id.register);
         mEmailRegister.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                registerNewUser(view);
+            public void onClick(View ignored) {
+                registerNewUser();
             }
         });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        SharedPreferences prefs = getSharedPreferences(Configs.KEY_SHARED_PREFS, MODE_PRIVATE);
-        UserType userType = UserType.valueOf(prefs.getString(Configs.KEY_USER_TYPE, UserType.NONE.toString()));
-        String raEmail = prefs.getString(Configs.KEY_RA_EMAIL, "");
+        SharedPreferences prefs = getSharedPreferences(ConfigKeys.KEY_SHARED_PREFS, MODE_PRIVATE);
+        UserType userType = UserType.valueOf(prefs.getString(ConfigKeys.KEY_USER_TYPE, UserType.NONE.toString()));
+        String raEmail = prefs.getString(ConfigKeys.KEY_RA_EMAIL, "");
 
         // Skip login screen if we're still authorized and have data.
         if (firebase.getAuth() != null && !userType.equals(UserType.NONE) && !raEmail.equals("")) {
@@ -133,7 +139,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !mLogin.isPasswordValid(password)) {
+        if (!TextUtils.isEmpty(password) && !Login.isPasswordValid(password)) {
             mPasswordView
                     .setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
@@ -145,7 +151,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!mLogin.isEmailValid(email)) {
+        } else if (!Login.isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -170,17 +176,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      */
     public void launchMainActivity(UserType userType, String raEmail) {
         mAuthProgressDialog.hide();
-        Intent intent = new Intent(this, Configs.class);
-        intent.putExtra(Configs.KEY_USER_TYPE, userType.name());
-        intent.putExtra(Configs.KEY_RA_EMAIL, raEmail);
+        Intent intent = new Intent(this, ConfigKeys.class);
+        intent.putExtra(ConfigKeys.KEY_USER_TYPE, userType.name());
+        intent.putExtra(ConfigKeys.KEY_RA_EMAIL, raEmail);
 
         // Store data for persistence
-        SharedPreferences.Editor editor = getSharedPreferences(Configs.KEY_SHARED_PREFS, MODE_PRIVATE).edit();
-        editor.putString(Configs.KEY_USER_TYPE, userType.name());
-        editor.putString(Configs.KEY_RA_EMAIL, raEmail);
+        SharedPreferences.Editor editor = getSharedPreferences(ConfigKeys.KEY_SHARED_PREFS, MODE_PRIVATE).edit();
+        editor.putString(ConfigKeys.KEY_USER_TYPE, userType.name());
+        editor.putString(ConfigKeys.KEY_RA_EMAIL, raEmail);
         editor.apply();
 
-        Log.d(Configs.LOG_TAG, "starting Main with userType <" + userType + "> and raEmail <" + raEmail + ">");
+        Log.d(ConfigKeys.LOG_TAG, "starting Main with userType <" + userType + "> and raEmail <" + raEmail + ">");
         startActivity(intent);
         finish();
     }
@@ -296,13 +302,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         int IS_PRIMARY = 1;
     }
 
-    /**
-     * Opens a browser activity that loads the page that allows the user to create a new account
-     */
-    private void registerNewUser(View view) {
-        // TODO: make a registration page intent here instead
-//        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://henry-staging.firebaseio.com"));
-//        startActivity(browserIntent);
+    private void registerNewUser() {
+        Intent registerIntent = new Intent(this, RegisterActivity.class);
+        String email = mEmailView.getText().toString();
+        if (!email.equals("")) {
+            registerIntent.putExtra(ConfigKeys.KEY_USER_EMAIL, email);
+        }
+        startActivity(registerIntent);
     }
 
     public void showError(String errorMessage) {

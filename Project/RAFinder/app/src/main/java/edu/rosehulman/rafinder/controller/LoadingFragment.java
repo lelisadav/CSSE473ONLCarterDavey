@@ -14,17 +14,14 @@ import edu.rosehulman.rafinder.R;
 
 public class LoadingFragment extends Fragment {
     private View mProgressView;
-    private ProgressDialog mProgressDialog;
-    private Context context;
 
     /**
      * Use this factory method to create a new instance of this fragment using the provided parameters.
      *
      * @return A new instance of fragment HomeFragment.
      */
-    public static LoadingFragment newInstance(/*String param1, String param2*/) {
-        LoadingFragment fragment = new LoadingFragment();
-        return fragment;
+    public static LoadingFragment newInstance() {
+        return new LoadingFragment();
     }
 
     public LoadingFragment() {
@@ -38,10 +35,9 @@ public class LoadingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_loading, container, false);
-        context = v.getContext();
-        mProgressDialog = new ProgressDialog(context);
+        Context mContext = v.getContext();
+        ProgressDialog mProgressDialog = new ProgressDialog(mContext);
         mProgressDialog.setTitle("Loading");
         mProgressDialog.setMessage("Loading Employee data...");
         mProgressDialog.setCancelable(false);

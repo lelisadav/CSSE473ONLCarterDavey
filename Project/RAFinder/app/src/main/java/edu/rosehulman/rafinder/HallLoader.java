@@ -5,21 +5,17 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-import java.util.HashMap;
-import java.util.List;
-
 import edu.rosehulman.rafinder.model.Hall;
 
-/**
- * Created by daveyle on 8/15/2015.
- */
 public class HallLoader {
+    private static final String resHalls = "ResHalls";
+
     private Hall hall;
     private LoaderCallbacks callbacks;
     public HallLoader(String url, String hallName, LoaderCallbacks cb){
         callbacks=cb;
 
-        Firebase firebase=new Firebase(url+"/"+Configs.resHalls+"/"+hallName);
+        Firebase firebase=new Firebase(url+"/"+ resHalls+"/"+hallName);
         firebase.addListenerForSingleValueEvent(new HallValueEventListener());
 
     }

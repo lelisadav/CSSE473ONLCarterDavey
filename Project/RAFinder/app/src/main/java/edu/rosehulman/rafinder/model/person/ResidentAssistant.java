@@ -6,7 +6,7 @@ import com.firebase.client.DataSnapshot;
  * An RA, who has the broadest access to the app.
  */
 public class ResidentAssistant extends Employee {
-    public ResidentAssistant(DataSnapshot ds){
+    public ResidentAssistant(DataSnapshot ds) {
         super(ds);
     }
 

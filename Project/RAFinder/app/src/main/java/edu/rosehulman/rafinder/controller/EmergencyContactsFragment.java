@@ -40,8 +40,8 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyCont
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mListener!=null){
-            emergencyContacts=mListener.getEmergencyContacts();
+        if (mListener != null) {
+            emergencyContacts = mListener.getEmergencyContacts();
         }
     }
 
@@ -49,16 +49,20 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyCont
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_emergency_contacts, container, false);
-        ListView listView= (ListView) view.findViewById(R.id.emergencyContactsListView);
-        Comparator<EmergencyContact> c=new Comparator<EmergencyContact>() {
+        View view = inflater.inflate(R.layout.fragment_emergency_contacts, container, false);
+        ListView listView = (ListView) view.findViewById(R.id.emergencyContactsListView);
+        Comparator<EmergencyContact> c = new Comparator<EmergencyContact>() {
             @Override
             public int compare(EmergencyContact lhs, EmergencyContact rhs) {
                 return lhs.compareTo(rhs);
             }
         };
-        Collections.sort(emergencyContacts,c);
-        EmergencyContactArrayAdapter mAdapter= new EmergencyContactArrayAdapter(this.getActivity(), R.layout.fragment_emergency_contacts, emergencyContacts, this);
+        Collections.sort(emergencyContacts, c);
+        EmergencyContactArrayAdapter mAdapter = new EmergencyContactArrayAdapter(
+                getActivity(),
+                R.layout.fragment_emergency_contacts,
+                emergencyContacts,
+                this);
         listView.setAdapter(mAdapter);
         return view;
 
@@ -70,8 +74,7 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyCont
         try {
             mListener = (EmergencyContactsListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                                         + " must implement EmergencyContactsListener");
+            throw new ClassCastException(activity.toString() + " must implement EmergencyContactsListener");
         }
     }
 
@@ -83,18 +86,16 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyCont
 
     @Override
     public void makePhoneCall(String phoneNumber) {
-        if (mListener!=null){
+        if (mListener != null) {
             mListener.dialPhoneNumber(phoneNumber);
         }
-
     }
 
     @Override
     public void sendEmail(String emailAddress) {
-        if (mListener!=null){
+        if (mListener != null) {
             mListener.sendEmail(emailAddress);
         }
-
     }
 
     public interface EmergencyContactsListener {
@@ -102,5 +103,4 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyCont
         public void sendEmail(String emailAddress);
         public List<EmergencyContact> getEmergencyContacts();
     }
-
 }

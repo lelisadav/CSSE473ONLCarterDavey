@@ -17,36 +17,16 @@ import java.util.List;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.RAListArrayAdapter;
 import edu.rosehulman.rafinder.model.person.Employee;
-import edu.rosehulman.rafinder.model.person.Resident;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HomeFragmentSubsectionMySAs.HomeMySAListener} interface
- * to handle interaction events.
- * Use the {@link HomeFragmentSubsectionMySAs#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArrayAdapter.RAListArrayAdapterCallbacks{
+public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArrayAdapter.RAListArrayAdapterCallbacks {
 
     private HomeMySAListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-
-     * @return A new instance of fragment HomeFragmentSubsectionMySAs.
-     */
-
     public static HomeFragmentSubsectionMySAs newInstance() {
-        HomeFragmentSubsectionMySAs fragment = new HomeFragmentSubsectionMySAs();
-
-        return fragment;
+        return new HomeFragmentSubsectionMySAs();
     }
 
     public HomeFragmentSubsectionMySAs() {
-        // Required empty public constructor
     }
 
     @Override
@@ -58,9 +38,8 @@ public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArray
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_home_subsection_my_sas, container, false);
-        final ListView listView= (ListView) view.findViewById(R.id.mySAsView);
+        View view = inflater.inflate(R.layout.fragment_home_subsection_my_sas, container, false);
+        final ListView listView = (ListView) view.findViewById(R.id.mySAsView);
         listView.setOnTouchListener(new View.OnTouchListener() {
             // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
@@ -70,11 +49,11 @@ public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArray
                 return false;
             }
         });
-        List<Employee> hallSAs= mListener.getMySAs();
-        RAListArrayAdapter<Employee> mAdapter2= new RAListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallSAs, this);
+        List<Employee> hallSAs = mListener.getMySAs();
+        RAListArrayAdapter<Employee> mAdapter2 = new RAListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallSAs, this);
         listView.setAdapter(mAdapter2);
         setListViewHeightBasedOnChildren(listView);
-        final ToggleButton toggleButton=(ToggleButton) view.findViewById(R.id.mySAexpander);
+        final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.mySAexpander);
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -107,18 +86,21 @@ public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArray
         super.onDetach();
         mListener = null;
     }
+
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
+        if (listAdapter == null) {
             return;
+        }
 
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
         int totalHeight = 0;
         View view = null;
         for (int i = 0; i < listAdapter.getCount(); i++) {
             view = listAdapter.getView(i, view, listView);
-            if (i == 0)
+            if (i == 0) {
                 view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
 
             view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
             totalHeight += view.getMeasuredHeight();
@@ -136,6 +118,7 @@ public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArray
 
     public interface HomeMySAListener {
         public void switchToProfile(Employee res);
+
         public List<Employee> getMySAs();
 
     }

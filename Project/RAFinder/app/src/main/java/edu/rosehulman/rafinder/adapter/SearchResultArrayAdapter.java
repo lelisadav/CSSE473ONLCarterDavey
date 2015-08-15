@@ -19,15 +19,15 @@ import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.Resident;
 
 public class SearchResultArrayAdapter extends ArrayAdapter<SearchResultItem> {
-    private final Context context;
-    private final List<SearchResultItem> objects;
-    private final int layout;
+    private final Context mContext;
+    private final List<SearchResultItem> mObjects;
+    private final int mLayout;
 
     public SearchResultArrayAdapter(Context context, int textViewResourceId, List<SearchResultItem> objects) {
         super(context, R.layout.layout_search_item, textViewResourceId, objects);
-        this.layout = R.layout.layout_search_item;
-        this.context = context;
-        this.objects = objects;
+        mLayout = R.layout.layout_search_item;
+        mContext = context;
+        mObjects = objects;
     }
 
     @Override
@@ -41,23 +41,23 @@ public class SearchResultArrayAdapter extends ArrayAdapter<SearchResultItem> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
+        LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(layout, parent, false);
+        View view = inflater.inflate(mLayout, parent, false);
         ImageView typeIcon = (ImageView) view.findViewById(R.id.typeIcon);
         TextView nameText = (TextView) view.findViewById(R.id.nameTextView);
         TextView roomText = (TextView) view.findViewById(R.id.roomTextView);
         TextView statusText = (TextView) view.findViewById(R.id.dutyStatusTextView);
         TextView statusDetailText = (TextView) view.findViewById(R.id.statusDetailTextView);
-        if (objects.get(position) instanceof Resident) {
+        if (mObjects.get(position) instanceof Resident) {
             Drawable personDrawable;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                personDrawable = context.getResources().getDrawable(R.drawable.ic_person, context.getTheme());
+                personDrawable = mContext.getResources().getDrawable(R.drawable.ic_person, mContext.getTheme());
             } else {
-                personDrawable = context.getResources().getDrawable(R.drawable.ic_person);
+                personDrawable = mContext.getResources().getDrawable(R.drawable.ic_person);
             }
 
-            Employee emp = (Employee) objects.get(position);
+            Employee emp = (Employee) mObjects.get(position);
             nameText.setText(emp.getName());
             roomText.setText(String.valueOf(emp.getFloor()));
             statusText.setText(emp.getStatus());
@@ -67,11 +67,11 @@ public class SearchResultArrayAdapter extends ArrayAdapter<SearchResultItem> {
         } else {
             Drawable hallDrawable;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                hallDrawable = context.getResources().getDrawable(R.drawable.ic_phone, context.getTheme());
+                hallDrawable = mContext.getResources().getDrawable(R.drawable.ic_phone, mContext.getTheme());
             } else {
-                hallDrawable = context.getResources().getDrawable(R.drawable.ic_phone);
+                hallDrawable = mContext.getResources().getDrawable(R.drawable.ic_phone);
             }
-            Hall hall = (Hall) objects.get(position);
+            Hall hall = (Hall) mObjects.get(position);
             nameText.setVisibility(View.GONE);
             roomText.setVisibility(View.GONE);
             statusText.setText(hall.getName());

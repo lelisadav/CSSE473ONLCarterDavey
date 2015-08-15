@@ -6,7 +6,7 @@ import com.firebase.client.DataSnapshot;
  * A GA (Like an RA, but with somewhat limited priviledges (FIXME?).
  */
 public class GraduateAssistant extends Employee {
-    public GraduateAssistant(DataSnapshot ds){
+    public GraduateAssistant(DataSnapshot ds) {
         super(ds);
     }
 

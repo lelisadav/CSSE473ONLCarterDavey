@@ -3,27 +3,21 @@ package edu.rosehulman.rafinder.controller.reslife;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.rosehulman.rafinder.Configs;
-import edu.rosehulman.rafinder.MainActivity;
+import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.DutyRosterArrayAdapter;
 import edu.rosehulman.rafinder.model.DutyRoster;
 import edu.rosehulman.rafinder.model.DutyRosterItem;
-
 
 
 /**
@@ -37,12 +31,11 @@ public class DutyRosterFragment extends Fragment {
     private DutyRoster roster;
 
 
-
     public static DutyRosterFragment newInstance(String hall, LocalDate date) {
-        DutyRosterFragment fragment= new DutyRosterFragment();
-        Bundle args=new Bundle();
-        args.putString(Configs.HALL, hall);
-        args.putString(Configs.DATE, date.toString(Configs.dateFormatter));
+        DutyRosterFragment fragment = new DutyRosterFragment();
+        Bundle args = new Bundle();
+        args.putString(ConfigKeys.HALL, hall);
+        args.putString(ConfigKeys.DATE, date.toString(ConfigKeys.dateFormat));
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,12 +47,10 @@ public class DutyRosterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_student_duty_roster, container, false);
-        //Log.i("RA Finder", DummyData.getDutyRoster().size() + "");
         ListView listView = (ListView) view.findViewById(R.id.dutyRosterListView);
-        List<DutyRosterItem> rosterItems=new ArrayList<>();
+        List<DutyRosterItem> rosterItems = new ArrayList<>();
         rosterItems.addAll(roster.getRoster().values());
-//        Toast.makeText(this.getActivity(), DummyData.getDutyRoster().size() + "", Toast.LENGTH_LONG).show();
-        mAdapter = new DutyRosterArrayAdapter(this.getActivity(), R.layout.fragment_student_duty_roster_widget, rosterItems);
+        mAdapter = new DutyRosterArrayAdapter(getActivity(), R.layout.fragment_student_duty_roster_widget, rosterItems);
         listView.setAdapter(mAdapter);
         return view;
     }
@@ -67,24 +58,23 @@ public class DutyRosterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState!=null){
-            hallName=savedInstanceState.getString(Configs.HALL, null);
-            String dateStr=savedInstanceState.getString(Configs.DATE, null);
-            if (dateStr!=null) {
+        if (savedInstanceState != null) {
+            hallName = savedInstanceState.getString(ConfigKeys.HALL, null);
+            String dateStr = savedInstanceState.getString(ConfigKeys.DATE, null);
+            if (dateStr != null) {
 
-                date = LocalDate.parse(dateStr, Configs.formatter);
+                date = LocalDate.parse(dateStr, ConfigKeys.formatter);
+            }
+        } else if (getArguments() != null) {
+            hallName = getArguments().getString(ConfigKeys.HALL, null);
+            String dateStr = getArguments().getString(ConfigKeys.DATE, null);
+            if (dateStr != null) {
+
+                date = LocalDate.parse(dateStr, ConfigKeys.formatter);
             }
         }
-        else if(getArguments()!=null){
-            hallName=getArguments().getString(Configs.HALL, null);
-            String dateStr=getArguments().getString(Configs.DATE, null);
-            if (dateStr!=null) {
-
-                date = LocalDate.parse(dateStr, Configs.formatter);
-            }
-        }
-        if (mListener!=null){
-            roster=mListener.getDutyRoster();
+        if (mListener != null) {
+            roster = mListener.getDutyRoster();
         }
     }
 

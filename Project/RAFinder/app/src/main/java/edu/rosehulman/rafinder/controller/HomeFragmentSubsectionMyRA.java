@@ -18,35 +18,16 @@ import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.RAListArrayAdapter;
 import edu.rosehulman.rafinder.model.person.Employee;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HomeFragmentSubsectionMyRA.HomeMyRAListener} interface
- * to handle interaction events.
- * Use the {@link HomeFragmentSubsectionMyRA#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class HomeFragmentSubsectionMyRA extends Fragment implements RAListArrayAdapter.RAListArrayAdapterCallbacks{
+public class HomeFragmentSubsectionMyRA extends Fragment
+        implements RAListArrayAdapter.RAListArrayAdapterCallbacks {
 
     private HomeMyRAListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragmentSubsectionMyRA.
-     */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragmentSubsectionMyRA newInstance() {
-        HomeFragmentSubsectionMyRA fragment = new HomeFragmentSubsectionMyRA();
-
-        return fragment;
+        return new HomeFragmentSubsectionMyRA();
     }
 
     public HomeFragmentSubsectionMyRA() {
-        // Required empty public constructor
     }
 
     @Override
@@ -58,11 +39,9 @@ public class HomeFragmentSubsectionMyRA extends Fragment implements RAListArrayA
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_home_subsection_my_ra, container, false);
-        final ListView listView= (ListView) view.findViewById(R.id.myRAView);
+        View view = inflater.inflate(R.layout.fragment_home_subsection_my_ra, container, false);
+        final ListView listView = (ListView) view.findViewById(R.id.myRAView);
         listView.setOnTouchListener(new View.OnTouchListener() {
-            // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // Disallow the touch request for parent scroll on touch of child view
@@ -70,11 +49,11 @@ public class HomeFragmentSubsectionMyRA extends Fragment implements RAListArrayA
                 return false;
             }
         });
-        List<Employee> hallRAs= mListener.getAllRAs();
-        RAListArrayAdapter<Employee> mAdapter2= new RAListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallRAs, this);
+        List<Employee> hallRAs = mListener.getAllRAs();
+        RAListArrayAdapter<Employee> mAdapter2 = new RAListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallRAs, this);
         listView.setAdapter(mAdapter2);
         setListViewHeightBasedOnChildren(listView);
-        final ToggleButton toggleButton=(ToggleButton) view.findViewById(R.id.myRAexpander);
+        final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.myRAexpander);
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -93,15 +72,13 @@ public class HomeFragmentSubsectionMyRA extends Fragment implements RAListArrayA
     }
 
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
             mListener = (HomeMyRAListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(activity.toString() + " must implement HomeMyRAListener");
         }
     }
 
@@ -110,18 +87,21 @@ public class HomeFragmentSubsectionMyRA extends Fragment implements RAListArrayA
         super.onDetach();
         mListener = null;
     }
+
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
+        if (listAdapter == null) {
             return;
+        }
 
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
         int totalHeight = 0;
         View view = null;
         for (int i = 0; i < listAdapter.getCount(); i++) {
             view = listAdapter.getView(i, view, listView);
-            if (i == 0)
+            if (i == 0) {
                 view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
 
             view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
             totalHeight += view.getMeasuredHeight();
@@ -140,6 +120,7 @@ public class HomeFragmentSubsectionMyRA extends Fragment implements RAListArrayA
 
     public interface HomeMyRAListener {
         public void switchToProfile(Employee res);
+
         public List<Employee> getAllRAs();
 
     }

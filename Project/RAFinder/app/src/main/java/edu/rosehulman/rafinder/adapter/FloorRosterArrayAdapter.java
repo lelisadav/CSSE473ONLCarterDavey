@@ -17,14 +17,14 @@ import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 import edu.rosehulman.rafinder.model.person.SophomoreAdvisor;
 
 public class FloorRosterArrayAdapter extends ArrayAdapter<RoomEntry> {
-    private final Context context;
-    private final int layout;
+    private final Context mContext;
+    private final int mLayout;
 
 
     public FloorRosterArrayAdapter(Context context, int textViewResourceId, List<RoomEntry> objects) {
         super(context, R.layout.entry_floor_roster, textViewResourceId, objects);
-        this.layout = R.layout.entry_floor_roster;
-        this.context = context;
+        mLayout = R.layout.entry_floor_roster;
+        mContext = context;
     }
 
 
@@ -39,9 +39,9 @@ public class FloorRosterArrayAdapter extends ArrayAdapter<RoomEntry> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
+        LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(layout, parent, false);
+        View view = inflater.inflate(mLayout, parent, false);
 
         TextView roomNumberText = (TextView) view.findViewById(R.id.roomNumberTextView);
 
@@ -67,17 +67,15 @@ public class FloorRosterArrayAdapter extends ArrayAdapter<RoomEntry> {
                     textViews[i].setVisibility(View.INVISIBLE);
                 } else {
                     textViews[i].setText(residents[i].getName());
-                    if (residents[i] instanceof ResidentAssistant){
-                        textViews[i].setTextColor(context.getResources().getColor(R.color.red));
-                        textViews[i].setText(textViews[i].getText()+" (RA)");
-                    }
-                    else if (residents[i] instanceof SophomoreAdvisor){
-                        textViews[i].setTextColor(context.getResources().getColor(R.color.blue));
+                    if (residents[i] instanceof ResidentAssistant) {
+                        textViews[i].setTextColor(mContext.getResources().getColor(R.color.red));
+                        textViews[i].setText(textViews[i].getText() + " (RA)");
+                    } else if (residents[i] instanceof SophomoreAdvisor) {
+                        textViews[i].setTextColor(mContext.getResources().getColor(R.color.blue));
                         textViews[i].setText(textViews[i].getText() + " (SA)");
-                    }
-                    else if (residents[i] instanceof GraduateAssistant){
-                        textViews[i].setTextColor(context.getResources().getColor(R.color.green));
-                        textViews[i].setText(textViews[i].getText()+" (GA)");
+                    } else if (residents[i] instanceof GraduateAssistant) {
+                        textViews[i].setTextColor(mContext.getResources().getColor(R.color.green));
+                        textViews[i].setText(textViews[i].getText() + " (GA)");
                     }
                 }
 
