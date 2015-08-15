@@ -46,6 +46,7 @@ public class MainActivity extends Activity implements ICallback {
     protected static final String KEY_SHARED_PREFS = "RA_FINDER_SHARED_PREFERENCES";
     protected static final String KEY_USER_TYPE = "KEY_USER_TYPE";
     protected static final String KEY_RA_EMAIL = "KEY_RA_EMAIL";
+    protected static final String KEY_USER_EMAIL = "KEY_USER_EMAIL";
 
     private static final int HOME = 0;
     private static final int MY_RA = 1;
@@ -53,7 +54,7 @@ public class MainActivity extends Activity implements ICallback {
     private static final int DUTY_ROSTER = 3;
     private static final int HALL_ROSTER_OR_RESIDENT_LOGOUT = 4;
     private static final int RA_LOGOUT = 5;
-    private static final int INIT = -1;
+    private static final int LOADING = -1;
 
     public static String HALL = "HALL";
     public static String FLOOR = "FLOOR";
@@ -61,9 +62,8 @@ public class MainActivity extends Activity implements ICallback {
     public static String dateFormatter = "yyyy-MM-dd";
     public static DateTimeFormatter formatter = DateTimeFormat.forPattern(dateFormatter);
 
-    private static int myFloor = 3;
-    private static String myHall = "Lakeside";
-
+    private int mFloor;
+    private String mHall;
     private Hall currHall;
     private List<Employee> allRAs;
     private EmployeeLoader loader;
@@ -89,7 +89,6 @@ public class MainActivity extends Activity implements ICallback {
 
         loader = new EmployeeLoader(FIREBASE_ROOT_URL, this);
 //        ecLoader = new EmergencyContactLoader(this);
-        currHall = new Hall(FIREBASE_ROOT_URL + "/ResHalls/" + myHall);
 
         mRaEmail = getIntent().getStringExtra(KEY_RA_EMAIL);
         mUserType = UserType.valueOf(getIntent().getStringExtra(KEY_USER_TYPE));
@@ -116,7 +115,7 @@ public class MainActivity extends Activity implements ICallback {
         Fragment fragment;
 
         switch (position) {
-        case INIT:
+        case LOADING:
             fragment = LoadingFragment.newInstance();
             break;
         case HOME:
@@ -129,6 +128,7 @@ public class MainActivity extends Activity implements ICallback {
             fragment = EmergencyContactsFragment.newInstance();
             break;
         case DUTY_ROSTER:
+            // TODO: kick off DutyRosterLoader, set to loading fragment, move logic to loadingComplete callback
             LocalDate date = LocalDate.now();
             int DoW = date.getDayOfWeek();
             if (DoW < DateTimeConstants.FRIDAY) {
@@ -138,9 +138,9 @@ public class MainActivity extends Activity implements ICallback {
                 date.minusDays(DoW - DateTimeConstants.FRIDAY);
             }
             if (mUserType == UserType.RESIDENT) {
-                fragment = StudentDutyRosterFragment.newInstance(myHall, date);
+                fragment = StudentDutyRosterFragment.newInstance(mHall, date);
             } else {
-                fragment = DutyRosterFragment.newInstance(myHall, date);
+                fragment = DutyRosterFragment.newInstance(mHall, date);
             }
             break;
         case HALL_ROSTER_OR_RESIDENT_LOGOUT:
@@ -148,7 +148,8 @@ public class MainActivity extends Activity implements ICallback {
                 logout();
                 return;
             } else {
-                fragment = HallRosterFragment.newInstance(myHall, myFloor + "");
+                // TODO: kick off HallRosterLoader, set to loading fragment
+                fragment = HallRosterFragment.newInstance(mHall, mFloor + "");
                 break;
             }
         case RA_LOGOUT:
@@ -299,18 +300,25 @@ public class MainActivity extends Activity implements ICallback {
 
     @Override
     public String getMyHall() {
-        return myHall;
+        return mHall;
     }
 
     @Override
     public void onEmployeeLoadingComplete() {
         mUserRA = getRA(mRaEmail);
+        mHall = mUserRA.getHall();
+        mFloor = mUserRA.getFloor();
+        currHall = new Hall(FIREBASE_ROOT_URL + "/ResHalls/" + mHall);
         onNavigationDrawerItemSelected(0);
     }
 
+    // TODO: onHallRosterLoadingComplete - fragment logic and startup here
+
+    // TODO: onDutyRosterLoadingComplete - fragment logic and startup here
+
     @Override
     public DutyRoster getRoster() {
-        return new DutyRoster(FIREBASE_ROOT_URL + "/DutyRosters/" + myHall, LocalDate.now());
+        return new DutyRoster(FIREBASE_ROOT_URL + "/DutyRosters/" + mHall, LocalDate.now());
     }
 
     @Override
