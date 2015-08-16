@@ -8,7 +8,6 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import edu.rosehulman.rafinder.model.person.Administrator;
@@ -22,7 +21,7 @@ public class EmployeeLoader {
     private List<Employee> ras = new ArrayList<>();
     private List<Employee> gas = new ArrayList<>();
     private List<Employee> sas = new ArrayList<>();
-    private EmployeeLoaderListener callbacks;
+    private final EmployeeLoaderListener callbacks;
 
 
     public EmployeeLoader(String url, EmployeeLoaderListener cb) {
@@ -31,43 +30,12 @@ public class EmployeeLoader {
         firebase.addListenerForSingleValueEvent(new EmployeeValueEventListener());
     }
 
-    public List<Employee> getMyRAs() {
-        List<Employee> myRAs = new ArrayList<>();
-        for (Employee ra : ras) {
-            if (ra.getHall().equals(callbacks.getMyHall())) {
-                myRAs.add(ra);
-            }
-        }
-        return myRAs;
-    }
-
-    public List<Employee> getMySAs() {
-        List<Employee> mySAs = new ArrayList<>();
-        for (Employee sa : sas) {
-            if (sa.getHall().equals(callbacks.getMyHall())) {
-                mySAs.add(sa);
-            }
-        }
-        return mySAs;
-    }
-
-    public Employee getEmployee(String email) {
-        for (List<Employee> employees : Arrays.asList(ras, sas, gas, admins) ) {
-            for (Employee e : employees) {
-                if (e.getEmail().equals(email)) {
-                    return e;
-                }
-            }
-        }
-        return null;
-    }
-
     public interface EmployeeLoaderListener {
         public String getMyHall();
         public void onEmployeeLoadingComplete();
     }
 
-    public class EmployeeValueEventListener implements ValueEventListener {
+    private class EmployeeValueEventListener implements ValueEventListener {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             Log.d(ConfigKeys.LOG_TAG, "Loading Employee data...");

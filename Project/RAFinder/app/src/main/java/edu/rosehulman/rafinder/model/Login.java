@@ -10,6 +10,7 @@ import com.firebase.client.ValueEventListener;
 
 import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.LoginActivity;
+import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.UserType;
 
 
@@ -19,8 +20,8 @@ public class Login {
 
     private static final String Residents = "Residents";
 
-    private Firebase mFirebaseRef;
-    private LoginActivity mActivity;
+    private final Firebase mFirebaseRef;
+    private final LoginActivity mActivity;
 
     private UserType mUserType;
     private String mRAEmail = "";
@@ -86,7 +87,13 @@ public class Login {
          * On failed login, displays an error message
          */
         public void onAuthenticationError(FirebaseError firebaseError) {
-            mActivity.showError(firebaseError.toString());
+            if (firebaseError.getCode() == FirebaseError.INVALID_PASSWORD) {
+                mActivity.showError(mActivity.getString(R.string.error_invalid_email));
+            } else if (firebaseError.getCode() == FirebaseError.INVALID_PASSWORD) {
+                mActivity.showError(mActivity.getString(R.string.error_invalid_password));
+            } else {
+                mActivity.showError(mActivity.getString(R.string.error_message));
+            }
         }
     }
 

@@ -15,10 +15,11 @@ import android.widget.ToggleButton;
 import java.util.List;
 
 import edu.rosehulman.rafinder.R;
-import edu.rosehulman.rafinder.adapter.RAListArrayAdapter;
+import edu.rosehulman.rafinder.adapter.EmployeeListArrayAdapter;
 import edu.rosehulman.rafinder.model.person.Employee;
 
-public class HomeFragmentSubsectionMyHallRAs extends Fragment implements RAListArrayAdapter.RAListArrayAdapterCallbacks {
+public class HomeFragmentSubsectionMyHallRAs extends Fragment
+        implements EmployeeListArrayAdapter.EmployeeListArrayAdapterListener {
 
     private HomeMyHallListener mListener;
 
@@ -27,12 +28,6 @@ public class HomeFragmentSubsectionMyHallRAs extends Fragment implements RAListA
     }
 
     public HomeFragmentSubsectionMyHallRAs() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -49,8 +44,9 @@ public class HomeFragmentSubsectionMyHallRAs extends Fragment implements RAListA
                 return false;
             }
         });
-        List<Employee> hallRAs = mListener.getMyRAs();
-        RAListArrayAdapter<Employee> mAdapter2 = new RAListArrayAdapter<Employee>(this.getActivity(), R.layout.fragment_home, hallRAs, this);
+
+        List<Employee> hallRAs = mListener.getMyHallRAs();
+        EmployeeListArrayAdapter<Employee> mAdapter2 = new EmployeeListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallRAs, this);
         listView.setAdapter(mAdapter2);
         setListViewHeightBasedOnChildren(listView);
         final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.myHallexpander);
@@ -72,7 +68,6 @@ public class HomeFragmentSubsectionMyHallRAs extends Fragment implements RAListA
 
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -89,7 +84,7 @@ public class HomeFragmentSubsectionMyHallRAs extends Fragment implements RAListA
         mListener = null;
     }
 
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
+    private static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
             return;
@@ -114,15 +109,13 @@ public class HomeFragmentSubsectionMyHallRAs extends Fragment implements RAListA
     }
 
     @Override
-    public void moreDetailsRequested(Employee RA) {
-        mListener.switchToProfile(RA);
+    public void switchToProfile(Employee ra) {
+        mListener.switchToProfile(ra);
     }
 
     public interface HomeMyHallListener {
-        public void switchToProfile(Employee res);
-
-        public List<Employee> getMyRAs();
-
+        public void switchToProfile(Employee employee);
+        List<Employee> getMyHallRAs();
     }
 
 }

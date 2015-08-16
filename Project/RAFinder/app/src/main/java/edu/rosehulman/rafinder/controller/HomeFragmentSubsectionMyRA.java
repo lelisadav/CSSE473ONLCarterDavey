@@ -10,16 +10,17 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.util.List;
 
 import edu.rosehulman.rafinder.R;
-import edu.rosehulman.rafinder.adapter.RAListArrayAdapter;
+import edu.rosehulman.rafinder.adapter.EmployeeListArrayAdapter;
 import edu.rosehulman.rafinder.model.person.Employee;
 
 public class HomeFragmentSubsectionMyRA extends Fragment
-        implements RAListArrayAdapter.RAListArrayAdapterCallbacks {
+        implements EmployeeListArrayAdapter.EmployeeListArrayAdapterListener {
 
     private HomeMyRAListener mListener;
 
@@ -49,10 +50,21 @@ public class HomeFragmentSubsectionMyRA extends Fragment
                 return false;
             }
         });
-        List<Employee> hallRAs = mListener.getAllRAs();
-        RAListArrayAdapter<Employee> mAdapter2 = new RAListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallRAs, this);
+
+        List<Employee> myRAs = mListener.getMyRAs();
+
+        if (myRAs.size() > 1) {
+            ((TextView) view.findViewById(R.id.titleTextView)).setText(getString(R.string.my_ras));
+        }
+
+        EmployeeListArrayAdapter<Employee> mAdapter2 = new EmployeeListArrayAdapter<>(
+                getActivity(),
+                R.layout.fragment_home,
+                myRAs,
+                this);
         listView.setAdapter(mAdapter2);
         setListViewHeightBasedOnChildren(listView);
+
         final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.myRAexpander);
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -114,15 +126,13 @@ public class HomeFragmentSubsectionMyRA extends Fragment
 
 
     @Override
-    public void moreDetailsRequested(Employee RA) {
-        mListener.switchToProfile(RA);
+    public void switchToProfile(Employee ra) {
+        mListener.switchToProfile(ra);
     }
 
     public interface HomeMyRAListener {
         public void switchToProfile(Employee res);
-
-        public List<Employee> getAllRAs();
-
+        public List<Employee> getMyRAs();
     }
 
 }

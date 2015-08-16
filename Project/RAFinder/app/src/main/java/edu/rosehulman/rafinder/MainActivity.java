@@ -19,8 +19,11 @@ import com.firebase.client.Firebase;
 
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import edu.rosehulman.rafinder.controller.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.EmergencyContactsFragment;
 import edu.rosehulman.rafinder.controller.HomeFragment;
 import edu.rosehulman.rafinder.controller.HomeFragmentSubsectionMyHallRAs;
@@ -28,7 +31,6 @@ import edu.rosehulman.rafinder.controller.HomeFragmentSubsectionMyRA;
 import edu.rosehulman.rafinder.controller.HomeFragmentSubsectionMySAs;
 import edu.rosehulman.rafinder.controller.LoadingFragment;
 import edu.rosehulman.rafinder.controller.ProfileFragment;
-import edu.rosehulman.rafinder.controller.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
 import edu.rosehulman.rafinder.model.DutyRoster;
 import edu.rosehulman.rafinder.model.Hall;
@@ -59,43 +61,39 @@ public class MainActivity extends Activity
     private static final int EMERGENCY_CONTACTS = 2;
     private static final int DUTY_ROSTER = 3;
     private static final int HALL_ROSTER_OR_RESIDENT_LOGOUT = 4;
-    private static final int RA_LOGOUT = 5;
+    private static final int EMPLOYEE_LOGOUT = 5;
     private static final int LOADING = -1;
 
+    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private CharSequence mTitle;
+    private String mEmail;
+    private String mRaEmail;
     private int mFloor;
     private String mHallName;
-    private Hall mHall;
-    private Hall currHall;
-    private EmployeeLoader loader;
-    private EmergencyContactsLoader ecLoader;
-    private DutyRosterLoader dutyRosterLoader;
-    private DutyRoster roster;
-    private HallLoader hallLoader;
-    private UserType mUserType = UserType.RESIDENT;
-    private Employee selectedResident;
-    private ResidentAssistant myRA;
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    private CharSequence mTitle;
-    private String mRaEmail;
-    private Employee mUser;
-    private String mEmail;
+    private EmployeeLoader loader;
+    private DutyRosterLoader dutyRosterLoader;
+    private HallLoader hallLoader;
+    private EmergencyContactsLoader ecLoader;
+
+    private UserType mUserType = UserType.RESIDENT;
 
     private List<Employee> allRAs;
     private List<Employee> allSAs;
     private List<Employee> allGAs;
     private List<Employee> allAdmins;
-    private DutyRoster mDutyRoster;
-    private LocalDate mDate;
     private List<EmergencyContact> mEmergencyContacts;
+    private Employee mSelectedEmployee;
+    private Employee mUser;
+    private ResidentAssistant myRA;
+    private LocalDate mDate;
+    private DutyRoster mDutyRoster;
+    private Hall mHall;
 
     /**
      * Borrowed from {@link PhoneNumberUtils#normalizeNumber(String)}, for use on devices below API21
      */
-    public static String normalizeNumber(String phoneNumber) {
+    private static String normalizeNumber(String phoneNumber) {
         if (TextUtils.isEmpty(phoneNumber)) {
             return "";
         }
@@ -145,7 +143,6 @@ public class MainActivity extends Activity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragment;
 
@@ -160,17 +157,17 @@ public class MainActivity extends Activity
             switchToProfile(myRA);
             return;
         case EMERGENCY_CONTACTS:
-            if (mEmergencyContacts == null) {
-                fragment = LoadingFragment.newInstance();
-            } else {
+            if (mEmergencyContacts != null) {
                 fragment = EmergencyContactsFragment.newInstance();
+            } else {
+                fragment = LoadingFragment.newInstance();
             }
             break;
         case DUTY_ROSTER:
-            if (mDutyRoster == null) {
-                fragment = LoadingFragment.newInstance();
-            } else {
+            if (mDutyRoster != null) {
                 fragment = DutyRosterFragment.newInstance(mHallName, mDate);
+            } else {
+                fragment = LoadingFragment.newInstance();
             }
             break;
         case HALL_ROSTER_OR_RESIDENT_LOGOUT:
@@ -178,14 +175,14 @@ public class MainActivity extends Activity
                 logout();
                 return;
             } else {
-                if (mHall == null) {
-                    fragment = LoadingFragment.newInstance();
-                } else {
+                if (mHall != null) {
                     fragment = HallRosterFragment.newInstance(mHallName, mFloor + "");
+                } else {
+                    fragment = LoadingFragment.newInstance();
                 }
                 break;
             }
-        case RA_LOGOUT:
+        case EMPLOYEE_LOGOUT:
             logout();
             return;
         default:
@@ -193,7 +190,7 @@ public class MainActivity extends Activity
         }
 
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
+                .replace(R.id.content_frame, fragment, fragment.getClass().toString())
                 .commit();
     }
 
@@ -210,7 +207,7 @@ public class MainActivity extends Activity
         finish();
     }
 
-    public void restoreActionBar() {
+    private void restoreActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
@@ -220,7 +217,7 @@ public class MainActivity extends Activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            getMenuInflater().inflate(R.menu.main, menu);
+            getMenuInflater().inflate(R.menu.global, menu);
             restoreActionBar();
             return true;
         }
@@ -231,21 +228,22 @@ public class MainActivity extends Activity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_refresh) {
+            refreshFragment();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private ResidentAssistant getRA(String email) {
-        for (Employee ra : getAllRAs()) {
-            if (ra.getEmail().equals(email)) {
-                return (ResidentAssistant) ra;
-            }
-        }
-        return null;
+    private void refreshFragment() {
+        // TODO: refresh without altering the backstack
+        FragmentManager manager = getFragmentManager();
+        Fragment fragment = manager.findFragmentById(R.id.content_frame);
+        manager.beginTransaction()
+                .detach(fragment)
+                .attach(fragment)
+                .commit();
     }
 
     public void dialPhoneNumber(String phoneNumber) {
@@ -272,8 +270,8 @@ public class MainActivity extends Activity
     }
 
     @Override
-    public void switchToProfile(Employee res) {
-        selectedResident = res;
+    public void switchToProfile(Employee employee) {
+        mSelectedEmployee = employee;
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragment = ProfileFragment.newInstance();
         fragmentManager.beginTransaction()
@@ -283,17 +281,18 @@ public class MainActivity extends Activity
 
     @Override
     public List<Employee> getMySAs() {
-        return loader.getMySAs();
+        List<Employee> mySAs = new ArrayList<>();
+        for (Employee sa : allSAs) {
+            if (sa.getHall().equals(getMyHall())) {
+                mySAs.add(sa);
+            }
+        }
+        return mySAs;
     }
 
     @Override
-    public List<Employee> getAllRAs() {
-        return allRAs;
-    }
-
-    @Override
-    public Employee getSelectedResident() {
-        return selectedResident;
+    public Employee getSelectedEmployee() {
+        return mSelectedEmployee;
     }
 
     public UserType getUserType() {
@@ -312,7 +311,45 @@ public class MainActivity extends Activity
 
     @Override
     public List<Employee> getMyRAs() {
-        return loader.getMyRAs();
+        List<Employee> myRAs = new ArrayList<>();
+        for (Employee ra : allRAs) {
+            if (ra.getHall().equals(mHallName)
+                && ra.getFloor() == mFloor) {
+                myRAs.add(ra);
+            }
+        }
+        return myRAs;
+    }
+
+    @Override
+    public List<Employee> getMyHallRAs() {
+        List<Employee> hallRAs = new ArrayList<>();
+        for (Employee ra : allRAs) {
+            if (ra.getHall().equals(mHallName) && !ra.equals(myRA)) {
+                hallRAs.add(ra);
+            }
+        }
+        return hallRAs;
+    }
+
+    private Employee getEmployee(String email) {
+        for (List<Employee> employees : Arrays.asList(allRAs, allSAs, allGAs, allAdmins)) {
+            for (Employee e : employees) {
+                if (e.getEmail().equals(email)) {
+                    return e;
+                }
+            }
+        }
+        return null;
+    }
+
+    private ResidentAssistant getRA(String email) {
+        for (Employee ra : allRAs) {
+            if (ra.getEmail().equals(email)) {
+                return (ResidentAssistant) ra;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -332,7 +369,7 @@ public class MainActivity extends Activity
         myRA = getRA(mRaEmail);
         mHallName = myRA.getHall();
         mFloor = myRA.getFloor();
-        mUser = loader.getEmployee(mEmail);
+        mUser = getEmployee(mEmail);
         dutyRosterLoader = new DutyRosterLoader(ConfigKeys.FIREBASE_ROOT_URL, mHallName, this, allRAs);
     }
 
@@ -359,6 +396,7 @@ public class MainActivity extends Activity
     @Override
     public void onEmergencyContactsLoadingComplete() {
         mEmergencyContacts = ecLoader.getContactList();
+        // We've finished loading; go to the Home page
         onNavigationDrawerItemSelected(HOME);
     }
 

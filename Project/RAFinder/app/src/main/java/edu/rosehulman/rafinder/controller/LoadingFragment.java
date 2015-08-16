@@ -1,10 +1,7 @@
 package edu.rosehulman.rafinder.controller;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +9,14 @@ import android.view.ViewGroup;
 
 import edu.rosehulman.rafinder.R;
 
+/**
+ * A simple fragment to show a loading dialog.
+ * Used as a placeholder to prevent NullPointerExceptions while loading data.
+ */
 public class LoadingFragment extends Fragment {
-    private View mProgressView;
 
-    /**
-     * Use this factory method to create a new instance of this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment HomeFragment.
-     */
+    private ProgressDialog mProgressDialog;
+
     public static LoadingFragment newInstance() {
         return new LoadingFragment();
     }
@@ -28,40 +25,23 @@ public class LoadingFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_loading, container, false);
-        Context mContext = v.getContext();
-        ProgressDialog mProgressDialog = new ProgressDialog(mContext);
+
+        mProgressDialog = new ProgressDialog(v.getContext());
         mProgressDialog.setTitle("Loading");
-        mProgressDialog.setMessage("Loading Employee data...");
+        mProgressDialog.setMessage("Loading Data...");
         mProgressDialog.setCancelable(false);
-
-        mProgressView = v.findViewById(R.id.login_progress);
-
-        int shortAnimTime = getResources().getInteger(
-                android.R.integer.config_shortAnimTime);
-
-        mProgressView.setVisibility(View.VISIBLE);
-        mProgressView.animate().setDuration(shortAnimTime)
-                .alpha(1)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mProgressView.setVisibility(View.VISIBLE);
-                    }
-                });
+        mProgressDialog.show();
 
         return v;
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroyView() {
+        super.onDestroyView();
+        mProgressDialog.dismiss();
     }
+
 }

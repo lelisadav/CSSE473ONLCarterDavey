@@ -15,10 +15,11 @@ import android.widget.ToggleButton;
 import java.util.List;
 
 import edu.rosehulman.rafinder.R;
-import edu.rosehulman.rafinder.adapter.RAListArrayAdapter;
+import edu.rosehulman.rafinder.adapter.EmployeeListArrayAdapter;
 import edu.rosehulman.rafinder.model.person.Employee;
 
-public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArrayAdapter.RAListArrayAdapterCallbacks {
+public class HomeFragmentSubsectionMySAs extends Fragment
+        implements EmployeeListArrayAdapter.EmployeeListArrayAdapterListener {
 
     private HomeMySAListener mListener;
 
@@ -27,12 +28,6 @@ public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArray
     }
 
     public HomeFragmentSubsectionMySAs() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -49,8 +44,10 @@ public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArray
                 return false;
             }
         });
+
         List<Employee> hallSAs = mListener.getMySAs();
-        RAListArrayAdapter<Employee> mAdapter2 = new RAListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallSAs, this);
+
+        EmployeeListArrayAdapter<Employee> mAdapter2 = new EmployeeListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallSAs, this);
         listView.setAdapter(mAdapter2);
         setListViewHeightBasedOnChildren(listView);
         final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.mySAexpander);
@@ -87,7 +84,7 @@ public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArray
         mListener = null;
     }
 
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
+    private static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
             return;
@@ -112,15 +109,13 @@ public class HomeFragmentSubsectionMySAs extends Fragment implements RAListArray
     }
 
     @Override
-    public void moreDetailsRequested(Employee RA) {
-        mListener.switchToProfile(RA);
+    public void switchToProfile(Employee ra) {
+        mListener.switchToProfile(ra);
     }
 
     public interface HomeMySAListener {
         public void switchToProfile(Employee res);
-
         public List<Employee> getMySAs();
-
     }
 
 }

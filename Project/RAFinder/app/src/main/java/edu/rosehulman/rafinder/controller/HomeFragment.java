@@ -8,14 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.rosehulman.rafinder.R;
-import edu.rosehulman.rafinder.adapter.RAListArrayAdapter;
+import edu.rosehulman.rafinder.adapter.EmployeeListArrayAdapter;
 import edu.rosehulman.rafinder.model.person.Employee;
 
 /**
  * The Home Page.
  */
 public class HomeFragment extends Fragment
-        implements RAListArrayAdapter.RAListArrayAdapterCallbacks {
+        implements EmployeeListArrayAdapter.EmployeeListArrayAdapterListener {
     private HomeListener mListener;
 
     public static HomeFragment newInstance() {
@@ -23,11 +23,6 @@ public class HomeFragment extends Fragment
     }
 
     public HomeFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -53,8 +48,8 @@ public class HomeFragment extends Fragment
     }
 
     @Override
-    public void moreDetailsRequested(Employee RA) {
-        mListener.switchToProfile(RA);
+    public void switchToProfile(Employee ra) {
+        mListener.switchToProfile(ra);
     }
 
     public interface HomeListener {

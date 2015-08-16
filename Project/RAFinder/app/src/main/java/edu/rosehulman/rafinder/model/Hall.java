@@ -14,7 +14,7 @@ public class Hall implements SearchResultItem {
     // HallRoster Firebase keys
     private static final String roster = "Roster";
     private String name;
-    private HashMap<String, Floor> floors;
+    private final HashMap<String, Floor> floors;
     private Firebase firebase;
 
     public Hall(DataSnapshot ds) {
@@ -46,7 +46,7 @@ public class Hall implements SearchResultItem {
     }
 
     public List<Floor> getFloors() {
-        ArrayList<Floor> f = new ArrayList<Floor>();
+        ArrayList<Floor> f = new ArrayList<>();
         f.addAll(floors.values());
         return f;
     }
@@ -61,7 +61,7 @@ public class Hall implements SearchResultItem {
     public String[] getFloorNumbers() {
         String[] floorNumbers = new String[floors.size()];
         for (int i = 0; i < floorNumbers.length; i++) {
-            floorNumbers[i] = floors.get(i).getNumber();
+            floorNumbers[i] = floors.get(String.valueOf(i)).getNumber();
         }
         return floorNumbers;
     }

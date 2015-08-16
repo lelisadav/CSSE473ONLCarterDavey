@@ -124,7 +124,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    public void attemptLogin() {
+    private void attemptLogin() {
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -138,8 +138,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !Login.isPasswordValid(password)) {
-            mPasswordView
-                    .setError(getString(R.string.error_invalid_password));
+            mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
@@ -195,7 +194,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     /**
      * Shows the progress UI and hides the login form.
      */
-    public void showProgress(final boolean show) {
+    private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(
                 android.R.integer.config_shortAnimTime);
 
