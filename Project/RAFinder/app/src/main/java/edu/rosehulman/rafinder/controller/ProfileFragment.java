@@ -81,7 +81,11 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
         }
 
         // Set editable fields based on MainActivity.getUserType
-        if (!((MainActivity) view.getContext()).getUserType().equals(UserType.RESIDENT)) {
+        MainActivity context = (MainActivity) view.getContext();
+        if (!context.getUserType().equals(UserType.RESIDENT)
+                && context.getUser() != null
+                && employee.equals(context.getUser())) {
+
             phoneTextView.setOnLongClickListener(this);
             statusTextView.setOnLongClickListener(this);
             statusDetailTextView.setOnLongClickListener(this);

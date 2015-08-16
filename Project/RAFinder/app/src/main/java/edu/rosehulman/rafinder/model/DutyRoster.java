@@ -16,10 +16,10 @@ public class DutyRoster {
 
     public DutyRoster(DataSnapshot ds, LocalDate startDate) {
         this.startDate = startDate;
+        roster = new HashMap<>();
         for (DataSnapshot child : ds.getChildren()) {
             LocalDate rosterDate = LocalDate.parse(child.getKey(), ConfigKeys.formatter);
             if (!rosterDate.isBefore(getStartDate())) {
-                String fireBaseUrl = ConfigKeys.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
                 DutyRosterItem item = new DutyRosterItem(child);
                 roster.put(rosterDate, item);
             }

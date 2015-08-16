@@ -33,8 +33,8 @@ public class Login {
     /**
      * Authenticates the user with Firebase, using the specified email address and password
      */
-    public void loginWithPassword(String username, String password) {
-        mFirebaseRef.authWithPassword(username, password, new AuthResultHandler(
+    public void loginWithPassword(String email, String password) {
+        mFirebaseRef.authWithPassword(email, password, new AuthResultHandler(
                 "password"));
     }
 
@@ -103,7 +103,7 @@ public class Login {
             if (dataSnapshot.hasChild(uid)) {
                 mUserType = UserType.RESIDENT;
                 mRAEmail = dataSnapshot.child(uid).child(myRA).getValue().toString();
-                mActivity.launchMainActivity(mUserType, mRAEmail);
+                mActivity.launchMainActivity(mUserType, mRAEmail, mActivity.getEmail());
             } else {
                 Log.e(ConfigKeys.LOG_TAG, "No resident found with uid <" + uid + ">");
             }
@@ -148,7 +148,7 @@ public class Login {
                 return;
             }
             mRAEmail = table.child(uid).child(ConfigKeys.employeeEmail).getValue().toString();
-            mActivity.launchMainActivity(mUserType, mRAEmail);
+            mActivity.launchMainActivity(mUserType, mRAEmail, mActivity.getEmail());
         }
 
         @Override

@@ -28,14 +28,13 @@ public class DutyRosterItem {
     public DutyRosterItem(DataSnapshot ds) {
         friday = LocalDate.parse(ds.getKey(), ConfigKeys.formatter);
         for (DataSnapshot child : ds.getChildren()) {
-            String firebaseUrl = ConfigKeys.FIREBASE_ROOT_URL +
-                                 "/" + ConfigKeys.Employees +
+            String firebasePath = ConfigKeys.Employees +
                                  "/" + ConfigKeys.ResidentAssistants +
                                  "/" + child.getValue(String.class);
             if (child.getKey().equals(fridayKey)) {
-                friDuty = new ResidentAssistant(firebaseUrl);
+                friDuty = new ResidentAssistant(firebasePath);
             } else if (child.getKey().equals(saturdayKey)) {
-                satDuty = new ResidentAssistant(firebaseUrl);
+                satDuty = new ResidentAssistant(firebasePath);
             }
         }
     }

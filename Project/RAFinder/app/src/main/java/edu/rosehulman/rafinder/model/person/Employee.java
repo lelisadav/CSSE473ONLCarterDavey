@@ -204,6 +204,22 @@ public class Employee extends Resident {
     }
 
     @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Employee)) {
+            return false;
+        }
+        Employee e = (Employee) other;
+        return getName().equals(e.getName())
+                && email.equals(e.getEmail())
+                && floor == e.getFloor()
+                && hall.equals(e.getHall())
+                && phoneNumber.equals(e.getPhoneNumber())
+                && room == e.getRoom()
+                && status.equals(e.getStatus())
+                && statusDetail.equals(e.getStatusDetail());
+    }
+
+    @Override
     public String toString() {
         return Arrays.asList(
                 getName(),

@@ -24,14 +24,14 @@ public class HallLoader {
     }
 
     public interface LoaderCallbacks {
-        public void onHallLoadingComplete(); // TODO: similar for other loaders
+        public void onHallRosterLoadingComplete(); // TODO: similar for other loaders
     }
     public class HallValueEventListener implements ValueEventListener{
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             hall=new Hall(dataSnapshot);
-            callbacks.onHallLoadingComplete();
+            callbacks.onHallRosterLoadingComplete();
         }
 
         @Override

@@ -11,8 +11,6 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -67,19 +65,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mAuthProgressDialog.setTitle("Loading");
         mAuthProgressDialog.setMessage("Authenticating with Firebase...");
         mAuthProgressDialog.setCancelable(false);
-        if (!((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
-              Configuration.SCREENLAYOUT_SIZE_LARGE)) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
-        String email = getIntent().getStringExtra(ConfigKeys.KEY_USER_EMAIL);
-        if (email != null) {
+        String intentEmail = getIntent().getStringExtra(ConfigKeys.KEY_USER_EMAIL);
+        if (intentEmail != null) {
             // pre-populate the email address if we're coming from the Registration page
-            mEmailView.setText(email);
+            mEmailView.setText(intentEmail);
         }
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -114,10 +108,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         SharedPreferences prefs = getSharedPreferences(ConfigKeys.KEY_SHARED_PREFS, MODE_PRIVATE);
         UserType userType = UserType.valueOf(prefs.getString(ConfigKeys.KEY_USER_TYPE, UserType.NONE.toString()));
         String raEmail = prefs.getString(ConfigKeys.KEY_RA_EMAIL, "");
+        String email = prefs.getString(ConfigKeys.KEY_USER_EMAIL, "");
 
         // Skip login screen if we're still authorized and have data.
-        if (firebase.getAuth() != null && !userType.equals(UserType.NONE) && !raEmail.equals("")) {
-            launchMainActivity(userType, raEmail);
+        if (firebase.getAuth() != null
+                && !userType.equals(UserType.NONE)
+                && !raEmail.equals("")
+                && !email.equals("")) {
+            launchMainActivity(userType, raEmail, email);
         }
     }
 
@@ -167,6 +165,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(true);
             mAuthProgressDialog.show();
             mLogin.loginWithPassword(email, password);
+            mAuthProgressDialog.hide();
             showProgress(false);
         }
     }
@@ -174,16 +173,18 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     /**
      * Opens up a list of projects after logging in.
      */
-    public void launchMainActivity(UserType userType, String raEmail) {
+    public void launchMainActivity(UserType userType, String raEmail, String email) {
         mAuthProgressDialog.hide();
-        Intent intent = new Intent(this, ConfigKeys.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(ConfigKeys.KEY_USER_TYPE, userType.name());
         intent.putExtra(ConfigKeys.KEY_RA_EMAIL, raEmail);
+        intent.putExtra(ConfigKeys.KEY_USER_EMAIL, email);
 
         // Store data for persistence
         SharedPreferences.Editor editor = getSharedPreferences(ConfigKeys.KEY_SHARED_PREFS, MODE_PRIVATE).edit();
         editor.putString(ConfigKeys.KEY_USER_TYPE, userType.name());
         editor.putString(ConfigKeys.KEY_RA_EMAIL, raEmail);
+        editor.putString(ConfigKeys.KEY_USER_EMAIL, email);
         editor.apply();
 
         Log.d(ConfigKeys.LOG_TAG, "starting Main with userType <" + userType + "> and raEmail <" + raEmail + ">");
@@ -289,6 +290,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
+    }
+
+    public String getEmail() {
+        return mEmailView.getText().toString();
     }
 
     /**

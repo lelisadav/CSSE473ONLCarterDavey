@@ -8,6 +8,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.rosehulman.rafinder.model.person.Administrator;
@@ -50,9 +51,20 @@ public class EmployeeLoader {
         return mySAs;
     }
 
+    public Employee getEmployee(String email) {
+        for (List<Employee> employees : Arrays.asList(ras, sas, gas, admins) ) {
+            for (Employee e : employees) {
+                if (e.getEmail().equals(email)) {
+                    return e;
+                }
+            }
+        }
+        return null;
+    }
+
     public interface LoaderCallbacks {
         public String getMyHall();
-        public void onEmployeeLoadingComplete(); // TODO: similar for other loaders
+        public void onEmployeeLoadingComplete();
     }
 
     public class EmployeeValueEventListener implements ValueEventListener {

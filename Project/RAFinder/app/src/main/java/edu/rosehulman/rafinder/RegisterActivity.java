@@ -6,8 +6,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,10 +42,6 @@ public class RegisterActivity extends Activity {
         mRegisterProgressDialog.setTitle("Loading");
         mRegisterProgressDialog.setMessage("Registering with Firebase...");
         mRegisterProgressDialog.setCancelable(false);
-        if (!((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
-              Configuration.SCREENLAYOUT_SIZE_LARGE)) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
 
         // Set up the registration form.
         mEmailView = (EditText) findViewById(R.id.email);

@@ -66,6 +66,8 @@ public class MainActivity extends Activity implements ICallback {
      */
     private CharSequence mTitle;
     private String mRaEmail;
+    private Employee mUser;
+    private String mEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +76,9 @@ public class MainActivity extends Activity implements ICallback {
 
         loader = new EmployeeLoader(ConfigKeys.FIREBASE_ROOT_URL, this);
 
-//        ecLoader = new EmergencyContactLoader(this);
-
         mRaEmail = getIntent().getStringExtra(ConfigKeys.KEY_RA_EMAIL);
         mUserType = UserType.valueOf(getIntent().getStringExtra(ConfigKeys.KEY_USER_TYPE));
+        mEmail = getIntent().getStringExtra(ConfigKeys.KEY_USER_EMAIL);
 
         Log.d(ConfigKeys.LOG_TAG, "Main got UserType <" + mUserType + "> and raEmail <" + mRaEmail + ">");
 
@@ -96,39 +97,38 @@ public class MainActivity extends Activity implements ICallback {
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // updateDrawerList the main content by replacing fragments
+        // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragment;
 
         switch (position) {
-        case LOADING: //-1
+        case LOADING:
             fragment = LoadingFragment.newInstance();
             break;
-        case HOME: //0
+        case HOME:
             fragment = HomeFragment.newInstance();
             break;
-        case MY_RA: //1
+        case MY_RA:
             switchToProfile(mUserRA);
             return;
-        case EMERGENCY_CONTACTS: //2
-            fragment = EmergencyContactsFragment.newInstance();
+        case EMERGENCY_CONTACTS:
+            ecLoader = new EmergencyContactLoader(this);
+            fragment = LoadingFragment.newInstance();
             break;
-        case DUTY_ROSTER://3
-            // TODO: kick off DutyRosterLoader, set to loading fragment, move logic to loadingComplete callback
-
+        case DUTY_ROSTER:
             dutyRosterLoader = new DutyRosterLoader(ConfigKeys.FIREBASE_ROOT_URL, mHall, this);
-            fragment = new LoadingFragment();
+            fragment = LoadingFragment.newInstance();
             break;
-        case HALL_ROSTER_OR_RESIDENT_LOGOUT: //4
+        case HALL_ROSTER_OR_RESIDENT_LOGOUT:
             if (mUserType.equals(UserType.RESIDENT)) {
                 logout();
                 return;
             } else {
                 hallLoader = new HallLoader(ConfigKeys.FIREBASE_ROOT_URL, mHall, this);
-                fragment = new LoadingFragment();
+                fragment = LoadingFragment.newInstance();
                 break;
             }
-        case RA_LOGOUT: //5
+        case RA_LOGOUT:
             logout();
             return;
         default:
@@ -238,7 +238,6 @@ public class MainActivity extends Activity implements ICallback {
 
     @Override
     public List<EmergencyContact> getEmergencyContacts() {
-
         return ecLoader.getContactList();
     }
 
@@ -284,21 +283,20 @@ public class MainActivity extends Activity implements ICallback {
         mUserRA = getRA(mRaEmail);
         mHall = mUserRA.getHall();
         mFloor = mUserRA.getFloor();
-        //currHall = new Hall(FIREBASE_ROOT_URL + "/ResHalls/" + mHall);
-
+        mUser = loader.getEmployee(mEmail);
         onNavigationDrawerItemSelected(HOME);
     }
 
-    public void onHallLoadingComplete() {
-        //currHall=hallLoader.getHall();
+    @Override
+    public void onHallRosterLoadingComplete() {
         Fragment fragment = HallRosterFragment.newInstance(mHall, mFloor + "");
         getFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
     }
 
+    @Override
     public void onDutyRosterLoadingComplete() {
-        //roster=dutyRosterLoader.getDutyRoster();
         Fragment fragment;
         if (mUserType == UserType.RESIDENT) {
             fragment = StudentDutyRosterFragment.newInstance(mHall, dutyRosterLoader.getDate());
@@ -310,6 +308,13 @@ public class MainActivity extends Activity implements ICallback {
                 .commit();
     }
 
+    @Override
+    public void onEmergencyContactsLoadingComplete() {
+        Fragment fragment = EmergencyContactsFragment.newInstance();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
+    }
 
     @Override
     public DutyRoster getDutyRoster() {
@@ -324,6 +329,10 @@ public class MainActivity extends Activity implements ICallback {
     @Override
     public Hall getHall(String hall) {
         return hallLoader.getHall();
+    }
+
+    public Employee getUser() {
+        return mUser;
     }
 
 //    @Override
