@@ -42,4 +42,6 @@ public class ConfigKeys {
     static final String KEY_USER_TYPE = "KEY_USER_TYPE";
     static final String KEY_RA_EMAIL = "KEY_RA_EMAIL";
     static final String KEY_USER_EMAIL = "KEY_USER_EMAIL";
+    static final String FEEDBACK_EMAIL = "rafindernoreply@gmail.com";
+    static final String FEEDBACK_PASSWORD = "Rose-Hulman-RAFinder-201540";
 }

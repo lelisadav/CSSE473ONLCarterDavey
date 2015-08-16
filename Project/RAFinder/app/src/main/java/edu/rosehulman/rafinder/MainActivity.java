@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.telephony.PhoneNumberUtils;
@@ -22,6 +23,9 @@ import org.joda.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
 
 import edu.rosehulman.rafinder.controller.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.EmergencyContactsFragment;
@@ -260,8 +264,48 @@ public class MainActivity extends Activity
         startActivity(intent);
     }
 
-    public void sendFeedback(String name, String email) {
+    @Override
+    public void sendFeedback(String name, String email, String body) {
         // TODO: async task to send an email directly from the app
+        Log.d(ConfigKeys.LOG_TAG, "Preparing to send feedback email...");
+        String subject = getString(R.string.profile_feedback_subject_format, name);
+        String ccList = ",cartersm@rose-hulman.edu";
+        new SendEmailAsyncTask().execute(subject, body, email + ccList);
+    }
+
+    /**
+     * Borrowed from <a href=http://stackoverflow.com/questions/2020088/sending-email-in-android-using-javamail-api-without-using-the-default-built-in-a/2033124#2033124>This
+     * StackOverflowArticle</a>
+     * For sending email directly from the app.
+     */
+    private class SendEmailAsyncTask extends AsyncTask<String, Void, Boolean> {
+        public static final int SUBJECT = 0;
+        public static final int BODY = 1;
+        public static final int TO = 2;
+        GmailSender gmailSender;
+
+        public SendEmailAsyncTask() {
+            gmailSender = new GmailSender(ConfigKeys.FEEDBACK_EMAIL, ConfigKeys.FEEDBACK_PASSWORD);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            if (BuildConfig.DEBUG) {
+                Log.v(SendEmailAsyncTask.class.getName(), "doInBackground()");
+            }
+            try {
+                gmailSender.sendMail(params[SUBJECT], params[BODY], ConfigKeys.FEEDBACK_EMAIL, params[TO]);
+                return true;
+            } catch (AuthenticationFailedException e) {
+                Log.e(SendEmailAsyncTask.class.getName(), "Bad account details");
+                e.printStackTrace();
+                return false;
+            } catch (MessagingException e) {
+                return false;
+            } catch (Exception e) {
+                return false;
+            }
+        }
     }
 
     @Override

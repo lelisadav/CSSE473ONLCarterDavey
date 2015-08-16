@@ -72,4 +72,7 @@
     <string name="action_refresh">Refresh</string>
     <string name="my_sas">My SAs</string>
     <string name="hint_default">hint</string>
+    <string name="profile_feedback">Feedback Message</string>
+    <string name="profile_feedback_disclaimer">Please keep feedback to positives or constructive criticisms only.</string>
+    <string name="profile_feedback_subject_format">RA Finder: Anonymous feedback for %s</string>
 </resources>

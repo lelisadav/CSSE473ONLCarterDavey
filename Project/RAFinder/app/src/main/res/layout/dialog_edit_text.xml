@@ -5,8 +5,19 @@
     android:orientation="vertical">
 
     <EditText
+        android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:hint="@string/hint_default"/>
+        android:gravity="bottom"
+        android:hint="@string/hint_default" />
+
+    <TextView
+        android:id="@+id/feedback_disclaimer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@string/profile_feedback_disclaimer"
+        android:textSize="15sp"
+        android:textStyle="italic"
+        android:visibility="gone" />
 </LinearLayout>
