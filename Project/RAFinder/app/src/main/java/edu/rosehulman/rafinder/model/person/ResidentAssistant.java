@@ -9,17 +9,21 @@ import com.firebase.client.Firebase;
 public class ResidentAssistant extends Employee {
     public ResidentAssistant(DataSnapshot ds) {
         super(ds);
+        setPosition(Position.RA);
     }
 
     public ResidentAssistant(String name, String uid) {
         super(name, uid);
+        setPosition(Position.RA);
     }
 
     public ResidentAssistant(String name) {
         super(name);
+        setPosition(Position.RA);
     }
 
     public ResidentAssistant(Firebase firebase) {
         super(firebase);
+        setPosition(Position.RA);
     }
 }

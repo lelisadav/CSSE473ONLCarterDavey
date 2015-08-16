@@ -23,8 +23,8 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
     private final int mLayout;
 
     public DutyRosterArrayAdapter(Context context, int textViewResourceId, List<DutyRosterItem> objects) {
-        super(context, R.layout.fragment_student_duty_roster_widget, textViewResourceId, objects);
-        mLayout = R.layout.fragment_student_duty_roster_widget;
+        super(context, R.layout.fragment_duty_roster_widget, textViewResourceId, objects);
+        mLayout = R.layout.fragment_duty_roster_widget;
         mContext = context;
         mObjects = objects;
     }

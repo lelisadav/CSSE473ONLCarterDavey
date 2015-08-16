@@ -32,11 +32,13 @@ public class DutyRoster {
         if (now.getDayOfWeek() != DateTimeConstants.FRIDAY && now.getDayOfWeek() != DateTimeConstants.SATURDAY) {
             return null;
         } else {
-
             if (now.getDayOfWeek() == DateTimeConstants.SATURDAY) {
                 now = now.minusDays(1);
             }
             DutyRosterItem item = roster.get(now);
+            if (item == null) {
+                return null;
+            }
             if (now.getDayOfWeek() == DateTimeConstants.FRIDAY) {
                 return item.getFriDuty();
             } else {

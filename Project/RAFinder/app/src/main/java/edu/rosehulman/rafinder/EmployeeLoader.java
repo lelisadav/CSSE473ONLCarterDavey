@@ -22,10 +22,10 @@ public class EmployeeLoader {
     private List<Employee> ras = new ArrayList<>();
     private List<Employee> gas = new ArrayList<>();
     private List<Employee> sas = new ArrayList<>();
-    private LoaderCallbacks callbacks;
+    private EmployeeLoaderListener callbacks;
 
 
-    public EmployeeLoader(String url, LoaderCallbacks cb) {
+    public EmployeeLoader(String url, EmployeeLoaderListener cb) {
         callbacks = cb;
         Firebase firebase = new Firebase(url + "/"+ ConfigKeys.Employees);
         firebase.addListenerForSingleValueEvent(new EmployeeValueEventListener());
@@ -62,7 +62,7 @@ public class EmployeeLoader {
         return null;
     }
 
-    public interface LoaderCallbacks {
+    public interface EmployeeLoaderListener {
         public String getMyHall();
         public void onEmployeeLoadingComplete();
     }

@@ -17,15 +17,19 @@ import android.view.MenuItem;
 
 import com.firebase.client.Firebase;
 
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
 import edu.rosehulman.rafinder.controller.EmergencyContactsFragment;
 import edu.rosehulman.rafinder.controller.HomeFragment;
+import edu.rosehulman.rafinder.controller.HomeFragmentSubsectionMyHallRAs;
+import edu.rosehulman.rafinder.controller.HomeFragmentSubsectionMyRA;
+import edu.rosehulman.rafinder.controller.HomeFragmentSubsectionMySAs;
 import edu.rosehulman.rafinder.controller.LoadingFragment;
 import edu.rosehulman.rafinder.controller.ProfileFragment;
-import edu.rosehulman.rafinder.controller.reslife.DutyRosterFragment;
+import edu.rosehulman.rafinder.controller.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
-import edu.rosehulman.rafinder.controller.student.StudentDutyRosterFragment;
 import edu.rosehulman.rafinder.model.DutyRoster;
 import edu.rosehulman.rafinder.model.Hall;
 import edu.rosehulman.rafinder.model.person.EmergencyContact;
@@ -35,7 +39,21 @@ import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 /**
  * The container activity for the entire app.
  */
-public class MainActivity extends Activity implements ICallback {
+public class MainActivity extends Activity
+        implements  NavigationDrawerFragment.NavigationDrawerCallbacks,
+                    HomeFragment.HomeListener,
+                    EmergencyContactsFragment.EmergencyContactsListener,
+                    DutyRosterFragment.DutyRosterListener,
+                    HallRosterFragment.HallRosterListener,
+                    ProfileFragment.StudentProfileListener,
+                    HomeFragmentSubsectionMyHallRAs.HomeMyHallListener,
+                    HomeFragmentSubsectionMyRA.HomeMyRAListener,
+                    HomeFragmentSubsectionMySAs.HomeMySAListener,
+                    EmployeeLoader.EmployeeLoaderListener,
+                    EmergencyContactsLoader.EmergencyContactsLoaderListener,
+                    HallLoader.HallLoaderListener,
+                    DutyRosterLoader.DutyRosterLoaderListener {
+
     private static final int HOME = 0;
     private static final int MY_RA = 1;
     private static final int EMERGENCY_CONTACTS = 2;
@@ -45,16 +63,17 @@ public class MainActivity extends Activity implements ICallback {
     private static final int LOADING = -1;
 
     private int mFloor;
-    private String mHall;
+    private String mHallName;
+    private Hall mHall;
     private Hall currHall;
     private EmployeeLoader loader;
-    private EmergencyContactLoader ecLoader;
+    private EmergencyContactsLoader ecLoader;
     private DutyRosterLoader dutyRosterLoader;
     private DutyRoster roster;
     private HallLoader hallLoader;
     private UserType mUserType = UserType.RESIDENT;
     private Employee selectedResident;
-    private ResidentAssistant mUserRA;
+    private ResidentAssistant myRA;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -69,6 +88,34 @@ public class MainActivity extends Activity implements ICallback {
     private List<Employee> allSAs;
     private List<Employee> allGAs;
     private List<Employee> allAdmins;
+    private DutyRoster mDutyRoster;
+    private LocalDate mDate;
+    private List<EmergencyContact> mEmergencyContacts;
+
+    /**
+     * Borrowed from {@link PhoneNumberUtils#normalizeNumber(String)}, for use on devices below API21
+     */
+    public static String normalizeNumber(String phoneNumber) {
+        if (TextUtils.isEmpty(phoneNumber)) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        int len = phoneNumber.length();
+        for (int i = 0; i < len; i++) {
+            char c = phoneNumber.charAt(i);
+            // Character.digit() supports ASCII and Unicode digits (fullwidth, Arabic-Indic, etc.)
+            int digit = Character.digit(c, 10);
+            if (digit != -1) {
+                sb.append(digit);
+            } else if (sb.length() == 0 && c == '+') {
+                sb.append(c);
+            } else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+                return normalizeNumber(PhoneNumberUtils.convertKeypadLettersToDigits(phoneNumber));
+            }
+        }
+        return sb.toString();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,23 +157,32 @@ public class MainActivity extends Activity implements ICallback {
             fragment = HomeFragment.newInstance();
             break;
         case MY_RA:
-            switchToProfile(mUserRA);
+            switchToProfile(myRA);
             return;
         case EMERGENCY_CONTACTS:
-            ecLoader = new EmergencyContactLoader(this);
-            fragment = LoadingFragment.newInstance();
+            if (mEmergencyContacts == null) {
+                fragment = LoadingFragment.newInstance();
+            } else {
+                fragment = EmergencyContactsFragment.newInstance();
+            }
             break;
         case DUTY_ROSTER:
-            dutyRosterLoader = new DutyRosterLoader(ConfigKeys.FIREBASE_ROOT_URL, mHall, this, allRAs);
-            fragment = LoadingFragment.newInstance();
+            if (mDutyRoster == null) {
+                fragment = LoadingFragment.newInstance();
+            } else {
+                fragment = DutyRosterFragment.newInstance(mHallName, mDate);
+            }
             break;
         case HALL_ROSTER_OR_RESIDENT_LOGOUT:
             if (mUserType.equals(UserType.RESIDENT)) {
                 logout();
                 return;
             } else {
-                hallLoader = new HallLoader(ConfigKeys.FIREBASE_ROOT_URL, mHall, this);
-                fragment = LoadingFragment.newInstance();
+                if (mHall == null) {
+                    fragment = LoadingFragment.newInstance();
+                } else {
+                    fragment = HallRosterFragment.newInstance(mHallName, mFloor + "");
+                }
                 break;
             }
         case RA_LOGOUT:
@@ -200,31 +256,6 @@ public class MainActivity extends Activity implements ICallback {
         startActivity(intent);
     }
 
-    /**
-     * Borrowed from {@link PhoneNumberUtils#normalizeNumber(String)}, for use on devices below API21
-     */
-    public static String normalizeNumber(String phoneNumber) {
-        if (TextUtils.isEmpty(phoneNumber)) {
-            return "";
-        }
-
-        StringBuilder sb = new StringBuilder();
-        int len = phoneNumber.length();
-        for (int i = 0; i < len; i++) {
-            char c = phoneNumber.charAt(i);
-            // Character.digit() supports ASCII and Unicode digits (fullwidth, Arabic-Indic, etc.)
-            int digit = Character.digit(c, 10);
-            if (digit != -1) {
-                sb.append(digit);
-            } else if (sb.length() == 0 && c == '+') {
-                sb.append(c);
-            } else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-                return normalizeNumber(PhoneNumberUtils.convertKeypadLettersToDigits(phoneNumber));
-            }
-        }
-        return sb.toString();
-    }
-
     public void sendEmail(String email) {
         Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -237,7 +268,7 @@ public class MainActivity extends Activity implements ICallback {
 
     @Override
     public List<EmergencyContact> getEmergencyContacts() {
-        return ecLoader.getContactList();
+        return mEmergencyContacts;
     }
 
     @Override
@@ -271,58 +302,12 @@ public class MainActivity extends Activity implements ICallback {
 
     @Override
     public String getMyHall() {
-        return mHall;
-    }
-
-    @Override
-    public void onEmployeeLoadingComplete() {
-        setAllEmployees();
-        mUserRA = getRA(mRaEmail);
-        mHall = mUserRA.getHall();
-        mFloor = mUserRA.getFloor();
-        mUser = loader.getEmployee(mEmail);
-        onNavigationDrawerItemSelected(HOME);
-    }
-
-    private void setAllEmployees() {
-        allRAs = loader.getRAs();
-        allSAs = loader.getSAs();
-        allGAs = loader.getGAs();
-        allAdmins = loader.getAdmins();
-    }
-
-    @Override
-    public void onHallRosterLoadingComplete() {
-        Fragment fragment = HallRosterFragment.newInstance(mHall, mFloor + "");
-        getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
-    }
-
-    @Override
-    public void onDutyRosterLoadingComplete() {
-        Fragment fragment;
-        if (mUserType == UserType.RESIDENT) {
-            fragment = StudentDutyRosterFragment.newInstance(mHall, dutyRosterLoader.getDate());
-        } else {
-            fragment = DutyRosterFragment.newInstance(mHall, dutyRosterLoader.getDate());
-        }
-        getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
-    }
-
-    @Override
-    public void onEmergencyContactsLoadingComplete() {
-        Fragment fragment = EmergencyContactsFragment.newInstance();
-        getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
+        return mHallName;
     }
 
     @Override
     public DutyRoster getDutyRoster() {
-        return dutyRosterLoader.getDutyRoster();
+        return mDutyRoster;
     }
 
     @Override
@@ -337,6 +322,44 @@ public class MainActivity extends Activity implements ICallback {
 
     public Employee getUser() {
         return mUser;
+    }
+
+    // The onLoadingComplete family of methods are arranged in a daisy-chain of loaders, as Firebase's async,
+    // callback-based (i.e. non-blocking) nature requires us to frontload the data to prevent NullPointer exceptions
+    @Override
+    public void onEmployeeLoadingComplete() {
+        setAllEmployees();
+        myRA = getRA(mRaEmail);
+        mHallName = myRA.getHall();
+        mFloor = myRA.getFloor();
+        mUser = loader.getEmployee(mEmail);
+        dutyRosterLoader = new DutyRosterLoader(ConfigKeys.FIREBASE_ROOT_URL, mHallName, this, allRAs);
+    }
+
+    private void setAllEmployees() {
+        allRAs = loader.getRAs();
+        allSAs = loader.getSAs();
+        allGAs = loader.getGAs();
+        allAdmins = loader.getAdmins();
+    }
+
+    @Override
+    public void onDutyRosterLoadingComplete() {
+        mDutyRoster = dutyRosterLoader.getDutyRoster();
+        mDate = dutyRosterLoader.getDate();
+        hallLoader = new HallLoader(ConfigKeys.FIREBASE_ROOT_URL, mHallName, this);
+    }
+
+    @Override
+    public void onHallRosterLoadingComplete() {
+        mHall = hallLoader.getHall();
+        ecLoader = new EmergencyContactsLoader(this);
+    }
+
+    @Override
+    public void onEmergencyContactsLoadingComplete() {
+        mEmergencyContacts = ecLoader.getContactList();
+        onNavigationDrawerItemSelected(HOME);
     }
 
 }

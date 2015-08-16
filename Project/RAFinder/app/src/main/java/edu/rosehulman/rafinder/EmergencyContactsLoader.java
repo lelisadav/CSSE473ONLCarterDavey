@@ -12,25 +12,26 @@ import edu.rosehulman.rafinder.model.DutyRoster;
 import edu.rosehulman.rafinder.model.person.EmergencyContact;
 import edu.rosehulman.rafinder.model.person.Employee;
 
-public class EmergencyContactLoader {
+public class EmergencyContactsLoader {
     private static final String EmergencyContacts = "EmergencyContacts";
-    List<EmergencyContact> contactList = new ArrayList<>();
-    ContactLoaderListener listener;
+    private List<EmergencyContact> contactList = new ArrayList<>();
+    private EmergencyContactsLoaderListener listener;
 
-    public EmergencyContactLoader(ContactLoaderListener listener) {
+    public EmergencyContactsLoader(EmergencyContactsLoaderListener listener) {
         this.listener = listener;
         if (listener != null) {
             Employee raOnDuty = listener.getDutyRoster().getOnDutyNow();
             if (raOnDuty != null) {
                 contactList.add(new EmergencyContact(raOnDuty, true));
             }
+
             List<Employee> myRAs = listener.getMyRAs();
             for (Employee employee : myRAs) {
                 contactList.add(new EmergencyContact(employee, false));
             }
         }
-        Firebase firebaseContact = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + "/" + EmergencyContacts);
-        firebaseContact.addListenerForSingleValueEvent(new LoaderListener(this));
+        Firebase firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + "/" + EmergencyContacts);
+        firebase.addListenerForSingleValueEvent(new LoaderListener());
 
 
     }
@@ -43,25 +44,20 @@ public class EmergencyContactLoader {
         this.contactList = contactList;
     }
 
-    public interface ContactLoaderListener {
+    public interface EmergencyContactsLoaderListener {
         public DutyRoster getDutyRoster();
         public List<Employee> getMyRAs();
         public void onEmergencyContactsLoadingComplete();
     }
 
     private class LoaderListener implements ValueEventListener {
-        EmergencyContactLoader loader;
-
-        public LoaderListener(EmergencyContactLoader loader) {
-            this.loader = loader;
-        }
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             for (DataSnapshot child : dataSnapshot.getChildren()) {
                 String firebaseURL = ConfigKeys.FIREBASE_ROOT_URL + child.getRef().getPath().toString();
                 EmergencyContact contact = new EmergencyContact(firebaseURL);
-                loader.getContactList().add(contact);
+                contactList.add(contact);
             }
             listener.onEmergencyContactsLoadingComplete();
         }

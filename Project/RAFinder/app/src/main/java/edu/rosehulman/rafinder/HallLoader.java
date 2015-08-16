@@ -11,8 +11,8 @@ public class HallLoader {
     private static final String resHalls = "ResHalls";
 
     private Hall hall;
-    private LoaderCallbacks callbacks;
-    public HallLoader(String url, String hallName, LoaderCallbacks cb){
+    private HallLoaderListener callbacks;
+    public HallLoader(String url, String hallName, HallLoaderListener cb){
         callbacks=cb;
 
         Firebase firebase=new Firebase(url+"/"+ resHalls+"/"+hallName);
@@ -23,7 +23,7 @@ public class HallLoader {
         return hall;
     }
 
-    public interface LoaderCallbacks {
+    public interface HallLoaderListener {
         public void onHallRosterLoadingComplete();
     }
     public class HallValueEventListener implements ValueEventListener{

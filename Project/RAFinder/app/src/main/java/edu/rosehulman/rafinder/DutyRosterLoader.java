@@ -17,10 +17,10 @@ public class DutyRosterLoader {
     private static final String DutyRosters = "DutyRosters";
     private final List<Employee> ras;
     private DutyRoster roster;
-    private LoaderCallbacks callbacks;
+    private DutyRosterLoaderListener callbacks;
     private LocalDate date;
 
-    public DutyRosterLoader(String url, String hallName, LoaderCallbacks cb, List<Employee> ras) {
+    public DutyRosterLoader(String url, String hallName, DutyRosterLoaderListener cb, List<Employee> ras) {
         callbacks = cb;
         this.ras = ras;
         Firebase firebase = new Firebase(url + "/" + DutyRosters + "/" + hallName);
@@ -49,9 +49,8 @@ public class DutyRosterLoader {
         return roster;
     }
 
-    public interface LoaderCallbacks {
+    public interface DutyRosterLoaderListener {
         public void onDutyRosterLoadingComplete();
-
     }
 
     public class DutyRosterValueEventListener implements ValueEventListener {

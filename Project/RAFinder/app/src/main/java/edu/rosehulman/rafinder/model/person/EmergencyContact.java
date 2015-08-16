@@ -5,6 +5,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.Arrays;
+
 public class EmergencyContact implements Comparable<EmergencyContact> {
     // EmergencyContact Firebase keys
     private static final String ecEmail = "Email";
@@ -16,12 +18,10 @@ public class EmergencyContact implements Comparable<EmergencyContact> {
     private Position position;
     private Priority priority;
 
-    public enum Position {
-        ResA, SA, GA, ADMIN
-    }
-
     public enum Priority {
-        ONDUTY, MYRA, STAFF
+        ON_DUTY,
+        MY_RA,
+        STAFF
     }
 
     public EmergencyContact(String firebaseURL) {
@@ -31,20 +31,8 @@ public class EmergencyContact implements Comparable<EmergencyContact> {
     }
 
     public EmergencyContact(Employee employee, boolean isOnDuty) {
-        if (employee instanceof Administrator) {
-            position = Position.ADMIN;
-        } else if (employee instanceof ResidentAssistant) {
-            position = Position.ResA;
-        } else if (employee instanceof SophomoreAdvisor) {
-            position = Position.SA;
-        } else if (employee instanceof GraduateAssistant) {
-            position = Position.GA;
-        }
-        if (isOnDuty) {
-            priority = Priority.ONDUTY;
-        } else {
-            priority = Priority.MYRA;
-        }
+        priority = (isOnDuty) ? Priority.ON_DUTY : Priority.MY_RA;
+        position = employee.getPosition();
         name = employee.getName();
         email = employee.getEmail();
         phone = employee.getPhoneNumber();
@@ -129,5 +117,14 @@ public class EmergencyContact implements Comparable<EmergencyContact> {
         public void onCancelled(FirebaseError firebaseError) {
 
         }
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.asList(name,
+                email,
+                phone,
+                position,
+                priority).toString();
     }
 }

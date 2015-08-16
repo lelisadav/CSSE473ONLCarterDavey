@@ -47,9 +47,9 @@ public class EmergencyContactArrayAdapter extends ArrayAdapter<EmergencyContact>
         final EmergencyContact selected = mObjects.get(position);
         String name = selected.getName();
         switch (selected.getPosition()) {
-        case ResA:
+        case RA:
             name += " (RA)";
-            if (selected.getPriority() == EmergencyContact.Priority.ONDUTY) {
+            if (selected.getPriority() == EmergencyContact.Priority.ON_DUTY) {
                 name += " (On Duty)";
             }
             break;
@@ -67,11 +67,6 @@ public class EmergencyContactArrayAdapter extends ArrayAdapter<EmergencyContact>
 
 
         nameTV.setText(name);
-
-        TextView callTV = (TextView) view.findViewById(R.id.callTextView);
-        TextView emailTV = (TextView) view.findViewById(R.id.emailTextView);
-        callTV.setText(selected.getPhone());
-        emailTV.setText(selected.getEmail());
 
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,17 +9,21 @@ import com.firebase.client.Firebase;
 public class GraduateAssistant extends Employee {
     public GraduateAssistant(DataSnapshot ds) {
         super(ds);
+        setPosition(Position.GA);
     }
 
     public GraduateAssistant(String name, String uid) {
         super(name, uid);
+        setPosition(Position.GA);
     }
 
     public GraduateAssistant(String name) {
         super(name);
+        setPosition(Position.GA);
     }
 
     public GraduateAssistant(Firebase firebase) {
         super(firebase);
+        setPosition(Position.GA);
     }
 }

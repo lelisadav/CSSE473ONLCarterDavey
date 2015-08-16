@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import edu.rosehulman.rafinder.R;
@@ -20,7 +19,8 @@ import edu.rosehulman.rafinder.model.person.Employee;
 /**
  * The Emergency Contacts list. Contains items of type {@link Employee}.
  */
-public class EmergencyContactsFragment extends Fragment implements EmergencyContactArrayAdapter.EmergencyContactCallbacks {
+public class EmergencyContactsFragment extends Fragment
+        implements EmergencyContactArrayAdapter.EmergencyContactCallbacks {
     private EmergencyContactsListener mListener;
     private List<EmergencyContact> emergencyContacts;
 
@@ -51,13 +51,8 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyCont
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_emergency_contacts, container, false);
         ListView listView = (ListView) view.findViewById(R.id.emergencyContactsListView);
-        Comparator<EmergencyContact> c = new Comparator<EmergencyContact>() {
-            @Override
-            public int compare(EmergencyContact lhs, EmergencyContact rhs) {
-                return lhs.compareTo(rhs);
-            }
-        };
-        Collections.sort(emergencyContacts, c);
+
+        Collections.sort(emergencyContacts);
         EmergencyContactArrayAdapter mAdapter = new EmergencyContactArrayAdapter(
                 getActivity(),
                 R.layout.fragment_emergency_contacts,

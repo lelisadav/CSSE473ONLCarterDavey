@@ -27,8 +27,9 @@ public class Employee extends Resident {
     private String statusDetail;
     private Bitmap profilePicture;
     private Firebase firebase;
+    private Position position;
 
-    public Employee(DataSnapshot ds) {
+    protected Employee(DataSnapshot ds) {
         this(
                 ds.child(ConfigKeys.employeeName).getValue(String.class),
                 ds.child(ConfigKeys.employeeEmail).getValue(String.class),
@@ -45,20 +46,20 @@ public class Employee extends Resident {
         firebase.addChildEventListener(new ChildrenListener());
     }
 
-    public Employee(String name, String uid) {
+    protected Employee(String name, String uid) {
         super(name, uid);
     }
 
-    public Employee(Firebase firebase) {
+    protected Employee(Firebase firebase) {
         this.firebase = firebase;
         this.firebase.addChildEventListener(new ChildrenListener());
     }
 
-    public Employee(String name) {
+    protected Employee(String name) {
         super(name);
     }
 
-    public Employee(String name,
+    protected Employee(String name,
                     String email,
                     int floor,
                     String hall,
@@ -91,6 +92,14 @@ public class Employee extends Resident {
             Log.w(ConfigKeys.LOG_TAG, "Error decoding image");
             return null;
         }
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     private class ChildrenListener implements ChildEventListener {

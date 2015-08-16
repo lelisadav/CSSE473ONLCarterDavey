@@ -1,4 +1,4 @@
-package edu.rosehulman.rafinder.controller.reslife;
+package edu.rosehulman.rafinder.controller;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -30,6 +30,7 @@ public class DutyRosterFragment extends Fragment {
     private LocalDate date;
     private DutyRoster roster;
 
+    // TODO: differentiate Resident and non-resident; set edit controls accordingly
 
     public static DutyRosterFragment newInstance(String hall, LocalDate date) {
         DutyRosterFragment fragment = new DutyRosterFragment();
@@ -44,38 +45,36 @@ public class DutyRosterFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_student_duty_roster, container, false);
-        ListView listView = (ListView) view.findViewById(R.id.dutyRosterListView);
-        List<DutyRosterItem> rosterItems = new ArrayList<>();
-        rosterItems.addAll(roster.getRoster().values());
-        mAdapter = new DutyRosterArrayAdapter(getActivity(), R.layout.fragment_student_duty_roster_widget, rosterItems);
-        listView.setAdapter(mAdapter);
-        return view;
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             hallName = savedInstanceState.getString(ConfigKeys.HALL, null);
             String dateStr = savedInstanceState.getString(ConfigKeys.DATE, null);
             if (dateStr != null) {
-
                 date = LocalDate.parse(dateStr, ConfigKeys.formatter);
             }
         } else if (getArguments() != null) {
             hallName = getArguments().getString(ConfigKeys.HALL, null);
             String dateStr = getArguments().getString(ConfigKeys.DATE, null);
             if (dateStr != null) {
-
                 date = LocalDate.parse(dateStr, ConfigKeys.formatter);
             }
         }
         if (mListener != null) {
             roster = mListener.getDutyRoster();
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_duty_roster, container, false);
+        List<DutyRosterItem> rosterItems = new ArrayList<>();
+        rosterItems.addAll(roster.getRoster().values());
+        mAdapter = new DutyRosterArrayAdapter(getActivity(), R.layout.fragment_duty_roster_widget, rosterItems);
+        ListView listView = (ListView) view.findViewById(R.id.dutyRosterListView);
+        listView.setAdapter(mAdapter);
+        return view;
     }
 
     @Override

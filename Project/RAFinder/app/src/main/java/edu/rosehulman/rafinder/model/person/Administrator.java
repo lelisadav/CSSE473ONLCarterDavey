@@ -9,17 +9,21 @@ import com.firebase.client.Firebase;
 public class Administrator extends Employee {
     public Administrator(DataSnapshot ds) {
         super(ds);
+        setPosition(Position.ADMIN);
     }
 
     public Administrator(String name, String uid) {
         super(name, uid);
+        setPosition(Position.ADMIN);
     }
 
     public Administrator(String name) {
         super(name);
+        setPosition(Position.ADMIN);
     }
 
     public Administrator(Firebase firebase) {
         super(firebase);
+        setPosition(Position.ADMIN);
     }
 }
