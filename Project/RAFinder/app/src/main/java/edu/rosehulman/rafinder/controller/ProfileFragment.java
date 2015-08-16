@@ -37,6 +37,7 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
     public static final int SELECT_IMAGE_REQUEST_CODE = 1;
     private StudentProfileListener mListener;
     private Employee employee;
+    private MainActivity mContext;
 
     public ProfileFragment() {
     }
@@ -56,7 +57,10 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        mContext = (MainActivity) view.getContext();
+
         // Fetch data
         TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
         TextView roomTextView = (TextView) view.findViewById(R.id.roomTextView);
@@ -81,10 +85,9 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
         }
 
         // Set editable fields based on MainActivity.getUserType
-        MainActivity context = (MainActivity) view.getContext();
-        if (!context.getUserType().equals(UserType.RESIDENT)
-                && context.getUser() != null
-                && employee.equals(context.getUser())) {
+        if (!mContext.getUserType().equals(UserType.RESIDENT)
+                && mContext.getUser() != null
+                && employee.equals(mContext.getUser())) {
 
             phoneTextView.setOnLongClickListener(this);
             statusTextView.setOnLongClickListener(this);
@@ -92,6 +95,27 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
             imageView.setOnLongClickListener(this);
             showEditPromptDialog();
         }
+
+       view.findViewById(R.id.phoneButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.dialPhoneNumber(employee.getPhoneNumber());
+            }
+        });
+
+        view.findViewById(R.id.emailButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.sendEmail(employee.getEmail());
+            }
+        });
+
+        view.findViewById(R.id.feedbackButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: open feedback (dialog?)
+            }
+        });
 
         return view;
     }

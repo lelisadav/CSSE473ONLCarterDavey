@@ -163,9 +163,6 @@ public class MainActivity extends Activity implements ICallback {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
             return true;
@@ -175,9 +172,6 @@ public class MainActivity extends Activity implements ICallback {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -201,10 +195,8 @@ public class MainActivity extends Activity implements ICallback {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         phoneNumber = normalizeNumber(phoneNumber);
         intent.setData(Uri.parse("tel:" + phoneNumber));
-        // TODO:
-//        if (intent.resolveActivity(getPackageManager()) != null) {
-//            startActivity(intent);
-//        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     /**
@@ -232,8 +224,14 @@ public class MainActivity extends Activity implements ICallback {
         return sb.toString();
     }
 
-    public void sendEmail(String emailAddress) {
-        // TODO:
+    public void sendEmail(String email) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void sendFeedback(String name, String email) {
+        // TODO: async task to send an email directly from the app
     }
 
     @Override

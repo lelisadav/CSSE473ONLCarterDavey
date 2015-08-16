@@ -78,4 +78,6 @@
     <string name="ra_email_does_not_exist">RA\'s email does not exist</string>
     <string name="email_in_use">This email is already in use</string>
     <string name="error_message">An unexpected error occurred.</string>
+    <string name="phone_button_content_description">Dial their Number</string>
+    <string name="email_button_content_description">Compose an Email</string>
 </resources>
