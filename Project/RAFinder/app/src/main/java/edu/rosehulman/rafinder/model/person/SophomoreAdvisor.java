@@ -12,6 +12,10 @@ public class SophomoreAdvisor extends Employee {
         super(ds);
     }
 
+    public SophomoreAdvisor(String name, String uid) {
+        super(name, uid);
+    }
+
     public SophomoreAdvisor(String name) {
         super(name);
     }

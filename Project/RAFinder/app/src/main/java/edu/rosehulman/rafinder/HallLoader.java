@@ -24,7 +24,7 @@ public class HallLoader {
     }
 
     public interface LoaderCallbacks {
-        public void onHallRosterLoadingComplete(); // TODO: similar for other loaders
+        public void onHallRosterLoadingComplete();
     }
     public class HallValueEventListener implements ValueEventListener{
 

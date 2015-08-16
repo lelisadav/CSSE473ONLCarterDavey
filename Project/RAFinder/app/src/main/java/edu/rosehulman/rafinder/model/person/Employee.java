@@ -38,10 +38,45 @@ public class Employee extends Resident {
                 ds.child(ConfigKeys.employeeRoom).getValue(int.class),
                 ds.child(ConfigKeys.employeeStatus).getValue(String.class),
                 ds.child(ConfigKeys.employeeStatusDetail).getValue(String.class),
-                convertToBitmap(ds.child(ConfigKeys.employeePicture).getValue(String.class))
+                convertToBitmap(ds.child(ConfigKeys.employeePicture).getValue(String.class)),
+                ds.getKey()
         );
         firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + ds.getRef().getPath().toString());
         firebase.addChildEventListener(new ChildrenListener());
+    }
+
+    public Employee(String name, String uid) {
+        super(name, uid);
+    }
+
+    public Employee(Firebase firebase) {
+        this.firebase = firebase;
+        this.firebase.addChildEventListener(new ChildrenListener());
+    }
+
+    public Employee(String name) {
+        super(name);
+    }
+
+    public Employee(String name,
+                    String email,
+                    int floor,
+                    String hall,
+                    String phoneNumber,
+                    int room,
+                    String status,
+                    String statusDetail,
+                    Bitmap profilePicture,
+                    String uid) {
+        super(name, uid);
+        this.email = email;
+        this.floor = floor;
+        this.hall = hall;
+        this.phoneNumber = phoneNumber;
+        this.room = room;
+        this.status = status;
+        this.statusDetail = statusDetail;
+        this.profilePicture = profilePicture;
     }
 
     private static Bitmap convertToBitmap(String image) {
@@ -58,33 +93,81 @@ public class Employee extends Resident {
         }
     }
 
-    public Employee(String name) {
-        super(name);
+    private class ChildrenListener implements ChildEventListener {
+        public void onCancelled(FirebaseError arg0) {
+            // ignored
+        }
+
+        public void onChildAdded(DataSnapshot arg0, String arg1) {
+            // ignored
+        }
+
+        public void onChildChanged(DataSnapshot arg0, String arg1) {
+            switch (arg0.getKey()) {
+            case ConfigKeys.employeeEmail:
+                setEmail(arg0.getValue(String.class));
+                break;
+            case ConfigKeys.employeeFloor:
+                setFloor(arg0.getValue(int.class));
+                break;
+            case ConfigKeys.employeeHall:
+                setHall(arg0.getValue(String.class));
+                break;
+            case ConfigKeys.employeePhone:
+                setPhoneNumber(arg0.getValue(String.class));
+                break;
+            case ConfigKeys.employeeRoom:
+                setRoom(arg0.getValue(int.class));
+                break;
+            case ConfigKeys.employeeStatus:
+                setStatus(arg0.getValue(String.class));
+                break;
+            case ConfigKeys.employeeStatusDetail:
+                setStatusDetail(arg0.getValue(String.class));
+                break;
+            case ConfigKeys.employeeName:
+                setName(arg0.getValue(String.class));
+                break;
+            }
+        }
+
+        public void onChildMoved(DataSnapshot arg0, String arg1) {
+            // ignored
+        }
+
+        public void onChildRemoved(DataSnapshot arg0) {
+            // ignored
+        }
     }
 
-    public Employee(Firebase firebase) {
-        this.firebase = firebase;
-        this.firebase.addChildEventListener(new ChildrenListener());
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Employee)) {
+            return false;
+        }
+        Employee e = (Employee) other;
+        return getName().equals(e.getName())
+                && email.equals(e.getEmail())
+                && floor == e.getFloor()
+                && hall.equals(e.getHall())
+                && phoneNumber.equals(e.getPhoneNumber())
+                && room == e.getRoom()
+                && status.equals(e.getStatus())
+                && statusDetail.equals(e.getStatusDetail());
     }
 
-    public Employee(String name,
-                    String email,
-                    int floor,
-                    String hall,
-                    String phoneNumber,
-                    int room,
-                    String status,
-                    String statusDetail,
-                    Bitmap profilePicture) {
-        super(name);
-        this.email = email;
-        this.floor = floor;
-        this.hall = hall;
-        this.phoneNumber = phoneNumber;
-        this.room = room;
-        this.status = status;
-        this.statusDetail = statusDetail;
-        this.profilePicture = profilePicture;
+    @Override
+    public String toString() {
+        return Arrays.asList(
+                getUid(),
+                getName(),
+                email,
+                floor,
+                hall,
+                phoneNumber,
+                room,
+                status,
+                statusDetail).toString();
     }
 
     public String getEmail() {
@@ -157,81 +240,5 @@ public class Employee extends Resident {
 
     public void setProfilePicture(Bitmap profilePicture) {
         this.profilePicture = profilePicture;
-    }
-
-    private class ChildrenListener implements ChildEventListener {
-        public void onCancelled(FirebaseError arg0) {
-            // ignored
-        }
-
-        public void onChildAdded(DataSnapshot arg0, String arg1) {
-            // ignored
-        }
-
-        public void onChildChanged(DataSnapshot arg0, String arg1) {
-            switch (arg0.getKey()) {
-            case ConfigKeys.employeeEmail:
-                setEmail(arg0.getValue(String.class));
-                break;
-            case ConfigKeys.employeeFloor:
-                setFloor(arg0.getValue(int.class));
-                break;
-            case ConfigKeys.employeeHall:
-                setHall(arg0.getValue(String.class));
-                break;
-            case ConfigKeys.employeePhone:
-                setPhoneNumber(arg0.getValue(String.class));
-                break;
-            case ConfigKeys.employeeRoom:
-                setRoom(arg0.getValue(int.class));
-                break;
-            case ConfigKeys.employeeStatus:
-                setStatus(arg0.getValue(String.class));
-                break;
-            case ConfigKeys.employeeStatusDetail:
-                setStatusDetail(arg0.getValue(String.class));
-                break;
-            case ConfigKeys.employeeName:
-                setName(arg0.getValue(String.class));
-                break;
-            }
-        }
-
-        public void onChildMoved(DataSnapshot arg0, String arg1) {
-            // ignored
-        }
-
-        public void onChildRemoved(DataSnapshot arg0) {
-            // ignored
-        }
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof Employee)) {
-            return false;
-        }
-        Employee e = (Employee) other;
-        return getName().equals(e.getName())
-                && email.equals(e.getEmail())
-                && floor == e.getFloor()
-                && hall.equals(e.getHall())
-                && phoneNumber.equals(e.getPhoneNumber())
-                && room == e.getRoom()
-                && status.equals(e.getStatus())
-                && statusDetail.equals(e.getStatusDetail());
-    }
-
-    @Override
-    public String toString() {
-        return Arrays.asList(
-                getName(),
-                email,
-                floor,
-                hall,
-                phoneNumber,
-                room,
-                status,
-                statusDetail).toString();
     }
 }

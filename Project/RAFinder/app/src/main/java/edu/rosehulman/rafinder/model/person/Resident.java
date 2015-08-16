@@ -7,16 +7,23 @@ import edu.rosehulman.rafinder.model.SearchResultItem;
 
 public class Resident implements SearchResultItem {
     private String name;
+    private String uid;
 
     public Resident() {
     }
 
-    public Resident(String name) {
+    public Resident(String name, String uid) {
         this.name = name;
+        this.uid = uid;
     }
 
     public Resident(DataSnapshot ds) {
         name = ds.child(ConfigKeys.employeeName).getValue(String.class);
+        uid = ds.getKey();
+    }
+
+    public Resident(String name) {
+        this.name = name;
     }
 
     public String getName() {
@@ -27,4 +34,11 @@ public class Resident implements SearchResultItem {
         this.name = name;
     }
 
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 }

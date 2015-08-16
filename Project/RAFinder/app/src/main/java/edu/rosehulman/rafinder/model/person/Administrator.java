@@ -11,6 +11,10 @@ public class Administrator extends Employee {
         super(ds);
     }
 
+    public Administrator(String name, String uid) {
+        super(name, uid);
+    }
+
     public Administrator(String name) {
         super(name);
     }

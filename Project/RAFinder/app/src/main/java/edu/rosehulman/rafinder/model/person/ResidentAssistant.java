@@ -11,6 +11,10 @@ public class ResidentAssistant extends Employee {
         super(ds);
     }
 
+    public ResidentAssistant(String name, String uid) {
+        super(name, uid);
+    }
+
     public ResidentAssistant(String name) {
         super(name);
     }

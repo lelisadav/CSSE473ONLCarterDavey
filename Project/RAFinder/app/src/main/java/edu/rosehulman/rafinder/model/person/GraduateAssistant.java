@@ -11,6 +11,10 @@ public class GraduateAssistant extends Employee {
         super(ds);
     }
 
+    public GraduateAssistant(String name, String uid) {
+        super(name, uid);
+    }
+
     public GraduateAssistant(String name) {
         super(name);
     }

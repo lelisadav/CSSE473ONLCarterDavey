@@ -47,7 +47,6 @@ public class MainActivity extends Activity implements ICallback {
     private int mFloor;
     private String mHall;
     private Hall currHall;
-    private List<Employee> allRAs;
     private EmployeeLoader loader;
     private EmergencyContactLoader ecLoader;
     private DutyRosterLoader dutyRosterLoader;
@@ -61,13 +60,15 @@ public class MainActivity extends Activity implements ICallback {
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
     private CharSequence mTitle;
     private String mRaEmail;
     private Employee mUser;
     private String mEmail;
+
+    private List<Employee> allRAs;
+    private List<Employee> allSAs;
+    private List<Employee> allGAs;
+    private List<Employee> allAdmins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +117,7 @@ public class MainActivity extends Activity implements ICallback {
             fragment = LoadingFragment.newInstance();
             break;
         case DUTY_ROSTER:
-            dutyRosterLoader = new DutyRosterLoader(ConfigKeys.FIREBASE_ROOT_URL, mHall, this);
+            dutyRosterLoader = new DutyRosterLoader(ConfigKeys.FIREBASE_ROOT_URL, mHall, this, allRAs);
             fragment = LoadingFragment.newInstance();
             break;
         case HALL_ROSTER_OR_RESIDENT_LOGOUT:
@@ -256,9 +257,6 @@ public class MainActivity extends Activity implements ICallback {
 
     @Override
     public List<Employee> getAllRAs() {
-        if (allRAs == null) {
-            allRAs = loader.getRAs();
-        }
         return allRAs;
     }
 
@@ -278,11 +276,19 @@ public class MainActivity extends Activity implements ICallback {
 
     @Override
     public void onEmployeeLoadingComplete() {
+        setAllEmployees();
         mUserRA = getRA(mRaEmail);
         mHall = mUserRA.getHall();
         mFloor = mUserRA.getFloor();
         mUser = loader.getEmployee(mEmail);
         onNavigationDrawerItemSelected(HOME);
+    }
+
+    private void setAllEmployees() {
+        allRAs = loader.getRAs();
+        allSAs = loader.getSAs();
+        allGAs = loader.getGAs();
+        allAdmins = loader.getAdmins();
     }
 
     @Override
@@ -333,8 +339,4 @@ public class MainActivity extends Activity implements ICallback {
         return mUser;
     }
 
-//    @Override
-//    public DutyRoster getDutyRoster(String hall, LocalDate date) {
-//        return new DutyRoster(ConfigKeys.FIREBASE_ROOT_URL + "/"+ConfigKeys.DutyRosters+"/" + hall, date);
-//    }
 }

@@ -125,7 +125,7 @@ public class EmployeeLoader {
         this.ras = ras;
     }
 
-    public List<Employee> getGas() {
+    public List<Employee> getGAs() {
         return gas;
     }
 
