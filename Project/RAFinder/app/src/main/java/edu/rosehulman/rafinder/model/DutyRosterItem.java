@@ -1,6 +1,7 @@
 package edu.rosehulman.rafinder.model;
 
 import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
 
 import org.joda.time.LocalDate;
 
@@ -20,7 +21,6 @@ public class DutyRosterItem {
 
     }
 
-    private String firebaseURL;
     private Employee friDuty;
     private Employee satDuty;
     private LocalDate friday;
@@ -28,13 +28,13 @@ public class DutyRosterItem {
     public DutyRosterItem(DataSnapshot ds) {
         friday = LocalDate.parse(ds.getKey(), ConfigKeys.formatter);
         for (DataSnapshot child : ds.getChildren()) {
-            String firebasePath = ConfigKeys.Employees +
+            String firebaseUrl = ConfigKeys.Employees +
                                  "/" + ConfigKeys.ResidentAssistants +
                                  "/" + child.getValue(String.class);
             if (child.getKey().equals(fridayKey)) {
-                friDuty = new ResidentAssistant(firebasePath);
+                friDuty = new ResidentAssistant(new Firebase(firebaseUrl));
             } else if (child.getKey().equals(saturdayKey)) {
-                satDuty = new ResidentAssistant(firebasePath);
+                satDuty = new ResidentAssistant(new Firebase(firebaseUrl));
             }
         }
     }

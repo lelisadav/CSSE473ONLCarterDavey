@@ -32,16 +32,16 @@ public class RoomEntry {
         for (DataSnapshot child : ds.getChildren()) {
             switch (child.getValue(String.class)) {
             case Resident:
-                residents.add(new Resident(child));
+                residents.add(new Resident(child.getKey()));
                 break;
             case SophomoreAdvisor:
-                residents.add(new SophomoreAdvisor(child));
+                residents.add(new SophomoreAdvisor(child.getKey()));
                 break;
             case ResidentAssistant:
-                residents.add(new ResidentAssistant(child));
+                residents.add(new ResidentAssistant(child.getKey()));
                 break;
             case GraduateAssistant:
-                residents.add(new GraduateAssistant(child));
+                residents.add(new GraduateAssistant(child.getKey()));
                 break;
             default:
                 break;

@@ -45,7 +45,7 @@ public class Employee extends Resident {
     }
 
     private static Bitmap convertToBitmap(String image) {
-        if (image.equals("")) {
+        if (image == null || image.equals("")) {
             // no profile image
             return null;
         }
@@ -58,10 +58,13 @@ public class Employee extends Resident {
         }
     }
 
-    public Employee(String firebaseUrl) {
-        super("");
-        firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + firebaseUrl);
-        firebase.addChildEventListener(new ChildrenListener());
+    public Employee(String name) {
+        super(name);
+    }
+
+    public Employee(Firebase firebase) {
+        this.firebase = firebase;
+        this.firebase.addChildEventListener(new ChildrenListener());
     }
 
     public Employee(String name,

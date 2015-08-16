@@ -1,6 +1,7 @@
 package edu.rosehulman.rafinder.model.person;
 
 import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
 
 /**
  * An SA (like an RA, but with limited privileges).
@@ -11,7 +12,11 @@ public class SophomoreAdvisor extends Employee {
         super(ds);
     }
 
-    public SophomoreAdvisor(String firebaseUrl) {
-        super(firebaseUrl);
+    public SophomoreAdvisor(String name) {
+        super(name);
+    }
+
+    public SophomoreAdvisor(Firebase firebase) {
+        super(firebase);
     }
 }

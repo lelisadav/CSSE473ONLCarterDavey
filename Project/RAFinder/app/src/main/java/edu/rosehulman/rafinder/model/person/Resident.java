@@ -8,10 +8,10 @@ import edu.rosehulman.rafinder.model.SearchResultItem;
 public class Resident implements SearchResultItem {
     private String name;
 
+    public Resident() {
+    }
+
     public Resident(String name) {
-        if (name.equals("")) {
-            return;
-        }
         this.name = name;
     }
 
