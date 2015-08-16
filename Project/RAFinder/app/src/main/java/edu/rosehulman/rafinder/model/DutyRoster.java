@@ -12,7 +12,7 @@ import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.model.person.Employee;
 
 public class DutyRoster {
-    HashMap<LocalDate, DutyRosterItem> roster;
+    private HashMap<LocalDate, DutyRosterItem> roster;
     private LocalDate startDate;
 
     public DutyRoster(DataSnapshot ds, LocalDate startDate, List<Employee> ras) {
@@ -20,7 +20,7 @@ public class DutyRoster {
         roster = new HashMap<>();
         for (DataSnapshot child : ds.getChildren()) {
             LocalDate rosterDate = LocalDate.parse(child.getKey(), ConfigKeys.formatter);
-            if (!rosterDate.isBefore(getStartDate())) {
+            if (!rosterDate.isBefore(startDate)) {
                 DutyRosterItem item = new DutyRosterItem(child, ras);
                 roster.put(rosterDate, item);
             }
@@ -53,10 +53,6 @@ public class DutyRoster {
 
     public void setRoster(HashMap<LocalDate, DutyRosterItem> roster) {
         this.roster = roster;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
     }
 
     public void setStartDate(LocalDate startDate) {

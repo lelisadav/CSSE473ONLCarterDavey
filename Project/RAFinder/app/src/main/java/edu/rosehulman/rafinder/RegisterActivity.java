@@ -169,7 +169,7 @@ public class RegisterActivity extends Activity {
                 });
     }
 
-    public void showProgress(final boolean show) {
+    private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(
                 android.R.integer.config_shortAnimTime);
 
@@ -196,14 +196,14 @@ public class RegisterActivity extends Activity {
                 });
     }
 
-    public void showError(String errorMessage) {
+    private void showError(String errorMessage) {
         showProgress(false);
         mRegisterProgressDialog.hide();
         showErrorDialog(errorMessage);
     }
 
     private class User {
-        private String myRA;
+        private final String myRA;
 
         public User(String raEmail) {
             myRA = raEmail;

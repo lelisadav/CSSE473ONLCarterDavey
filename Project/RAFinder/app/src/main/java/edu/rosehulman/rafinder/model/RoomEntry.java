@@ -50,7 +50,7 @@ public class RoomEntry {
 
     }
 
-    public RoomEntry() {
+    RoomEntry() {
         residents = new ArrayList<>();
     }
 
@@ -72,7 +72,7 @@ public class RoomEntry {
     }
 
     public void setHallName(String hall) {
-        this.hallName = hall;
+        hallName = hall;
     }
 
     public String getRoomNumber() {

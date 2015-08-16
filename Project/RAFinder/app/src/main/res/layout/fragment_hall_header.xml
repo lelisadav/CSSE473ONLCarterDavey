@@ -6,15 +6,12 @@
     android:orientation="horizontal"
     tools:context="edu.rosehulman.rafinder.controller.reslife.HallHeader">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <TextView
         android:id="@+id/hallNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:paddingRight="20dp"
-        android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="30sp" />
 

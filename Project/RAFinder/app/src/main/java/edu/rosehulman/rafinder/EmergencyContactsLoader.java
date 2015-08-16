@@ -15,7 +15,7 @@ import edu.rosehulman.rafinder.model.person.Employee;
 public class EmergencyContactsLoader {
     private static final String EmergencyContacts = "EmergencyContacts";
     private List<EmergencyContact> contactList = new ArrayList<>();
-    private EmergencyContactsLoaderListener listener;
+    private final EmergencyContactsLoaderListener listener;
 
     public EmergencyContactsLoader(EmergencyContactsLoaderListener listener) {
         this.listener = listener;

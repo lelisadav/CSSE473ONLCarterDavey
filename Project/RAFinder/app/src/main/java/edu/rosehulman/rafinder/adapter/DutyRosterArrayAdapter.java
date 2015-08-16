@@ -29,12 +29,6 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
         mObjects = objects;
     }
 
-
-    @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-    }
-
     /**
      * This method overrides the default getView method to show a two line view that has a due date. It also controls
      * the displaying of icons such as flags and trophies.
@@ -43,7 +37,7 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(mLayout, parent, false);
+        View view = convertView != null ? convertView : inflater.inflate(mLayout, parent, false);
         TextView weekendText = (TextView) view.findViewById(R.id.weekendTextView);
         TextView friNameText = (TextView) view.findViewById(R.id.friNameTextView);
         ImageButton friButton = (ImageButton) view.findViewById(R.id.friCallButton);

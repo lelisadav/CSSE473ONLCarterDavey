@@ -11,7 +11,7 @@ public class HallLoader {
     private static final String resHalls = "ResHalls";
 
     private Hall hall;
-    private HallLoaderListener callbacks;
+    private final HallLoaderListener callbacks;
     public HallLoader(String url, String hallName, HallLoaderListener cb){
         callbacks=cb;
 
@@ -26,7 +26,7 @@ public class HallLoader {
     public interface HallLoaderListener {
         public void onHallRosterLoadingComplete();
     }
-    public class HallValueEventListener implements ValueEventListener{
+    private class HallValueEventListener implements ValueEventListener{
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {

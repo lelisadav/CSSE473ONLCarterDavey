@@ -17,7 +17,7 @@ public class DutyRosterLoader {
     private static final String DutyRosters = "DutyRosters";
     private final List<Employee> ras;
     private DutyRoster roster;
-    private DutyRosterLoaderListener callbacks;
+    private final DutyRosterLoaderListener callbacks;
     private LocalDate date;
 
     public DutyRosterLoader(String url, String hallName, DutyRosterLoaderListener cb, List<Employee> ras) {
@@ -28,7 +28,7 @@ public class DutyRosterLoader {
 
     }
 
-    public LocalDate modifyDate(LocalDate dt) {
+    private LocalDate modifyDate(LocalDate dt) {
         if (dt.getDayOfWeek() == DateTimeConstants.FRIDAY) {
             dt = dt.minusDays(1);
         } else if (dt.getDayOfWeek() == DateTimeConstants.SATURDAY) {
@@ -53,7 +53,7 @@ public class DutyRosterLoader {
         public void onDutyRosterLoadingComplete();
     }
 
-    public class DutyRosterValueEventListener implements ValueEventListener {
+    private class DutyRosterValueEventListener implements ValueEventListener {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {

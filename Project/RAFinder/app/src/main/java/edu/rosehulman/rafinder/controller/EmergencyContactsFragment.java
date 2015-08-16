@@ -30,8 +30,7 @@ public class EmergencyContactsFragment extends Fragment
      * @return A new instance of fragment EmergencyContactsFragment.
      */
     public static EmergencyContactsFragment newInstance() {
-        EmergencyContactsFragment fragment = new EmergencyContactsFragment();
-        return fragment;
+        return new EmergencyContactsFragment();
     }
 
     public EmergencyContactsFragment() {

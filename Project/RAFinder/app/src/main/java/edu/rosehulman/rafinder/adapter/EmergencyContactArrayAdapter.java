@@ -18,7 +18,7 @@ public class EmergencyContactArrayAdapter extends ArrayAdapter<EmergencyContact>
     private final Context mContext;
     private final List<EmergencyContact> mObjects;
     private final int mLayout;
-    private EmergencyContactCallbacks mCallbacks;
+    private final EmergencyContactCallbacks mCallbacks;
 
     public EmergencyContactArrayAdapter(Context context, int textViewResourceId,
                                         List<EmergencyContact> objects, EmergencyContactCallbacks callbacks) {
@@ -31,16 +31,10 @@ public class EmergencyContactArrayAdapter extends ArrayAdapter<EmergencyContact>
     }
 
     @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-    }
-
-
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(mLayout, parent, false);
+        View view = convertView != null ? convertView : inflater.inflate(mLayout, parent, false);
         TextView nameTV = (TextView) view.findViewById(R.id.nameTextView);
         Button callButton = (Button) view.findViewById(R.id.callButton);
         Button emailButton = (Button) view.findViewById(R.id.emailButton);

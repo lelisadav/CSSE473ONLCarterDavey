@@ -29,7 +29,7 @@ public class Employee extends Resident {
     private Firebase firebase;
     private Position position;
 
-    protected Employee(DataSnapshot ds) {
+    Employee(DataSnapshot ds) {
         this(
                 ds.child(ConfigKeys.employeeName).getValue(String.class),
                 ds.child(ConfigKeys.employeeEmail).getValue(String.class),
@@ -46,29 +46,29 @@ public class Employee extends Resident {
         firebase.addChildEventListener(new ChildrenListener());
     }
 
-    protected Employee(String name, String uid) {
+    Employee(String name, String uid) {
         super(name, uid);
     }
 
-    protected Employee(Firebase firebase) {
+    Employee(Firebase firebase) {
         this.firebase = firebase;
         this.firebase.addChildEventListener(new ChildrenListener());
     }
 
-    protected Employee(String name) {
+    Employee(String name) {
         super(name);
     }
 
-    protected Employee(String name,
-                    String email,
-                    int floor,
-                    String hall,
-                    String phoneNumber,
-                    int room,
-                    String status,
-                    String statusDetail,
-                    Bitmap profilePicture,
-                    String uid) {
+    private Employee(String name,
+             String email,
+             int floor,
+             String hall,
+             String phoneNumber,
+             int room,
+             String status,
+             String statusDetail,
+             Bitmap profilePicture,
+             String uid) {
         super(name, uid);
         this.email = email;
         this.floor = floor;
@@ -156,13 +156,13 @@ public class Employee extends Resident {
         }
         Employee e = (Employee) other;
         return getName().equals(e.getName())
-                && email.equals(e.getEmail())
-                && floor == e.getFloor()
-                && hall.equals(e.getHall())
-                && phoneNumber.equals(e.getPhoneNumber())
-                && room == e.getRoom()
-                && status.equals(e.getStatus())
-                && statusDetail.equals(e.getStatusDetail());
+               && email.equals(e.getEmail())
+               && floor == e.getFloor()
+               && hall.equals(e.getHall())
+               && phoneNumber.equals(e.getPhoneNumber())
+               && room == e.getRoom()
+               && status.equals(e.getStatus())
+               && statusDetail.equals(e.getStatusDetail());
     }
 
     @Override

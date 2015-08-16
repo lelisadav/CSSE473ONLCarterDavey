@@ -24,23 +24,18 @@ public class HallHeader extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_hall_header, container, false);
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout);
         if (mListener != null) {
-            this.hall = mListener.getHall();
-            this.currentFloor = mListener.getCurrentFloorIndex();
+            hall = mListener.getHall();
+            currentFloor = mListener.getCurrentFloorIndex();
             String[] floorNumbers = hall.getFloorNumbers();
             for (int i = 0; i < floorNumbers.length; i++) {
                 final int floorNum = i;
-                ToggleButton b = new ToggleButton(this.getActivity());
+                ToggleButton b = new ToggleButton(getActivity());
                 b.setText(floorNumbers[i]);
                 b.setPadding(5, 5, 5, 5);
                 b.setOnClickListener(new View.OnClickListener() {

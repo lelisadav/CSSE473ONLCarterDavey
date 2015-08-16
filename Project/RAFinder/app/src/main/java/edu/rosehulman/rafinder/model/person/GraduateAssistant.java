@@ -4,7 +4,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 
 /**
- * A GA (Like an RA, but with somewhat limited priviledges (FIXME?).
+ * A GA (Like an RA, but with somewhat limited privileges (FIXME?).
  */
 public class GraduateAssistant extends Employee {
     public GraduateAssistant(DataSnapshot ds) {

@@ -92,7 +92,7 @@ public class EmergencyContact implements Comparable<EmergencyContact> {
     }
 
     public class EmergencyContactListener implements ValueEventListener {
-        private EmergencyContact contact;
+        private final EmergencyContact contact;
 
         public EmergencyContactListener(EmergencyContact emergencyContact) {
             contact = emergencyContact;

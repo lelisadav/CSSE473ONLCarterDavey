@@ -133,7 +133,7 @@ public class HallRosterFragment extends Fragment
 
     @Override
     public Hall getHall() {
-        return this.hall;
+        return hall;
     }
 
     @Override
@@ -143,7 +143,7 @@ public class HallRosterFragment extends Fragment
 
     @Override
     public void setCurrentFloorIndex(int index) {
-        this.floorIndex = index;
+        floorIndex = index;
     }
 
     public interface HallRosterListener {

@@ -9,10 +9,10 @@ public class Resident implements SearchResultItem {
     private String name;
     private String uid;
 
-    public Resident() {
+    Resident() {
     }
 
-    public Resident(String name, String uid) {
+    Resident(String name, String uid) {
         this.name = name;
         this.uid = uid;
     }
@@ -30,7 +30,7 @@ public class Resident implements SearchResultItem {
         return name;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
 

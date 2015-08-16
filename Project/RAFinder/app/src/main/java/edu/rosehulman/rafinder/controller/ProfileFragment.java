@@ -34,7 +34,7 @@ import edu.rosehulman.rafinder.model.person.Employee;
  * The Standard view of the Profile Page, with an edit button only visible to the owner of the Page.
  */
 public class ProfileFragment extends Fragment implements View.OnLongClickListener {
-    public static final int SELECT_IMAGE_REQUEST_CODE = 1;
+    private static final int SELECT_IMAGE_REQUEST_CODE = 1;
     private StudentProfileListener mListener;
     private Employee employee;
     private MainActivity mContext;
@@ -46,7 +46,7 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (mListener != null) {
-            employee = mListener.getSelectedResident();
+            employee = mListener.getSelectedEmployee();
         }
     }
 
@@ -306,6 +306,6 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
     }
 
     public interface StudentProfileListener {
-        public Employee getSelectedResident();
+        public Employee getSelectedEmployee();
     }
 }

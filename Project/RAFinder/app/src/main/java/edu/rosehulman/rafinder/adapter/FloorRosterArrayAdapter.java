@@ -28,11 +28,6 @@ public class FloorRosterArrayAdapter extends ArrayAdapter<RoomEntry> {
     }
 
 
-    @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-    }
-
     /**
      * This method overrides the default getView method to show a two line view that has a due date. It also controls
      * the displaying of icons such as flags and trophies.
@@ -41,8 +36,7 @@ public class FloorRosterArrayAdapter extends ArrayAdapter<RoomEntry> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(mLayout, parent, false);
-
+        View view = convertView != null ? convertView : inflater.inflate(mLayout, parent, false);
         TextView roomNumberText = (TextView) view.findViewById(R.id.roomNumberTextView);
 
         TextView roommate1 = (TextView) view.findViewById(R.id.roommate1);
