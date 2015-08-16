@@ -1,5 +1,7 @@
 package edu.rosehulman.rafinder;
 
+import android.util.Log;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -24,8 +26,8 @@ public class DutyRosterLoader {
         callbacks = cb;
         this.ras = ras;
         Firebase firebase = new Firebase(url + "/" + DutyRosters + "/" + hallName);
+        Log.d(ConfigKeys.LOG_TAG, "Loading Duty Roster data...");
         firebase.addListenerForSingleValueEvent(new DutyRosterValueEventListener());
-
     }
 
     private LocalDate modifyDate(LocalDate dt) {
@@ -58,6 +60,7 @@ public class DutyRosterLoader {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             roster = new DutyRoster(dataSnapshot, modifyDate(LocalDate.now()), ras);
+            Log.d(ConfigKeys.LOG_TAG, "Finished loading Duty Roster data.");
             callbacks.onDutyRosterLoadingComplete();
         }
 

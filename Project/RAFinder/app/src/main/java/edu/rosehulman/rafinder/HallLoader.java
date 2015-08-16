@@ -1,5 +1,7 @@
 package edu.rosehulman.rafinder;
 
+import android.util.Log;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -12,25 +14,30 @@ public class HallLoader {
 
     private Hall hall;
     private final HallLoaderListener callbacks;
-    public HallLoader(String url, String hallName, HallLoaderListener cb){
-        callbacks=cb;
 
-        Firebase firebase=new Firebase(url+"/"+ resHalls+"/"+hallName);
+    public HallLoader(String url, String hallName, HallLoaderListener cb) {
+        callbacks = cb;
+
+        Firebase firebase = new Firebase(url + "/" + resHalls + "/" + hallName);
+        Log.d(ConfigKeys.LOG_TAG, "Loading HallRoster data...");
         firebase.addListenerForSingleValueEvent(new HallValueEventListener());
 
     }
-    public Hall getHall(){
+
+    public Hall getHall() {
         return hall;
     }
 
     public interface HallLoaderListener {
         public void onHallRosterLoadingComplete();
     }
-    private class HallValueEventListener implements ValueEventListener{
+
+    private class HallValueEventListener implements ValueEventListener {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            hall=new Hall(dataSnapshot);
+            hall = new Hall(dataSnapshot);
+            Log.d(ConfigKeys.LOG_TAG, "Finished loading Hall data.");
             callbacks.onHallRosterLoadingComplete();
         }
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -35,15 +34,6 @@ public class HomeFragmentSubsectionMyHallRAs extends Fragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_subsection_my_hall_ras, container, false);
         final ListView listView = (ListView) view.findViewById(R.id.myHallRAsFragment);
-        listView.setOnTouchListener(new View.OnTouchListener() {
-            // Setting on Touch Listener for handling the touch inside ScrollView
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // Disallow the touch request for parent scroll on touch of child view
-                v.getParent().requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
-        });
 
         List<Employee> hallRAs = mListener.getMyHallRAs();
         EmployeeListArrayAdapter<Employee> mAdapter2 = new EmployeeListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallRAs, this);

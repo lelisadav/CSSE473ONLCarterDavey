@@ -122,6 +122,7 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
 
         loader = new EmployeeLoader(ConfigKeys.FIREBASE_ROOT_URL, this);
@@ -193,8 +194,9 @@ public class MainActivity extends Activity
             fragment = HomeFragment.newInstance();
         }
 
+        String tag = fragment.getClass().toString();
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment, fragment.getClass().toString())
+                .replace(R.id.content_frame, fragment, tag)
                 .commit();
     }
 
@@ -213,6 +215,7 @@ public class MainActivity extends Activity
 
     private void restoreActionBar() {
         ActionBar actionBar = getActionBar();
+        //noinspection deprecation
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
@@ -266,7 +269,6 @@ public class MainActivity extends Activity
 
     @Override
     public void sendFeedback(String name, String email, String body) {
-        // TODO: async task to send an email directly from the app
         Log.d(ConfigKeys.LOG_TAG, "Preparing to send feedback email...");
         String subject = getString(R.string.profile_feedback_subject_format, name);
         String ccList = ",cartersm@rose-hulman.edu";
@@ -318,8 +320,9 @@ public class MainActivity extends Activity
         mSelectedEmployee = employee;
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragment = ProfileFragment.newInstance();
+        String tag = fragment.toString();
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
+                .replace(R.id.content_frame, fragment, tag)
                 .commit();
     }
 

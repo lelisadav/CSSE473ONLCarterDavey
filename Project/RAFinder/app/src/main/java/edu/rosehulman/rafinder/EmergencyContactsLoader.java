@@ -1,5 +1,7 @@
 package edu.rosehulman.rafinder;
 
+import android.util.Log;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -31,6 +33,7 @@ public class EmergencyContactsLoader {
             }
         }
         Firebase firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + "/" + EmergencyContacts);
+        Log.d(ConfigKeys.LOG_TAG, "Loading Emergency Contact data...");
         firebase.addListenerForSingleValueEvent(new LoaderListener());
 
 
@@ -59,6 +62,7 @@ public class EmergencyContactsLoader {
                 EmergencyContact contact = new EmergencyContact(firebaseURL);
                 contactList.add(contact);
             }
+            Log.d(ConfigKeys.LOG_TAG, "Finished loading Emergency Contact data.");
             listener.onEmergencyContactsLoadingComplete();
         }
 

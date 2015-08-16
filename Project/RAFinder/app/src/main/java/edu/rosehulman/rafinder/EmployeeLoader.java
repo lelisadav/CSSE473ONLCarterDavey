@@ -27,6 +27,7 @@ public class EmployeeLoader {
     public EmployeeLoader(String url, EmployeeLoaderListener cb) {
         callbacks = cb;
         Firebase firebase = new Firebase(url + "/"+ ConfigKeys.Employees);
+        Log.d(ConfigKeys.LOG_TAG, "Loading Employee data...");
         firebase.addListenerForSingleValueEvent(new EmployeeValueEventListener());
     }
 
@@ -38,7 +39,6 @@ public class EmployeeLoader {
     private class EmployeeValueEventListener implements ValueEventListener {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            Log.d(ConfigKeys.LOG_TAG, "Loading Employee data...");
             for (DataSnapshot child : dataSnapshot.getChildren()) {
                 switch (child.getKey()) {
                 case ConfigKeys.Administrators:
