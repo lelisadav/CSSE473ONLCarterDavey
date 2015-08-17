@@ -26,17 +26,6 @@ public class Hall implements SearchResultItem {
 
     }
 
-//    public Hall(String url){
-//        floors=new HashMap<>();
-//        firebase=new Firebase(url);
-//        firebase.addListenerForSingleValueEvent(new HallListener(this));
-//    }
-
-//    public Hall(String name, Floor... floors) {
-//        this.name = name;
-//        this.floors = floors;
-//    }
-
     public String getName() {
         return name;
     }
@@ -74,25 +63,4 @@ public class Hall implements SearchResultItem {
         return floors.size();
     }
 
-//    private class HallListener implements ValueEventListener{
-//        private Hall hall;
-//
-//        public HallListener(Hall hall){
-//            this.hall=hall;
-//        }
-//
-//        @Override
-//        public void onDataChange(DataSnapshot dataSnapshot) {
-//            for (DataSnapshot floor : dataSnapshot.getChildren()){
-//                String url = ConfigKeys.FIREBASE_ROOT_URL + floor.getRef().getPath().toString();
-//                Floor flr = new Floor(url);
-//                hall.getFloors().add(flr);
-//            }
-//        }
-//
-//        @Override
-//        public void onCancelled(FirebaseError firebaseError) {
-//
-//        }
-//    }
 }
