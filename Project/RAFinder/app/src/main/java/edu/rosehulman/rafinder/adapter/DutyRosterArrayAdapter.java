@@ -1,5 +1,6 @@
 package edu.rosehulman.rafinder.adapter;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.R;
+import edu.rosehulman.rafinder.controller.EditDutyRosterDialog;
 import edu.rosehulman.rafinder.model.DutyRosterItem;
 import edu.rosehulman.rafinder.model.person.Employee;
 
@@ -21,12 +23,19 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
     private final Context mContext;
     private final List<DutyRosterItem> mObjects;
     private final int mLayout;
+    private boolean isEditable=false;
+    private DutyRosterAAListener mListener;
 
-    public DutyRosterArrayAdapter(Context context, int textViewResourceId, List<DutyRosterItem> objects) {
+    public DutyRosterArrayAdapter(Context context, int textViewResourceId, List<DutyRosterItem> objects, DutyRosterAAListener listener) {
         super(context, R.layout.fragment_duty_roster_widget, textViewResourceId, objects);
+        mListener=listener;
         mLayout = R.layout.fragment_duty_roster_widget;
         mContext = context;
         mObjects = objects;
+    }
+    public void setEditable(boolean isEditable){
+        this.isEditable=isEditable;
+        notifyDataSetChanged();
     }
 
     /**
@@ -43,16 +52,33 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
         ImageButton friButton = (ImageButton) view.findViewById(R.id.friCallButton);
         TextView satNameText = (TextView) view.findViewById(R.id.satNameTextView);
         ImageButton satButton = (ImageButton) view.findViewById(R.id.satCallButton);
-        DutyRosterItem item = super.getItem(position);
+        ImageButton editButton= (ImageButton) view.findViewById(R.id.editButton);
+        final DutyRosterItem item = super.getItem(position);
         final Employee fridayDuty = item.getFriDuty();
         final Employee saturdayDuty = item.getSatDuty();
-        LocalDate friday = item.getFriday();
+        final LocalDate friday = item.getFriday();
+        if (!isEditable){
+            editButton.setVisibility(View.GONE);
+        }
+        else {
+            editButton.setVisibility(View.VISIBLE);
+            editButton.setImageResource(R.drawable.ic_phone);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   mListener.showEditDialog(item);
+                }
+            });
+        }
         LocalDate sunday = friday.plusDays(2);
         String weekend = friday.dayOfWeek().getAsShortText() + " " +
                          friday.toString("M/d") + " - " +
                          sunday.dayOfWeek().getAsShortText() + " " +
                          sunday.toString("M/d");
         weekendText.setText(weekend);
+//        if (isEditable){
+//            weekendText
+//        }
         friNameText.setText(fridayDuty.getName());
         friNameText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,4 +108,9 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
         view.refreshDrawableState();
         return view;
     }
+
+    public interface DutyRosterAAListener{
+        public void showEditDialog(DutyRosterItem item);
+    }
+
 }

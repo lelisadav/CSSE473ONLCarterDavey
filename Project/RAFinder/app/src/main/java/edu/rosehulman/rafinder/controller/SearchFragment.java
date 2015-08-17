@@ -7,23 +7,26 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.rosehulman.rafinder.R;
+import edu.rosehulman.rafinder.adapter.SearchResultArrayAdapter;
+import edu.rosehulman.rafinder.model.person.Employee;
 
 /**
  * The search box and result list.
  */
 public class SearchFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
+    ListView listView;
+    List<Employee> items=new ArrayList<>();
+    ListAdapter mAdapter;
 
     /**
      * Use this factory method to create a new instance of this fragment using the provided parameters.
@@ -37,10 +40,7 @@ public class SearchFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -50,29 +50,33 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        mAdapter=new SearchResultArrayAdapter(getActivity(), R.layout.layout_search_item, items);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
-        //FrameLayout frameLayout= (FrameLayout) view.findViewById(R.id.searchresultsfragment);
+        final View view = inflater.inflate(R.layout.fragment_search, container, false);
+        ImageButton searchButton=(ImageButton) view.findViewById(R.id.searchButton);
+       final EditText searchField=(EditText) view.findViewById(R.id.searchField);
+        listView=(ListView) view.findViewById(R.id.searchResultsFragment);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               items= mListener.getEmployeesForName(searchField.getText().toString());
+                ((SearchResultArrayAdapter)mAdapter).refresh(items);
+                view.refreshDrawableState();
+
+            }
+        });
+//        FrameLayout frameLayout= (FrameLayout) view.findViewById(R.id.searchresultsfragment);
 //        getChildFragmentManager().beginTransaction()
 //                .replace(R.id.searchResultsFragment, results)
 //                .commit();
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -99,8 +103,7 @@ public class SearchFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+      public List<Employee> getEmployeesForName(String name);
     }
 
 }

@@ -14,7 +14,7 @@ import edu.rosehulman.rafinder.model.DutyRoster;
 import edu.rosehulman.rafinder.model.person.Employee;
 
 public class DutyRosterLoader {
-    private static final String DutyRosters = "DutyRosters";
+    protected static final String DutyRosters = "DutyRosters";
     private final List<Employee> ras;
     private DutyRoster roster;
     private final DutyRosterLoaderListener callbacks;

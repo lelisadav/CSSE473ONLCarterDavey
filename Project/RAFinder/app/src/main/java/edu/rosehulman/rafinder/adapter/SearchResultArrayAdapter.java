@@ -18,14 +18,14 @@ import edu.rosehulman.rafinder.model.SearchResultItem;
 import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.Resident;
 
-public class SearchResultArrayAdapter extends ArrayAdapter<SearchResultItem> {
+public class SearchResultArrayAdapter extends ArrayAdapter<Employee> {
     private final Context mContext;
-    private final List<SearchResultItem> mObjects;
+    private final List<Employee> mObjects;
     private final int mLayout;
 
-    public SearchResultArrayAdapter(Context context, int textViewResourceId, List<SearchResultItem> objects) {
-        super(context, R.layout.layout_search_item, textViewResourceId, objects);
-        mLayout = R.layout.layout_search_item;
+    public SearchResultArrayAdapter(Context context, int resource, List<Employee> objects) {
+        super(context, resource, objects);
+        mLayout = resource;
         mContext = context;
         mObjects = objects;
     }
@@ -39,6 +39,11 @@ public class SearchResultArrayAdapter extends ArrayAdapter<SearchResultItem> {
      * This method overrides the default getView method to show a two line view that has a due date. It also controls
      * the displaying of icons such as flags and trophies.
      */
+    public void refresh(List<Employee> newResults){
+        super.clear();
+        super.addAll(newResults);
+        notifyDataSetChanged();
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext
@@ -49,7 +54,7 @@ public class SearchResultArrayAdapter extends ArrayAdapter<SearchResultItem> {
         TextView roomText = (TextView) view.findViewById(R.id.roomTextView);
         TextView statusText = (TextView) view.findViewById(R.id.dutyStatusTextView);
         TextView statusDetailText = (TextView) view.findViewById(R.id.statusDetailTextView);
-        if (mObjects.get(position) instanceof Resident) {
+//        if (mObjects.get(position) instanceof Resident) {
             Drawable personDrawable;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 personDrawable = mContext.getResources().getDrawable(R.drawable.ic_person, mContext.getTheme());
@@ -64,20 +69,20 @@ public class SearchResultArrayAdapter extends ArrayAdapter<SearchResultItem> {
             statusDetailText.setText(emp.getStatusDetail());
             roomText.setText(String.valueOf(emp.getRoom()));
             typeIcon.setBackground(personDrawable);
-        } else {
-            Drawable hallDrawable;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                hallDrawable = mContext.getResources().getDrawable(R.drawable.ic_phone, mContext.getTheme());
-            } else {
-                hallDrawable = mContext.getResources().getDrawable(R.drawable.ic_phone);
-            }
-            Hall hall = (Hall) mObjects.get(position);
-            nameText.setVisibility(View.GONE);
-            roomText.setVisibility(View.GONE);
-            statusText.setText(hall.getName());
-            statusText.setVisibility(View.VISIBLE);
-            typeIcon.setBackground(hallDrawable);
-        }
+//        } else {
+//            Drawable hallDrawable;
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                hallDrawable = mContext.getResources().getDrawable(R.drawable.ic_phone, mContext.getTheme());
+//            } else {
+//                hallDrawable = mContext.getResources().getDrawable(R.drawable.ic_phone);
+//            }
+//            Hall hall = (Hall) mObjects.get(position);
+//            nameText.setVisibility(View.GONE);
+//            roomText.setVisibility(View.GONE);
+//            statusText.setText(hall.getName());
+//            statusText.setVisibility(View.VISIBLE);
+//            typeIcon.setBackground(hallDrawable);
+//        }
         view.refreshDrawableState();
         return view;
     }

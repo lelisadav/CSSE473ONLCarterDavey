@@ -13,11 +13,12 @@ import com.firebase.client.FirebaseError;
 import java.util.Arrays;
 
 import edu.rosehulman.rafinder.ConfigKeys;
+import edu.rosehulman.rafinder.model.SearchResultItem;
 
 /**
  * Any Residence Life employee.
  */
-public class Employee extends Resident {
+public class Employee extends Resident  implements SearchResultItem {
     private String email;
     private int floor;
     private String hall;
@@ -28,6 +29,7 @@ public class Employee extends Resident {
     private Bitmap profilePicture;
     private Firebase firebase;
     private Position position;
+    private String firebaseKey;
 
     Employee(DataSnapshot ds) {
         this(
@@ -42,6 +44,7 @@ public class Employee extends Resident {
                 convertToBitmap(ds.child(ConfigKeys.employeePicture).getValue(String.class)),
                 ds.getKey()
         );
+        firebaseKey=ds.getKey();
         firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + ds.getRef().getPath().toString());
         firebase.addChildEventListener(new ChildrenListener());
     }
@@ -100,6 +103,14 @@ public class Employee extends Resident {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public String getFirebaseKey() {
+        return firebaseKey;
+    }
+
+    public void setFirebaseKey(String firebaseKey) {
+        this.firebaseKey = firebaseKey;
     }
 
     private class ChildrenListener implements ChildEventListener {

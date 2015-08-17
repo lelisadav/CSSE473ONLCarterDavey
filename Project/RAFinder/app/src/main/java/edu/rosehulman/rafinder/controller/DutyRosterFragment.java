@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import org.joda.time.LocalDate;
@@ -71,9 +72,16 @@ public class DutyRosterFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_duty_roster, container, false);
         List<DutyRosterItem> rosterItems = new ArrayList<>();
         rosterItems.addAll(roster.getRoster().values());
-        mAdapter = new DutyRosterArrayAdapter(getActivity(), R.layout.fragment_duty_roster_widget, rosterItems);
+        mAdapter = new DutyRosterArrayAdapter(getActivity(), R.layout.fragment_duty_roster_widget, rosterItems, mListener);
         ListView listView = (ListView) view.findViewById(R.id.dutyRosterListView);
         listView.setAdapter(mAdapter);
+        ImageButton addButton=(ImageButton) view.findViewById(R.id.addDutyButton);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.showAddDialog();
+            }
+        });
         return view;
     }
 
@@ -93,7 +101,8 @@ public class DutyRosterFragment extends Fragment {
         mListener = null;
     }
 
-    public interface DutyRosterListener {
+    public interface DutyRosterListener extends DutyRosterArrayAdapter.DutyRosterAAListener, AddDutyRosterItemDialog.OnFragmentInteractionListener {
         public DutyRoster getDutyRoster();
+        public void showAddDialog();
     }
 }

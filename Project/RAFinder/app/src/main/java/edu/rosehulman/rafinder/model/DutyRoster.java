@@ -6,6 +6,7 @@ import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.rosehulman.rafinder.ConfigKeys;
@@ -57,6 +58,23 @@ public class DutyRoster {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate(){
+        Iterator<LocalDate> iter=roster.keySet().iterator();
+        LocalDate last=null;
+        while (iter.hasNext()){
+            if (last==null){
+                last=iter.next();
+            }
+            else{
+                LocalDate next=iter.next();
+                if (next.isAfter(last)){
+                    last=next;
+                }
+            }
+        }
+        return last;
     }
 
 }

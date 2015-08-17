@@ -4,6 +4,9 @@
 
     <string name="fri">Fri:</string>
     <string name="sat">Sat:</string>
+    <string name="edit_duty_roster">Edit Duty Roster</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
