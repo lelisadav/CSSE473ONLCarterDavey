@@ -1,4 +1,4 @@
-package edu.rosehulman.rafinder;
+package edu.rosehulman.rafinder.loader;
 
 import android.util.Log;
 
@@ -7,6 +7,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.model.Hall;
 
 public class HallLoader {

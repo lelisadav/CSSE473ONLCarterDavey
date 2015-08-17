@@ -38,10 +38,10 @@ public class ConfigKeys {
     public static final DateTimeFormatter formatter = DateTimeFormat.forPattern(dateFormat);
 
     // Shared prefs keys
-    static final String KEY_SHARED_PREFS = "RA_FINDER_SHARED_PREFERENCES";
-    static final String KEY_USER_TYPE = "KEY_USER_TYPE";
-    static final String KEY_RA_EMAIL = "KEY_RA_EMAIL";
-    static final String KEY_USER_EMAIL = "KEY_USER_EMAIL";
-    static final String FEEDBACK_EMAIL = "rafindernoreply@gmail.com";
-    static final String FEEDBACK_PASSWORD = "Rose-Hulman-RAFinder-201540";
+    public static final String KEY_SHARED_PREFS = "RA_FINDER_SHARED_PREFERENCES";
+    public static final String KEY_USER_TYPE = "KEY_USER_TYPE";
+    public static final String KEY_RA_EMAIL = "KEY_RA_EMAIL";
+    public static final String KEY_USER_EMAIL = "KEY_USER_EMAIL";
+    public static final String FEEDBACK_EMAIL = "rafindernoreply@gmail.com";
+    public static final String FEEDBACK_PASSWORD = "Rose-Hulman-RAFinder-201540";
 }

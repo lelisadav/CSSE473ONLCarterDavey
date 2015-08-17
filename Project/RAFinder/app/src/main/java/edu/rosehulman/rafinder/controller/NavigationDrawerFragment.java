@@ -1,4 +1,4 @@
-package edu.rosehulman.rafinder;
+package edu.rosehulman.rafinder.controller;
 
 
 import android.app.ActionBar;
@@ -20,6 +20,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import edu.rosehulman.rafinder.MainActivity;
+import edu.rosehulman.rafinder.R;
+import edu.rosehulman.rafinder.UserType;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer. See the <a

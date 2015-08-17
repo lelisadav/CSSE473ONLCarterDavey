@@ -1,4 +1,4 @@
-package edu.rosehulman.rafinder;
+package edu.rosehulman.rafinder.loader;
 
 import android.util.Log;
 
@@ -10,6 +10,7 @@ import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.model.person.Administrator;
 import edu.rosehulman.rafinder.model.person.Employee;
 import edu.rosehulman.rafinder.model.person.GraduateAssistant;

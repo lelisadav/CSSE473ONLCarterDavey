@@ -1,4 +1,4 @@
-package edu.rosehulman.rafinder;
+package edu.rosehulman.rafinder.controller;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -19,6 +19,8 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.Map;
 
+import edu.rosehulman.rafinder.ConfigKeys;
+import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.model.Login;
 
 public class RegisterActivity extends Activity {

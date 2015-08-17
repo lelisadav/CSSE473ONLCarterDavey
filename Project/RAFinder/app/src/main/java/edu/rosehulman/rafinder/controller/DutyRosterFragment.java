@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.rosehulman.rafinder.ConfigKeys;
+import edu.rosehulman.rafinder.MainActivity;
 import edu.rosehulman.rafinder.R;
+import edu.rosehulman.rafinder.UserType;
 import edu.rosehulman.rafinder.adapter.DutyRosterArrayAdapter;
 import edu.rosehulman.rafinder.model.DutyRoster;
 import edu.rosehulman.rafinder.model.DutyRosterItem;
@@ -30,8 +32,6 @@ public class DutyRosterFragment extends Fragment {
     private String hallName;
     private LocalDate date;
     private DutyRoster roster;
-
-    // TODO: differentiate Resident and non-resident; set edit controls accordingly
 
     public static DutyRosterFragment newInstance(String hall, LocalDate date) {
         DutyRosterFragment fragment = new DutyRosterFragment();
@@ -73,9 +73,13 @@ public class DutyRosterFragment extends Fragment {
         List<DutyRosterItem> rosterItems = new ArrayList<>();
         rosterItems.addAll(roster.getRoster().values());
         mAdapter = new DutyRosterArrayAdapter(getActivity(), R.layout.fragment_duty_roster_widget, rosterItems, mListener);
+        MainActivity context = (MainActivity) view.getContext();
+        if (context.getUserType().equals(UserType.RESIDENT_ASSISTANT)) {
+            mAdapter.setEditable(true);
+        }
         ListView listView = (ListView) view.findViewById(R.id.dutyRosterListView);
         listView.setAdapter(mAdapter);
-        ImageButton addButton=(ImageButton) view.findViewById(R.id.addDutyButton);
+        ImageButton addButton = (ImageButton) view.findViewById(R.id.addDutyButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +105,7 @@ public class DutyRosterFragment extends Fragment {
         mListener = null;
     }
 
-    public interface DutyRosterListener extends DutyRosterArrayAdapter.DutyRosterAAListener, AddDutyRosterItemDialog.OnFragmentInteractionListener {
+    public interface DutyRosterListener extends DutyRosterArrayAdapter.DutyRosterAAListener, AddDutyRosterItemDialog.AddDutyRosterItemListener {
         public DutyRoster getDutyRoster();
         public void showAddDialog();
     }

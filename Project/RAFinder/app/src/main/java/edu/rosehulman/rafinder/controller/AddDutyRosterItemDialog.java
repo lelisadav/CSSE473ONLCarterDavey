@@ -6,16 +6,13 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import org.joda.time.LocalDate;
@@ -25,32 +22,17 @@ import java.util.List;
 
 import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.R;
-import edu.rosehulman.rafinder.adapter.DutyRosterArrayAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AddDutyRosterItemDialog.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AddDutyRosterItemDialog#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AddDutyRosterItemDialog extends DialogFragment {
 
 
-    private OnFragmentInteractionListener mListener;
+    private AddDutyRosterItemListener mListener;
     private LocalDate last;
     EditText fri;
     EditText sat;
     Spinner spinner;
     String hall;
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
 
-     * @return A new instance of fragment AddDutyRosterItemDialog.
-     */
     public static AddDutyRosterItemDialog newInstance(LocalDate last, String hall) {
         AddDutyRosterItemDialog fragment = new AddDutyRosterItemDialog();
         Bundle args = new Bundle();
@@ -61,7 +43,6 @@ public class AddDutyRosterItemDialog extends DialogFragment {
     }
 
     public AddDutyRosterItemDialog() {
-        // Required empty public constructor
     }
 
     @Override
@@ -69,32 +50,33 @@ public class AddDutyRosterItemDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             last = LocalDate.parse(getArguments().getString("LAST", null), ConfigKeys.formatter);
-            hall=getArguments().getString("HALL");
+            hall = getArguments().getString("HALL");
         }
     }
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
-        AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view =inflater.inflate(R.layout.edit_duty_roster_dialog, null);
 
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.add_duty_roster_item_dialog, null);
+        fri = (EditText) view.findViewById(R.id.friField);
+        sat = (EditText) view.findViewById(R.id.satField);
+
         builder.setView(createView(view));
         return builder.setIcon(R.drawable.ic_phone)
                 .setTitle(getResources().getString(R.string.edit_duty_roster))
-                .setPositiveButton(R.string.ok,
+                .setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                LocalDate date= (LocalDate)spinner.getSelectedItem();
+                                LocalDate date = (LocalDate) spinner.getSelectedItem();
                                 mListener.onAddDutyRosterItem(hall, date, fri.getText().toString(), sat.getText().toString());
                             }
                         }
                 )
-                .setNegativeButton(R.string.cancel,
+                .setNegativeButton(android.R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                AddDutyRosterItemDialog.this.dismiss();
+                                dismiss();
                             }
                         }
                 )
@@ -102,9 +84,12 @@ public class AddDutyRosterItemDialog extends DialogFragment {
 
     }
 
-    private View createView(View view){
-        spinner=(Spinner) view.findViewById(R.id.spinner);
-        spinner.setAdapter(new DutyRosterSpinnerAdapter(getActivity(),android.R.layout.simple_spinner_item, android.R.layout.simple_spinner_dropdown_item, last));
+    private View createView(View view) {
+        spinner = (Spinner) view.findViewById(R.id.spinner);
+        spinner.setAdapter(new DutyRosterSpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_item,
+                android.R.layout.simple_spinner_dropdown_item,
+                last));
         return view;
     }
 
@@ -112,10 +97,10 @@ public class AddDutyRosterItemDialog extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (AddDutyRosterItemListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                                         + " must implement AddDutyRosterDialogListener");
         }
     }
 
@@ -125,29 +110,21 @@ public class AddDutyRosterItemDialog extends DialogFragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
+    public interface AddDutyRosterItemListener {
 
         public void onAddDutyRosterItem(String hall, LocalDate friday, String fri, String sat);
     }
-    private List<LocalDate> getDates(LocalDate last){
-        List<LocalDate> dates=new ArrayList<>();
-        LocalDate next= last;
-        for (int i=0; i<12; i++){
-            next=next.plusDays(7);
+
+    private List<LocalDate> getDates(LocalDate last) {
+        List<LocalDate> dates = new ArrayList<>();
+        LocalDate next = last;
+        for (int i = 0; i < 12; i++) {
+            next = next.plusDays(7);
             dates.add(next);
         }
         return dates;
     }
+
     public class DutyRosterSpinnerAdapter extends ArrayAdapter<LocalDate> {
         private final int mLayout;
         private final Context mContext;
@@ -159,24 +136,25 @@ public class AddDutyRosterItemDialog extends DialogFragment {
             super.setDropDownViewResource(dropdownresource);
             mLayout = resource;
             mContext = context;
-            mDropdown=dropdownresource;
+            mDropdown = dropdownresource;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent){
+        public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = convertView != null ? convertView : inflater.inflate(mLayout, parent, false);
-            TextView text=(TextView) view.findViewById(android.R.id.text1);
+            TextView text = (TextView) view.findViewById(android.R.id.text1);
             text.setText(getItem(position).toString(ConfigKeys.formatter));
             return view;
         }
+
         @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent){
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = convertView != null ? convertView : inflater.inflate(mDropdown, parent, false);
-            TextView text=(TextView) view.findViewById(android.R.id.text1);
+            TextView text = (TextView) view.findViewById(android.R.id.text1);
             text.setText(getItem(position).toString(ConfigKeys.formatter));
             return view;
         }

@@ -1,4 +1,4 @@
-package edu.rosehulman.rafinder;
+package edu.rosehulman.rafinder.controller;
 
 
 import android.animation.Animator;
@@ -32,6 +32,10 @@ import com.firebase.client.Firebase;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.rosehulman.rafinder.ConfigKeys;
+import edu.rosehulman.rafinder.MainActivity;
+import edu.rosehulman.rafinder.R;
+import edu.rosehulman.rafinder.UserType;
 import edu.rosehulman.rafinder.model.Login;
 
 /**

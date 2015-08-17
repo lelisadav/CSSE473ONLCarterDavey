@@ -9,7 +9,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import edu.rosehulman.rafinder.ConfigKeys;
-import edu.rosehulman.rafinder.LoginActivity;
+import edu.rosehulman.rafinder.controller.LoginActivity;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.UserType;
 
@@ -87,12 +87,12 @@ public class Login {
          * On failed login, displays an error message
          */
         public void onAuthenticationError(FirebaseError firebaseError) {
-            if (firebaseError.getCode() == FirebaseError.INVALID_PASSWORD) {
+            if (firebaseError.getCode() == FirebaseError.INVALID_EMAIL) {
                 mActivity.showError(mActivity.getString(R.string.error_invalid_email));
             } else if (firebaseError.getCode() == FirebaseError.INVALID_PASSWORD) {
-                mActivity.showError(mActivity.getString(R.string.error_invalid_password));
+                mActivity.showError(mActivity.getString(R.string.error_incorrect_password));
             } else {
-                mActivity.showError(mActivity.getString(R.string.error_message));
+                Log.w(ConfigKeys.LOG_TAG, "Caught firebase error: " + firebaseError.getMessage());
             }
         }
     }

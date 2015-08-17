@@ -4,8 +4,6 @@
     android:orientation="vertical"
     tools:context="edu.rosehulman.rafinder.controller.AddDutyRosterItemDialog">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
