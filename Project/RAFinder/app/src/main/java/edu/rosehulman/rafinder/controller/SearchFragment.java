@@ -46,9 +46,9 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
-        ImageButton searchButton = (ImageButton) view.findViewById(R.id.searchButton);
-        final EditText searchField = (EditText) view.findViewById(R.id.searchField);
-        listView = (ListView) view.findViewById(R.id.searchResultsFragment);
+        ImageButton searchButton=(ImageButton) view.findViewById(R.id.searchButton);
+       final EditText searchField=(EditText) view.findViewById(R.id.searchField);
+        listView=(ListView) view.findViewById(R.id.searchResultsFragment);
         listView.setAdapter(mAdapter);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override

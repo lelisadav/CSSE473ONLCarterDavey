@@ -60,7 +60,7 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
             editButton.setVisibility(View.GONE);
         } else {
             editButton.setVisibility(View.VISIBLE);
-            editButton.setImageResource(R.drawable.ic_phone);
+            editButton.setBackgroundResource(R.mipmap.ic_edit);
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

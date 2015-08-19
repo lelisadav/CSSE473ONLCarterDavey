@@ -30,25 +30,6 @@
         android:text="@string/res_hall_default"
         android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/hallNameTextView"
-        android:layout_toEndOf="@+id/hallNameTextView"
-        android:layout_toRightOf="@+id/hallNameTextView"
-        android:text="@string/dash"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_toEndOf="@+id/textView2"
-        android:layout_toRightOf="@+id/textView2"
-        android:text="@string/month_default"
-        android:textSize="20sp" />
 
     <ListView
         android:id="@+id/dutyRosterListView"
@@ -64,5 +45,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:background="@mipmap/ic_edit" />
+
 
 </RelativeLayout>

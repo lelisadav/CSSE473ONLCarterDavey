@@ -486,6 +486,14 @@ public class MainActivity extends Activity
         newFragment.show(getFragmentManager(), "addRoster");
     }
 
+    @Override
+    public boolean canEdit() {
+        if (mUserType==UserType.RESIDENT){
+            return false;
+        };
+        return true;
+    }
+
 
     @Override
     public void onEditConfirm(String fri, String sat) {

@@ -17,7 +17,7 @@
             android:id="@+id/weekendTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
             android:text="@string/dates_default"
             android:textSize="25sp"
             android:textStyle="bold"

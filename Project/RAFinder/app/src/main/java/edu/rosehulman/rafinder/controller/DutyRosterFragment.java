@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.joda.time.LocalDate;
 
@@ -72,20 +73,33 @@ public class DutyRosterFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_duty_roster, container, false);
         List<DutyRosterItem> rosterItems = new ArrayList<>();
         rosterItems.addAll(roster.getRoster().values());
+        TextView hallName = (TextView) view.findViewById(R.id.hallNameTextView);
+        hallName.setText(mListener.getMyHall());
         mAdapter = new DutyRosterArrayAdapter(getActivity(), R.layout.fragment_duty_roster_widget, rosterItems, mListener);
         MainActivity context = (MainActivity) view.getContext();
+        ImageButton addButton = (ImageButton) view.findViewById(R.id.addDutyButton);
         if (context.getUserType().equals(UserType.RESIDENT_ASSISTANT)) {
             mAdapter.setEditable(true);
+
+
+
+
+
+            addButton.setBackgroundResource(R.mipmap.ic_edit);
+            mAdapter.setEditable(true);
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.showAddDialog();
+                }
+            });
+            addButton.setVisibility(View.VISIBLE);
+        }
+        else{
+            addButton.setVisibility(View.GONE);
         }
         ListView listView = (ListView) view.findViewById(R.id.dutyRosterListView);
         listView.setAdapter(mAdapter);
-        ImageButton addButton = (ImageButton) view.findViewById(R.id.addDutyButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.showAddDialog();
-            }
-        });
         return view;
     }
 
@@ -107,6 +121,7 @@ public class DutyRosterFragment extends Fragment {
 
     public interface DutyRosterListener extends DutyRosterArrayAdapter.DutyRosterAAListener, AddDutyRosterItemDialog.AddDutyRosterItemListener {
         public DutyRoster getDutyRoster();
+        public String getMyHall();
         public void showAddDialog();
     }
 }
