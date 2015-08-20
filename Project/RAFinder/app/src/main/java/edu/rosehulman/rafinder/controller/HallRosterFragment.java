@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.FloorRosterArrayAdapter;
+import edu.rosehulman.rafinder.model.Floor;
 import edu.rosehulman.rafinder.model.Hall;
 import edu.rosehulman.rafinder.model.RoomEntry;
 
@@ -27,7 +29,7 @@ public class HallRosterFragment extends Fragment
 
     private int floorIndex; //not necessarily the floor number
     private String floorName;
-    private List<RoomEntry> rooms;
+    private List<RoomEntry> rooms = new ArrayList<>();
     private HallRosterListener mListener;
     private ListAdapter mAdapter;
 
@@ -53,7 +55,10 @@ public class HallRosterFragment extends Fragment
         }
         if (mListener != null) {
             hall = mListener.getHall();
-            rooms = hall.getFloor(floorName).getRooms();
+            Floor floor = hall.getFloor(floorName);
+            if (floor != null) {
+                rooms = floor.getRooms();
+            }
         }
 
         mAdapter = new FloorRosterArrayAdapter(getActivity(), android.R.id.text1, rooms);
