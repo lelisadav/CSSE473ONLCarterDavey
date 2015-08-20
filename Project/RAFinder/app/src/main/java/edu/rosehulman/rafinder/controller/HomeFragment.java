@@ -48,8 +48,8 @@ public class HomeFragment extends Fragment
     }
 
     @Override
-    public void switchToProfile(Employee ra) {
-        mListener.switchToProfile(ra);
+    public void switchToProfile(Employee employee) {
+        mListener.switchToProfile(employee);
     }
 
     public interface HomeListener {

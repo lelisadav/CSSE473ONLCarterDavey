@@ -17,6 +17,7 @@ import edu.rosehulman.rafinder.model.person.GraduateAssistant;
 import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 import edu.rosehulman.rafinder.model.person.SophomoreAdvisor;
 
+@SuppressWarnings("unused")
 public class EmployeeLoader {
     private List<Employee> admins = new ArrayList<>();
     private List<Employee> ras = new ArrayList<>();
@@ -27,7 +28,7 @@ public class EmployeeLoader {
 
     public EmployeeLoader(String url, EmployeeLoaderListener cb) {
         callbacks = cb;
-        Firebase firebase = new Firebase(url + "/"+ ConfigKeys.Employees);
+        Firebase firebase = new Firebase(url + "/" + ConfigKeys.Employees);
         Log.d(ConfigKeys.LOG_TAG, "Loading Employee data...");
         firebase.addListenerForSingleValueEvent(new EmployeeValueEventListener());
     }

@@ -22,17 +22,19 @@ package edu.rosehulman.rafinder;
 
 
 import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.security.Provider;
 
 /**
- * Borrowed from <a href=http://stackoverflow.com/questions/2020088/sending-email-in-android-using-javamail-api-without-using-the-default-built-in-a/2033124#2033124>This StackOverflowArticle</a>
+ * Borrowed from <a href=http://stackoverflow.com/questions/2020088/sending-email-in-android-using-javamail-api-without-using-the-default-built-in-a/2033124#2033124>This
+ * StackOverflowArticle</a>
  * For sending email directly from the app.
  */
 public final class JSSEProvider extends Provider {
 
     public JSSEProvider() {
         super("HarmonyJSSE", 1.0, "Harmony JSSE Provider");
-        AccessController.doPrivileged(new java.security.PrivilegedAction<Void>() {
+        AccessController.doPrivileged(new PrivilegedAction<Void>() {
             public Void run() {
                 put("SSLContext.TLS",
                         "org.apache.harmony.xnet.provider.jsse.SSLContextImpl");

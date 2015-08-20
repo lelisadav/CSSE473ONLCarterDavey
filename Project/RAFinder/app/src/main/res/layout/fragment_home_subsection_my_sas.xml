@@ -22,7 +22,7 @@
             android:textStyle="bold" />
 
         <ToggleButton
-            android:id="@+id/mySAexpander"
+            android:id="@+id/mySAExpander"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"

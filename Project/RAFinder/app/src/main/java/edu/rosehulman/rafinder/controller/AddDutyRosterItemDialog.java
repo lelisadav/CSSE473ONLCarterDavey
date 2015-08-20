@@ -28,10 +28,10 @@ public class AddDutyRosterItemDialog extends DialogFragment {
 
     private AddDutyRosterItemListener mListener;
     private LocalDate last;
-    EditText fri;
-    EditText sat;
-    Spinner spinner;
-    String hall;
+    private EditText fri;
+    private EditText sat;
+    private Spinner spinner;
+    private String hall;
 
     public static AddDutyRosterItemDialog newInstance(LocalDate last, String hall) {
         AddDutyRosterItemDialog fragment = new AddDutyRosterItemDialog();
@@ -58,7 +58,7 @@ public class AddDutyRosterItemDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.add_duty_roster_item_dialog, null);
+        View view = inflater.inflate(R.layout.dialog_add_duty_roster_item, null);
         fri = (EditText) view.findViewById(R.id.friField);
         sat = (EditText) view.findViewById(R.id.satField);
 
@@ -131,12 +131,12 @@ public class AddDutyRosterItemDialog extends DialogFragment {
         private final int mDropdown;
 
 
-        public DutyRosterSpinnerAdapter(Context context, int resource, int dropdownresource, LocalDate last) {
+        public DutyRosterSpinnerAdapter(Context context, int resource, int dropdownResource, LocalDate last) {
             super(context, resource, getDates(last));
-            super.setDropDownViewResource(dropdownresource);
+            super.setDropDownViewResource(dropdownResource);
             mLayout = resource;
             mContext = context;
-            mDropdown = dropdownresource;
+            mDropdown = dropdownResource;
         }
 
         @Override

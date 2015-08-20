@@ -21,8 +21,8 @@ public class EditDutyRosterDialog extends DialogFragment {
     private LocalDate friday;
     private String friDuty;
     private String satDuty;
-    EditText fri;
-    EditText sat;
+    private EditText fri;
+    private EditText sat;
 
     public static EditDutyRosterDialog newInstance(LocalDate friday, String friDuty, String satDuty) {
         EditDutyRosterDialog fragment = new EditDutyRosterDialog();
@@ -52,7 +52,7 @@ public class EditDutyRosterDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.edit_duty_roster_dialog, null);
+        View view = inflater.inflate(R.layout.dialog_edit_duty_roster, null);
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout

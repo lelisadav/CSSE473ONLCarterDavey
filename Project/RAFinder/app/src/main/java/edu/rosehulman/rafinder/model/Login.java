@@ -9,15 +9,14 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import edu.rosehulman.rafinder.ConfigKeys;
-import edu.rosehulman.rafinder.controller.LoginActivity;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.UserType;
+import edu.rosehulman.rafinder.controller.LoginActivity;
 
 
 public class Login {
     // Resident Firebase key
     private static final String myRA = "myRA";
-
     private static final String Residents = "Residents";
 
     private final Firebase mFirebaseRef;
@@ -72,7 +71,7 @@ public class Login {
         /**
          * Creates a new AuthResultHandler
          */
-        public AuthResultHandler(String provider) {
+        private AuthResultHandler(String provider) {
             this.provider = provider;
         }
 
@@ -125,7 +124,7 @@ public class Login {
     private class EmployeeListener implements ValueEventListener {
         private final String uid;
 
-        public EmployeeListener(String uid) {
+        private EmployeeListener(String uid) {
             this.uid = uid;
         }
 
@@ -140,16 +139,20 @@ public class Login {
             if (dataSnapshot.child(ConfigKeys.Administrators).hasChild(uid)) {
                 mUserType = UserType.ADMINISTRATOR;
                 table = dataSnapshot.child(ConfigKeys.Administrators);
-            } else if (dataSnapshot.child(ConfigKeys.ResidentAssistants).hasChild(uid)) {
+            }
+            else if (dataSnapshot.child(ConfigKeys.ResidentAssistants).hasChild(uid)) {
                 mUserType = UserType.RESIDENT_ASSISTANT;
                 table = dataSnapshot.child(ConfigKeys.ResidentAssistants);
-            } else if (dataSnapshot.child(ConfigKeys.SophomoreAdvisors).hasChild(uid)) {
+            }
+            else if (dataSnapshot.child(ConfigKeys.SophomoreAdvisors).hasChild(uid)) {
                 mUserType = UserType.SOPHOMORE_ADVISOR;
                 table = dataSnapshot.child(ConfigKeys.SophomoreAdvisors);
-            } else if (dataSnapshot.child(ConfigKeys.GraduateAssistants).hasChild(uid)) {
+            }
+            else if (dataSnapshot.child(ConfigKeys.GraduateAssistants).hasChild(uid)) {
                 mUserType = UserType.GRADUATE_ASSISTANT;
                 table = dataSnapshot.child(ConfigKeys.GraduateAssistants);
-            } else {
+            }
+            else {
                 mFirebaseRef.child(Residents).addListenerForSingleValueEvent(new ResidentListener(uid));
                 Log.d(ConfigKeys.LOG_TAG, "User <" + uid + "> not found in employees");
                 return;

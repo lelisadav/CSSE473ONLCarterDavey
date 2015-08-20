@@ -17,65 +17,59 @@ import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 import edu.rosehulman.rafinder.model.person.SophomoreAdvisor;
 
 public class FloorRosterArrayAdapter extends ArrayAdapter<RoomEntry> {
+    public static final int MAX_ROOMMATES = 5;
     private final Context mContext;
     private final int mLayout;
 
-
     public FloorRosterArrayAdapter(Context context, int textViewResourceId, List<RoomEntry> objects) {
-        super(context, R.layout.entry_floor_roster, textViewResourceId, objects);
-        mLayout = R.layout.entry_floor_roster;
+        super(context, R.layout.layout_floor_roster_item, textViewResourceId, objects);
+        mLayout = R.layout.layout_floor_roster_item;
         mContext = context;
     }
 
-
-    /**
-     * This method overrides the default getView method to show a two line view that has a due date. It also controls
-     * the displaying of icons such as flags and trophies.
-     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = convertView != null ? convertView : inflater.inflate(mLayout, parent, false);
-        TextView roomNumberText = (TextView) view.findViewById(R.id.roomNumberTextView);
+        TextView roomNumberTextView = (TextView) view.findViewById(R.id.roomNumberTextView);
 
-        TextView roommate1 = (TextView) view.findViewById(R.id.roommate1);
-        TextView roommate2 = (TextView) view.findViewById(R.id.roommate2);
-        TextView roommate3 = (TextView) view.findViewById(R.id.roommate3);
-        TextView roommate4 = (TextView) view.findViewById(R.id.roommate4);
-        TextView roommate5 = (TextView) view.findViewById(R.id.roommate5);
-
-        TextView[] textViews = { roommate1, roommate2, roommate3, roommate4, roommate5 };
+        TextView[] roommates = {
+                (TextView) view.findViewById(R.id.roommate1),
+                (TextView) view.findViewById(R.id.roommate2),
+                (TextView) view.findViewById(R.id.roommate3),
+                (TextView) view.findViewById(R.id.roommate4),
+                (TextView) view.findViewById(R.id.roommate5)
+        };
         RoomEntry item = super.getItem(position);
         if (item instanceof RoomEntry.Lobby) {
-            for (TextView textView : textViews) {
+            for (TextView textView : roommates) {
                 textView.setVisibility(View.INVISIBLE);
-                roomNumberText.setTextSize(42);
             }
+            roomNumberTextView.setTextSize(42);
         } else {
             final Resident[] residents = item.getResidents();
             int numResidents = residents.length;
-            for (int i = 0; i < 5; i++) {
-
+            for (int i = 0; i < MAX_ROOMMATES; i++) {
                 if (numResidents <= i) {
-                    textViews[i].setVisibility(View.INVISIBLE);
+                    roommates[i].setVisibility(View.INVISIBLE);
                 } else {
-                    textViews[i].setText(residents[i].getName());
+                    roommates[i].setText(residents[i].getName());
                     if (residents[i] instanceof ResidentAssistant) {
-                        textViews[i].setTextColor(mContext.getResources().getColor(R.color.red));
-                        textViews[i].setText(textViews[i].getText() + " (RA)");
+                        roommates[i].setTextColor(mContext.getResources().getColor(R.color.red));
+                        roommates[i].setText(roommates[i].getText() + " (RA)");
                     } else if (residents[i] instanceof SophomoreAdvisor) {
-                        textViews[i].setTextColor(mContext.getResources().getColor(R.color.blue));
-                        textViews[i].setText(textViews[i].getText() + " (SA)");
+                        roommates[i].setTextColor(mContext.getResources().getColor(R.color.blue));
+                        roommates[i].setText(roommates[i].getText() + " (SA)");
                     } else if (residents[i] instanceof GraduateAssistant) {
-                        textViews[i].setTextColor(mContext.getResources().getColor(R.color.green));
-                        textViews[i].setText(textViews[i].getText() + " (GA)");
+                        roommates[i].setTextColor(mContext.getResources().getColor(R.color.green));
+                        roommates[i].setText(roommates[i].getText() + " (GA)");
                     }
                 }
-
             }
         }
-        roomNumberText.setText(item.getRoomNumber());
+
+        roomNumberTextView.setText(item.getRoomNumber());
         view.refreshDrawableState();
         return view;
     }

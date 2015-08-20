@@ -15,6 +15,7 @@ import edu.rosehulman.rafinder.model.DutyRoster;
 import edu.rosehulman.rafinder.model.person.EmergencyContact;
 import edu.rosehulman.rafinder.model.person.Employee;
 
+@SuppressWarnings("unused")
 public class EmergencyContactsLoader {
     private static final String EmergencyContacts = "EmergencyContacts";
     private List<EmergencyContact> contactList = new ArrayList<>();
@@ -36,8 +37,6 @@ public class EmergencyContactsLoader {
         Firebase firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + "/" + EmergencyContacts);
         Log.d(ConfigKeys.LOG_TAG, "Loading Emergency Contact data...");
         firebase.addListenerForSingleValueEvent(new LoaderListener());
-
-
     }
 
     public List<EmergencyContact> getContactList() {

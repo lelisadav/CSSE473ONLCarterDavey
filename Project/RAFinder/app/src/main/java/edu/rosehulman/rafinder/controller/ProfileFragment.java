@@ -31,7 +31,7 @@ import edu.rosehulman.rafinder.UserType;
 import edu.rosehulman.rafinder.model.person.Employee;
 
 /**
- * The Standard view of the Profile Page, with an edit button only visible to the owner of the Page.
+ * The Profile Page.
  */
 public class ProfileFragment extends Fragment implements View.OnLongClickListener {
     private static final int SELECT_IMAGE_REQUEST_CODE = 1;
@@ -55,8 +55,7 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         mContext = (MainActivity) view.getContext();
@@ -86,8 +85,8 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
 
         // Set editable fields based on MainActivity.getUserType
         if (!mContext.getUserType().equals(UserType.RESIDENT)
-                && mContext.getUser() != null
-                && employee.equals(mContext.getUser())) {
+            && mContext.getUser() != null
+            && employee.equals(mContext.getUser())) {
 
             phoneTextView.setOnLongClickListener(this);
             statusTextView.setOnLongClickListener(this);
@@ -345,7 +344,6 @@ public class ProfileFragment extends Fragment implements View.OnLongClickListene
 
     public interface StudentProfileListener {
         public Employee getSelectedEmployee();
-
         public void sendFeedback(String name, String email, String body);
     }
 }

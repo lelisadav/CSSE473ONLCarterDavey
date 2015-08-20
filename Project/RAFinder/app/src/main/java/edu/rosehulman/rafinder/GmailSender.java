@@ -19,14 +19,14 @@ import eu.ocathain.javax.activation.DataHandler;
 import eu.ocathain.javax.activation.DataSource;
 
 /**
- * Borrowed from <a href=http://stackoverflow.com/questions/2020088/sending-email-in-android-using-javamail-api-without-using-the-default-built-in-a/2033124#2033124>This StackOverflowArticle</a>
+ * Borrowed from <a href=http://stackoverflow.com/questions/2020088/sending-email-in-android-using-javamail-api-without-using-the-default-built-in-a/2033124#2033124>This
+ * StackOverflowArticle</a>
  * For sending email directly from the app.
  */
 public class GmailSender extends Authenticator {
-    private String mailhost = "smtp.gmail.com";
-    private String user;
-    private String password;
-    private Session session;
+    private final String user;
+    private final String password;
+    private final Session session;
 
     static {
         Security.addProvider(new JSSEProvider());
@@ -38,7 +38,7 @@ public class GmailSender extends Authenticator {
 
         Properties props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");
-        props.setProperty("mail.host", mailhost);
+        props.setProperty("mail.host", "smtp.gmail.com");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
         props.put("mail.smtp.socketFactory.port", "465");
@@ -54,7 +54,7 @@ public class GmailSender extends Authenticator {
         return new PasswordAuthentication(user, password);
     }
 
-    public synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
+    public synchronized void sendMail(String subject, String body, String sender, String recipients) {
         try {
             MimeMessage message = new MimeMessage(session);
             DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
@@ -67,13 +67,14 @@ public class GmailSender extends Authenticator {
                 message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));
             }
             Transport.send(message);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
 
-    public class ByteArrayDataSource implements DataSource {
-        private byte[] data;
+    @SuppressWarnings("unused")
+    private class ByteArrayDataSource implements DataSource {
+        private final byte[] data;
         private String type;
 
         public ByteArrayDataSource(byte[] data, String type) {

@@ -29,9 +29,6 @@ import edu.rosehulman.rafinder.model.DutyRosterItem;
  */
 public class DutyRosterFragment extends Fragment {
     private DutyRosterListener mListener;
-    private DutyRosterArrayAdapter mAdapter;
-    private String hallName;
-    private LocalDate date;
     private DutyRoster roster;
 
     public static DutyRosterFragment newInstance(String hall, LocalDate date) {
@@ -49,19 +46,6 @@ public class DutyRosterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            hallName = savedInstanceState.getString(ConfigKeys.HALL, null);
-            String dateStr = savedInstanceState.getString(ConfigKeys.DATE, null);
-            if (dateStr != null) {
-                date = LocalDate.parse(dateStr, ConfigKeys.formatter);
-            }
-        } else if (getArguments() != null) {
-            hallName = getArguments().getString(ConfigKeys.HALL, null);
-            String dateStr = getArguments().getString(ConfigKeys.DATE, null);
-            if (dateStr != null) {
-                date = LocalDate.parse(dateStr, ConfigKeys.formatter);
-            }
-        }
         if (mListener != null) {
             roster = mListener.getDutyRoster();
         }
@@ -75,16 +59,11 @@ public class DutyRosterFragment extends Fragment {
         rosterItems.addAll(roster.getRoster().values());
         TextView hallName = (TextView) view.findViewById(R.id.hallNameTextView);
         hallName.setText(mListener.getMyHall());
-        mAdapter = new DutyRosterArrayAdapter(getActivity(), R.layout.fragment_duty_roster_widget, rosterItems, mListener);
+        DutyRosterArrayAdapter mAdapter = new DutyRosterArrayAdapter(getActivity(), R.layout.fragment_duty_roster_widget, rosterItems, mListener);
         MainActivity context = (MainActivity) view.getContext();
         ImageButton addButton = (ImageButton) view.findViewById(R.id.addDutyButton);
         if (context.getUserType().equals(UserType.RESIDENT_ASSISTANT)) {
             mAdapter.setEditable(true);
-
-
-
-
-
             addButton.setBackgroundResource(R.mipmap.ic_edit);
             mAdapter.setEditable(true);
             addButton.setOnClickListener(new View.OnClickListener() {
@@ -94,8 +73,7 @@ public class DutyRosterFragment extends Fragment {
                 }
             });
             addButton.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             addButton.setVisibility(View.GONE);
         }
         ListView listView = (ListView) view.findViewById(R.id.dutyRosterListView);
@@ -119,7 +97,9 @@ public class DutyRosterFragment extends Fragment {
         mListener = null;
     }
 
-    public interface DutyRosterListener extends DutyRosterArrayAdapter.DutyRosterAAListener, AddDutyRosterItemDialog.AddDutyRosterItemListener {
+    public interface DutyRosterListener
+            extends DutyRosterArrayAdapter.DutyRosterAAListener,
+            AddDutyRosterItemDialog.AddDutyRosterItemListener {
         public DutyRoster getDutyRoster();
         public String getMyHall();
         public void showAddDialog();

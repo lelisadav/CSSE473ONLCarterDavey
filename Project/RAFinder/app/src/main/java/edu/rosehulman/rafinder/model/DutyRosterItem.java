@@ -13,6 +13,7 @@ import edu.rosehulman.rafinder.model.person.ResidentAssistant;
 /**
  * A single item in the Duty Roster.
  */
+@SuppressWarnings("unused")
 public class DutyRosterItem {
     // DutyRosterItem Firebase keys
     public static final String fridayKey = "friday";
@@ -23,10 +24,10 @@ public class DutyRosterItem {
     private Employee satDuty;
     private LocalDate friday;
 
-    private String url;
+    private final String url;
 
     public DutyRosterItem(DataSnapshot ds, List<Employee> ras) {
-        url=ConfigKeys.FIREBASE_ROOT_URL+ds.getRef().getPath().toString();
+        url = ConfigKeys.FIREBASE_ROOT_URL + ds.getRef().getPath().toString();
         friday = LocalDate.parse(ds.getKey(), ConfigKeys.formatter);
         this.ras = ras;
         for (DataSnapshot child : ds.getChildren()) {
@@ -37,7 +38,8 @@ public class DutyRosterItem {
             }
         }
     }
-    public String getURL(){
+
+    public String getURL() {
         return url;
     }
 

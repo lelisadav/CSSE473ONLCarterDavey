@@ -19,17 +19,18 @@ import edu.rosehulman.rafinder.model.person.Employee;
 
 public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
     private final Context mContext;
-    private final List<DutyRosterItem> mObjects;
     private final int mLayout;
     private boolean isEditable = false;
-    private DutyRosterAAListener mListener;
+    private final DutyRosterAAListener mListener;
 
-    public DutyRosterArrayAdapter(Context context, int textViewResourceId, List<DutyRosterItem> objects, DutyRosterAAListener listener) {
+    public DutyRosterArrayAdapter(Context context,
+                                  int textViewResourceId,
+                                  List<DutyRosterItem> objects,
+                                  DutyRosterAAListener listener) {
         super(context, R.layout.fragment_duty_roster_widget, textViewResourceId, objects);
         mListener = listener;
         mLayout = R.layout.fragment_duty_roster_widget;
         mContext = context;
-        mObjects = objects;
     }
 
     public void setEditable(boolean isEditable) {
@@ -74,9 +75,6 @@ public class DutyRosterArrayAdapter extends ArrayAdapter<DutyRosterItem> {
                          sunday.dayOfWeek().getAsShortText() + " " +
                          sunday.toString("M/d");
         weekendText.setText(weekend);
-//        if (isEditable){
-//            weekendText
-//        }
         friNameText.setText(fridayDuty.getName());
         friNameText.setOnClickListener(new View.OnClickListener() {
             @Override

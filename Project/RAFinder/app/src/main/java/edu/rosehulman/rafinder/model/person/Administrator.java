@@ -6,6 +6,7 @@ import com.firebase.client.Firebase;
 /**
  * A Residence Life administrator (an employee of the Office of Residence Life)
  */
+@SuppressWarnings("unused")
 public class Administrator extends Employee {
     public Administrator(DataSnapshot ds) {
         super(ds);

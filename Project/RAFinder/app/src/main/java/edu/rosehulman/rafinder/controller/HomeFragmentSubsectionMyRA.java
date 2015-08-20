@@ -1,13 +1,11 @@
 package edu.rosehulman.rafinder.controller;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -18,9 +16,7 @@ import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.EmployeeListArrayAdapter;
 import edu.rosehulman.rafinder.model.person.Employee;
 
-public class HomeFragmentSubsectionMyRA extends Fragment
-        implements EmployeeListArrayAdapter.EmployeeListArrayAdapterListener {
-
+public class HomeFragmentSubsectionMyRA extends HomeFragmentSubsection {
     private HomeMyRAListener mListener;
 
     public static HomeFragmentSubsectionMyRA newInstance() {
@@ -31,24 +27,15 @@ public class HomeFragmentSubsectionMyRA extends Fragment
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_subsection_my_ra, container, false);
         final ListView listView = (ListView) view.findViewById(R.id.myRAView);
 
         List<Employee> myRAs = mListener.getMyRAs();
-
         if (myRAs.size() > 1) {
             ((TextView) view.findViewById(R.id.titleTextView)).setText(getString(R.string.my_ras));
         }
-
-        EmployeeListArrayAdapter<Employee> mAdapter2 = new EmployeeListArrayAdapter<>(
+        EmployeeListArrayAdapter mAdapter2 = new EmployeeListArrayAdapter(
                 getActivity(),
                 R.layout.fragment_home,
                 myRAs,
@@ -56,7 +43,7 @@ public class HomeFragmentSubsectionMyRA extends Fragment
         listView.setAdapter(mAdapter2);
         setListViewHeightBasedOnChildren(listView);
 
-        final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.myRAexpander);
+        final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.myRAExpander);
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -91,38 +78,12 @@ public class HomeFragmentSubsectionMyRA extends Fragment
         mListener = null;
     }
 
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            return;
-        }
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0) {
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            }
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
-
-
     @Override
-    public void switchToProfile(Employee ra) {
-        mListener.switchToProfile(ra);
+    public void switchToProfile(Employee employee) {
+        mListener.switchToProfile(employee);
     }
 
-    public interface HomeMyRAListener {
-        public void switchToProfile(Employee res);
+    public interface HomeMyRAListener extends HomeSubsectionListener {
         public List<Employee> getMyRAs();
     }
 

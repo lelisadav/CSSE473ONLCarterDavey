@@ -33,5 +33,6 @@
         android:layout_marginTop="5dp"
         android:layout_weight=".15"
         android:background="@drawable/btn_default_small_normal"
+        android:contentDescription="@string/content_description_profile_nav"
         android:src="@drawable/ic_menu_moreoverflow_normal_holo_light_rotated" />
 </LinearLayout>

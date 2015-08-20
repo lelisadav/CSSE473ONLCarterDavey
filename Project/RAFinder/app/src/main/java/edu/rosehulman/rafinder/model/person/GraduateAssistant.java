@@ -4,8 +4,9 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 
 /**
- * A GA (Like an RA, but with somewhat limited privileges (FIXME?).
+ * A GA (Like an RA, but with somewhat limited privileges.
  */
+@SuppressWarnings("unused")
 public class GraduateAssistant extends Employee {
     public GraduateAssistant(DataSnapshot ds) {
         super(ds);

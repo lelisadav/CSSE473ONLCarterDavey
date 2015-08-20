@@ -6,6 +6,7 @@ import com.firebase.client.Firebase;
 /**
  * An RA, who has the broadest access to the app.
  */
+@SuppressWarnings("unused")
 public class ResidentAssistant extends Employee {
     public ResidentAssistant(DataSnapshot ds) {
         super(ds);

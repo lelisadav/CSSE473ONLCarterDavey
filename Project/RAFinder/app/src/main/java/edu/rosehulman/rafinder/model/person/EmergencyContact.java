@@ -1,5 +1,7 @@
 package edu.rosehulman.rafinder.model.person;
 
+import android.support.annotation.NonNull;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -82,7 +84,7 @@ public class EmergencyContact implements Comparable<EmergencyContact> {
     //0 ==
     //1 this > another
     @Override
-    public int compareTo(EmergencyContact another) {
+    public int compareTo(@NonNull EmergencyContact another) {
         if (priority.ordinal() > another.getPriority().ordinal()) {
             return -1;
         } else if (priority.ordinal() < another.getPriority().ordinal()) {
@@ -91,7 +93,7 @@ public class EmergencyContact implements Comparable<EmergencyContact> {
         return 0;
     }
 
-    public class EmergencyContactListener implements ValueEventListener {
+    private class EmergencyContactListener implements ValueEventListener {
         private final EmergencyContact contact;
 
         public EmergencyContactListener(EmergencyContact emergencyContact) {
@@ -109,13 +111,12 @@ public class EmergencyContact implements Comparable<EmergencyContact> {
                 } else if (child.getKey().equals(ecPhone)) {
                     contact.setPhone(child.getValue(String.class));
                 }
-
             }
         }
 
         @Override
         public void onCancelled(FirebaseError firebaseError) {
-
+            // ignored
         }
     }
 
@@ -125,6 +126,7 @@ public class EmergencyContact implements Comparable<EmergencyContact> {
                 email,
                 phone,
                 position,
-                priority).toString();
+                priority
+        ).toString();
     }
 }

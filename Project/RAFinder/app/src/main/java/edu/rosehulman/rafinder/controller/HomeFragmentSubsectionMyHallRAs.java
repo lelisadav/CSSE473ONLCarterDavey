@@ -1,13 +1,11 @@
 package edu.rosehulman.rafinder.controller;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ToggleButton;
 
@@ -17,10 +15,10 @@ import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.adapter.EmployeeListArrayAdapter;
 import edu.rosehulman.rafinder.model.person.Employee;
 
-public class HomeFragmentSubsectionMyHallRAs extends Fragment
+public class HomeFragmentSubsectionMyHallRAs extends HomeFragmentSubsection
         implements EmployeeListArrayAdapter.EmployeeListArrayAdapterListener {
 
-    private HomeMyHallListener mListener;
+    private HomeMyHallRAsListener mListener;
 
     public static HomeFragmentSubsectionMyHallRAs newInstance() {
         return new HomeFragmentSubsectionMyHallRAs();
@@ -30,16 +28,20 @@ public class HomeFragmentSubsectionMyHallRAs extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_subsection_my_hall_ras, container, false);
         final ListView listView = (ListView) view.findViewById(R.id.myHallRAsFragment);
 
         List<Employee> hallRAs = mListener.getMyHallRAs();
-        EmployeeListArrayAdapter<Employee> mAdapter2 = new EmployeeListArrayAdapter<>(getActivity(), R.layout.fragment_home, hallRAs, this);
+        EmployeeListArrayAdapter mAdapter2 = new EmployeeListArrayAdapter(
+                getActivity(),
+                R.layout.fragment_home,
+                hallRAs,
+                this);
         listView.setAdapter(mAdapter2);
         setListViewHeightBasedOnChildren(listView);
-        final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.myHallexpander);
+
+        final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.myHallExpander);
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -62,9 +64,9 @@ public class HomeFragmentSubsectionMyHallRAs extends Fragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (HomeMyHallListener) activity;
+            mListener = (HomeMyHallRAsListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement HomeMyHallListener");
+            throw new ClassCastException(activity.toString() + " must implement HomeMyHallRAsListener");
         }
     }
 
@@ -74,37 +76,12 @@ public class HomeFragmentSubsectionMyHallRAs extends Fragment
         mListener = null;
     }
 
-    private static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            return;
-        }
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0) {
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            }
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
-
     @Override
-    public void switchToProfile(Employee ra) {
-        mListener.switchToProfile(ra);
+    public void switchToProfile(Employee employee) {
+        mListener.switchToProfile(employee);
     }
 
-    public interface HomeMyHallListener {
-        public void switchToProfile(Employee employee);
+    public interface HomeMyHallRAsListener extends HomeSubsectionListener {
         List<Employee> getMyHallRAs();
     }
 

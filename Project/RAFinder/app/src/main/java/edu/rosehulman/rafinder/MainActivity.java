@@ -29,13 +29,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.AuthenticationFailedException;
-import javax.mail.MessagingException;
-
 import edu.rosehulman.rafinder.controller.AddDutyRosterItemDialog;
 import edu.rosehulman.rafinder.controller.DutyRosterFragment;
 import edu.rosehulman.rafinder.controller.EditDutyRosterDialog;
 import edu.rosehulman.rafinder.controller.EmergencyContactsFragment;
+import edu.rosehulman.rafinder.controller.HallRosterFragment;
 import edu.rosehulman.rafinder.controller.HomeFragment;
 import edu.rosehulman.rafinder.controller.HomeFragmentSubsectionMyHallRAs;
 import edu.rosehulman.rafinder.controller.HomeFragmentSubsectionMyRA;
@@ -45,7 +43,6 @@ import edu.rosehulman.rafinder.controller.LoginActivity;
 import edu.rosehulman.rafinder.controller.NavigationDrawerFragment;
 import edu.rosehulman.rafinder.controller.ProfileFragment;
 import edu.rosehulman.rafinder.controller.SearchFragment;
-import edu.rosehulman.rafinder.controller.reslife.HallRosterFragment;
 import edu.rosehulman.rafinder.loader.DutyRosterLoader;
 import edu.rosehulman.rafinder.loader.EmergencyContactsLoader;
 import edu.rosehulman.rafinder.loader.EmployeeLoader;
@@ -61,21 +58,21 @@ import edu.rosehulman.rafinder.model.person.ResidentAssistant;
  * The container activity for the entire app.
  */
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        HomeFragment.HomeListener,
-        EmergencyContactsFragment.EmergencyContactsListener,
-        DutyRosterFragment.DutyRosterListener,
-        HallRosterFragment.HallRosterListener,
-        ProfileFragment.StudentProfileListener,
-        HomeFragmentSubsectionMyHallRAs.HomeMyHallListener,
-        HomeFragmentSubsectionMyRA.HomeMyRAListener,
-        HomeFragmentSubsectionMySAs.HomeMySAListener,
-        EmployeeLoader.EmployeeLoaderListener,
-        EmergencyContactsLoader.EmergencyContactsLoaderListener,
-        HallLoader.HallLoaderListener,
-        DutyRosterLoader.DutyRosterLoaderListener,
-        SearchFragment.SearchFragmentListener,
-        EditDutyRosterDialog.EditDutyRosterDialogListener {
+        implements  NavigationDrawerFragment.NavigationDrawerCallbacks,
+                    HomeFragment.HomeListener,
+                    EmergencyContactsFragment.EmergencyContactsListener,
+                    DutyRosterFragment.DutyRosterListener,
+                    HallRosterFragment.HallRosterListener,
+                    ProfileFragment.StudentProfileListener,
+                    HomeFragmentSubsectionMyHallRAs.HomeMyHallRAsListener,
+                    HomeFragmentSubsectionMyRA.HomeMyRAListener,
+                    HomeFragmentSubsectionMySAs.HomeMySAListener,
+                    EmployeeLoader.EmployeeLoaderListener,
+                    EmergencyContactsLoader.EmergencyContactsLoaderListener,
+                    HallLoader.HallLoaderListener,
+                    DutyRosterLoader.DutyRosterLoaderListener,
+                    SearchFragment.SearchFragmentListener,
+                    EditDutyRosterDialog.EditDutyRosterDialogListener {
 
     private static final int LOADING = -1;
     private static final int SEARCH = 0;
@@ -152,15 +149,11 @@ public class MainActivity extends Activity
         mEmail = getIntent().getStringExtra(ConfigKeys.KEY_USER_EMAIL);
 
         Log.d(ConfigKeys.LOG_TAG, "Main got UserType <" + mUserType + "> and raEmail <" + mRaEmail + ">");
+        mTitle = getTitle();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-
-        // updateDrawerList the drawer with the right list for either Employee or Resident
         mNavigationDrawerFragment.updateDrawerList(mUserType);
-
-        // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
@@ -257,12 +250,10 @@ public class MainActivity extends Activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_refresh) {
             refreshFragment();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -306,9 +297,9 @@ public class MainActivity extends Activity
         public static final int SUBJECT = 0;
         public static final int BODY = 1;
         public static final int TO = 2;
-        GmailSender gmailSender;
+        final GmailSender gmailSender;
 
-        public SendEmailAsyncTask() {
+        private SendEmailAsyncTask() {
             gmailSender = new GmailSender(ConfigKeys.FEEDBACK_EMAIL, ConfigKeys.FEEDBACK_PASSWORD);
         }
 
@@ -320,12 +311,6 @@ public class MainActivity extends Activity
             try {
                 gmailSender.sendMail(params[SUBJECT], params[BODY], ConfigKeys.FEEDBACK_EMAIL, params[TO]);
                 return true;
-            } catch (AuthenticationFailedException e) {
-                Log.e(SendEmailAsyncTask.class.getName(), "Bad account details");
-                e.printStackTrace();
-                return false;
-            } catch (MessagingException e) {
-                return false;
             } catch (Exception e) {
                 return false;
             }
@@ -422,7 +407,7 @@ public class MainActivity extends Activity
     }
 
     @Override
-    public Hall getHall(String hall) {
+    public Hall getHall() {
         return hallLoader.getHall();
     }
 
@@ -439,7 +424,7 @@ public class MainActivity extends Activity
         mHallName = myRA.getHall();
         mFloor = myRA.getFloor();
         mUser = getEmployee(mEmail);
-        dutyRosterLoader = new DutyRosterLoader(ConfigKeys.FIREBASE_ROOT_URL, mHallName, this, allRAs, false);
+        dutyRosterLoader = new DutyRosterLoader(mHallName, this, allRAs, false);
     }
 
     private void setAllEmployees() {
@@ -454,7 +439,7 @@ public class MainActivity extends Activity
         mDutyRoster = dutyRosterLoader.getDutyRoster();
         mDate = dutyRosterLoader.getDate();
         if (!isEdit) {
-            hallLoader = new HallLoader(ConfigKeys.FIREBASE_ROOT_URL, mHallName, this);
+            hallLoader = new HallLoader(mHallName, this);
         } else {
             onNavigationDrawerItemSelected(DUTY_ROSTER);
         }
@@ -476,7 +461,10 @@ public class MainActivity extends Activity
     @Override
     public void showEditDialog(DutyRosterItem item) {
         editing = item;
-        DialogFragment newFragment = EditDutyRosterDialog.newInstance(item.getFriday(), item.getFriDuty().getName(), item.getSatDuty().getName());
+        DialogFragment newFragment = EditDutyRosterDialog.newInstance(
+                item.getFriday(),
+                item.getFriDuty().getName(),
+                item.getSatDuty().getName());
         newFragment.show(getFragmentManager(), "editRoster");
     }
 
@@ -485,15 +473,6 @@ public class MainActivity extends Activity
         DialogFragment newFragment = AddDutyRosterItemDialog.newInstance(mDutyRoster.getEndDate(), getMyHall());
         newFragment.show(getFragmentManager(), "addRoster");
     }
-
-    @Override
-    public boolean canEdit() {
-        if (mUserType==UserType.RESIDENT){
-            return false;
-        };
-        return true;
-    }
-
 
     @Override
     public void onEditConfirm(String fri, String sat) {
@@ -516,7 +495,7 @@ public class MainActivity extends Activity
                 ref.child(DutyRosterItem.saturdayKey).setValue(saturday.getFirebaseKey(), new Firebase.CompletionListener() {
                     @Override
                     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                        dutyRosterLoader = new DutyRosterLoader(ConfigKeys.FIREBASE_ROOT_URL, mHallName, MainActivity.this, allRAs, true);
+                        dutyRosterLoader = new DutyRosterLoader(mHallName, MainActivity.this, allRAs, true);
                     }
                 });
             }
@@ -534,13 +513,11 @@ public class MainActivity extends Activity
 
     public List<Employee> getEmployeesForName(String name) {
         List<Employee> employees = new ArrayList<>();
-        int i = 0;
         for (List<Employee> emps : Arrays.asList(allRAs, allSAs, allGAs, allAdmins)) {
             for (Employee employee : emps) {
                 if (employee.getName().contains(name)) {
                     employees.add(employee);
                 }
-                i++;
             }
         }
         return employees;
@@ -558,7 +535,7 @@ public class MainActivity extends Activity
         firebase.setValue(rosterItem, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                dutyRosterLoader = new DutyRosterLoader(ConfigKeys.FIREBASE_ROOT_URL, mHallName, MainActivity.this, allRAs, true);
+                dutyRosterLoader = new DutyRosterLoader(mHallName, MainActivity.this, allRAs, true);
             }
         });
     }

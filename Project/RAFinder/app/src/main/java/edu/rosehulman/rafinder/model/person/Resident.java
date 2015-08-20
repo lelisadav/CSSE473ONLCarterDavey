@@ -3,9 +3,9 @@ package edu.rosehulman.rafinder.model.person;
 import com.firebase.client.DataSnapshot;
 
 import edu.rosehulman.rafinder.ConfigKeys;
-import edu.rosehulman.rafinder.model.SearchResultItem;
 
-public class Resident implements SearchResultItem {
+@SuppressWarnings("unused")
+public class Resident {
     private String name;
     private String uid;
 

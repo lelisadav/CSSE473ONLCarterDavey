@@ -16,10 +16,10 @@ public class HallLoader {
     private Hall hall;
     private final HallLoaderListener callbacks;
 
-    public HallLoader(String url, String hallName, HallLoaderListener cb) {
+    public HallLoader(String hallName, HallLoaderListener cb) {
         callbacks = cb;
 
-        Firebase firebase = new Firebase(url + "/" + resHalls + "/" + hallName);
+        Firebase firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + "/" + resHalls + "/" + hallName);
         Log.d(ConfigKeys.LOG_TAG, "Loading HallRoster data...");
         firebase.addListenerForSingleValueEvent(new HallValueEventListener());
 

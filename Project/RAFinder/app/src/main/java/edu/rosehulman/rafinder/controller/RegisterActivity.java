@@ -82,16 +82,16 @@ public class RegisterActivity extends Activity {
             mPasswordView.setError(getString(R.string.error_invalid_password));
         }
         if (!Login.isEmailValid(raEmail)) {
-            mRAEmailView.setError(getString(R.string.invalid_ra_email));
+            mRAEmailView.setError(getString(R.string.error_invalid_ra_email));
         }
         if (!email.equals(mConfirmEmailView.getText().toString())) {
-            mConfirmEmailView.setError(getString(R.string.email_mismatch));
+            mConfirmEmailView.setError(getString(R.string.error_email_mismatch));
         }
         if (!password.equals(mConfirmPasswordView.getText().toString())) {
-            mConfirmPasswordView.setError(getString(R.string.password_mismatch));
+            mConfirmPasswordView.setError(getString(R.string.error_password_mismatch));
         }
         if (!raEmail.equals(mConfirmRAEmailView.getText().toString())) {
-            mConfirmRAEmailView.setError(getString(R.string.ra_email_mismatch));
+            mConfirmRAEmailView.setError(getString(R.string.error_ra_email_mismatch));
         }
 
         showProgress(true);
@@ -108,7 +108,7 @@ public class RegisterActivity extends Activity {
                         return;
                     }
                 }
-                showError(getString(R.string.ra_email_does_not_exist));
+                showError(getString(R.string.error_ra_email_does_not_exist));
             }
 
             @Override
@@ -142,7 +142,7 @@ public class RegisterActivity extends Activity {
                                     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
 
                                         if (firebaseError != null) {
-                                            showError(getString(R.string.error_message));
+                                            showError(getString(R.string.error_generic));
                                             Log.e(ConfigKeys.LOG_TAG, firebaseError.getMessage());
                                         }
 
@@ -163,10 +163,10 @@ public class RegisterActivity extends Activity {
                     @Override
                     public void onError(FirebaseError firebaseError) {
                         if (firebaseError.getCode() == FirebaseError.EMAIL_TAKEN) {
-                            showError(getString(R.string.email_in_use));
+                            showError(getString(R.string.error_email_in_use));
                         } else {
                             Log.e(ConfigKeys.LOG_TAG, firebaseError.getMessage());
-                            showError(getString(R.string.error_message));
+                            showError(getString(R.string.error_generic));
                         }
                     }
                 });
@@ -205,6 +205,7 @@ public class RegisterActivity extends Activity {
         showErrorDialog(errorMessage);
     }
 
+    @SuppressWarnings("unused")
     private class User {
         private final String myRA;
 

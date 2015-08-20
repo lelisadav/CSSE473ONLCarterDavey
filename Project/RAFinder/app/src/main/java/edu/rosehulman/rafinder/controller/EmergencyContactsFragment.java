@@ -20,7 +20,7 @@ import edu.rosehulman.rafinder.model.person.Employee;
  * The Emergency Contacts list. Contains items of type {@link Employee}.
  */
 public class EmergencyContactsFragment extends Fragment
-        implements EmergencyContactArrayAdapter.EmergencyContactCallbacks {
+        implements EmergencyContactArrayAdapter.EmergencyContactListener {
     private EmergencyContactsListener mListener;
     private List<EmergencyContact> emergencyContacts;
 

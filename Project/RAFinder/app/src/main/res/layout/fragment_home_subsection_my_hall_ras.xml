@@ -17,12 +17,12 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_weight=".9"
-            android:text="@string/hall_ra"
+            android:text="@string/hall_ras"
             android:textSize="25sp"
             android:textStyle="bold" />
 
         <ToggleButton
-            android:id="@+id/myHallexpander"
+            android:id="@+id/myHallExpander"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"

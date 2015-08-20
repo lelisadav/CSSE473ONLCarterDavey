@@ -1,7 +1,6 @@
 package edu.rosehulman.rafinder.model;
 
 import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,12 +9,12 @@ import java.util.List;
 /**
  * A Residence Hall.
  */
-public class Hall implements SearchResultItem {
+@SuppressWarnings("unused")
+public class Hall {
     // HallRoster Firebase keys
     private static final String roster = "Roster";
     private String name;
     private final HashMap<String, Floor> floors;
-    private Firebase firebase;
 
     public Hall(DataSnapshot ds) {
         name = ds.getKey();
@@ -23,7 +22,6 @@ public class Hall implements SearchResultItem {
         for (DataSnapshot child : ds.child(roster).getChildren()) {
             floors.put(child.getKey(), new Floor(child, name));
         }
-
     }
 
     public String getName() {
@@ -58,9 +56,4 @@ public class Hall implements SearchResultItem {
     public Floor getFloor(String floorName) {
         return floors.get(floorName);
     }
-
-    public int getFloorCount() {
-        return floors.size();
-    }
-
 }

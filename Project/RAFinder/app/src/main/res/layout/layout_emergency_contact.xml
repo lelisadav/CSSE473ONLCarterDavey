@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:paddingTop="10dp"
         android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:text="@string/name_default_emergency"
         android:textSize="20sp" />
 
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:text="@string/call" />
+            android:text="@string/action_call" />
 
         <Space
             android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:text="@string/email" />
+            android:text="@string/action_email" />
 
         <Space
             android:layout_width="wrap_content"

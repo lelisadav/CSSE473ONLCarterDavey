@@ -5,32 +5,21 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.app.ProgressDialog;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import edu.rosehulman.rafinder.ConfigKeys;
 import edu.rosehulman.rafinder.MainActivity;
@@ -41,15 +30,15 @@ import edu.rosehulman.rafinder.model.Login;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends Activity {
 
     /**
-     * A dialog that displays during the authentication process saying "Authenticating with Firebase..."
+     * A dialog that displays during the authentication process
      */
     private ProgressDialog mAuthProgressDialog;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private TextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -71,8 +60,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mAuthProgressDialog.setCancelable(false);
 
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+        mEmailView = (TextView) findViewById(R.id.email);
 
         String intentEmail = getIntent().getStringExtra(ConfigKeys.KEY_USER_EMAIL);
         if (intentEmail != null) {
@@ -116,9 +104,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         // Skip login screen if we're still authorized and have data.
         if (firebase.getAuth() != null
-                && !userType.equals(UserType.NONE)
-                && !raEmail.equals("")
-                && !email.equals("")) {
+            && !userType.equals(UserType.NONE)
+            && !raEmail.equals("")
+            && !email.equals("")) {
             launchMainActivity(userType, raEmail, email);
         }
     }
@@ -226,53 +214,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     /**
-     * Shows the user's primary email address stores on their Android, used for autocomplete
-     */
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-                ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                new String[] { ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE },
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    /**
-     * sets up autocomplete for email addresses
-     */
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-        addEmailsToAutoComplete(emails);
-    }
-
-    /**
-     * does nothing right now
-     */
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    /**
-     * Populates the autocomplete feature
-     */
-    private void populateAutoComplete() {
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    /**
      * Displays an alert dialog that contains the specified error message
      */
     private void showErrorDialog(String message) {
@@ -282,32 +223,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 .show();
     }
 
-    /**
-     * Create adapter to tell the AutoCompleteTextView what to show in its
-     * dropdown list.
-     */
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
     public String getEmail() {
         return mEmailView.getText().toString();
-    }
-
-    /**
-     * Gets the primary email address associated with this phone in order to add it to the autocomplete list
-     */
-    private interface ProfileQuery {
-        String[] PROJECTION = { ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY, };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
     private void registerNewUser() {

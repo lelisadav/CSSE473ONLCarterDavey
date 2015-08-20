@@ -13,13 +13,16 @@ import java.util.List;
 import edu.rosehulman.rafinder.R;
 import edu.rosehulman.rafinder.model.person.Employee;
 
-public class EmployeeListArrayAdapter<T extends Employee> extends ArrayAdapter<T> {
+public class EmployeeListArrayAdapter extends ArrayAdapter<Employee> {
     private final Context mContext;
-    private final List<T> mObjects;
+    private final List<Employee> mObjects;
     private final int mLayout;
     private final EmployeeListArrayAdapterListener mListener;
 
-    public EmployeeListArrayAdapter(Context context, int textViewResourceId, List<T> objects, EmployeeListArrayAdapterListener callbacks) {
+    public EmployeeListArrayAdapter(Context context,
+                                    int textViewResourceId,
+                                    List<Employee> objects,
+                                    EmployeeListArrayAdapterListener callbacks) {
         super(context, R.layout.layout_ra_item, textViewResourceId, objects);
         mLayout = R.layout.layout_ra_item;
         mContext = context;
@@ -35,13 +38,14 @@ public class EmployeeListArrayAdapter<T extends Employee> extends ArrayAdapter<T
         TextView nameTextView = (TextView) view.findViewById(R.id.myRATextView);
         TextView statusTextView = (TextView) view.findViewById(R.id.status);
         ImageButton button = (ImageButton) view.findViewById(R.id.raMoreDetails);
-        final T ra = mObjects.get(position);
-        nameTextView.setText(ra.getName());
-        statusTextView.setText(ra.getStatus());
+
+        final Employee employee = mObjects.get(position);
+        nameTextView.setText(employee.getName());
+        statusTextView.setText(employee.getStatus());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.switchToProfile(ra);
+                mListener.switchToProfile(employee);
             }
         });
         view.refreshDrawableState();
@@ -49,6 +53,6 @@ public class EmployeeListArrayAdapter<T extends Employee> extends ArrayAdapter<T
     }
 
     public interface EmployeeListArrayAdapterListener {
-        public void switchToProfile(Employee ra);
+        public void switchToProfile(Employee employee);
     }
 }

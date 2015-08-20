@@ -5,8 +5,8 @@ import com.firebase.client.Firebase;
 
 /**
  * An SA (like an RA, but with limited privileges).
- * TODO: extend {@link ResidentAssistant} instead?
  */
+@SuppressWarnings("unused")
 public class SophomoreAdvisor extends Employee {
     public SophomoreAdvisor(DataSnapshot ds) {
         super(ds);

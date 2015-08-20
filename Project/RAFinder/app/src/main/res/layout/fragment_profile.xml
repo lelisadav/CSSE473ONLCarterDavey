@@ -19,9 +19,9 @@
         android:layout_height="200dp"
         android:layout_below="@+id/nameTextView"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_person"
-        android:contentDescription="@string/profile_pic_content_description"
-        android:scaleType="fitCenter"/>
+        android:contentDescription="@string/content_description_profile_picture"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_person" />
 
     <RelativeLayout
         android:id="@+id/gridLayout"
@@ -81,7 +81,7 @@
             android:layout_column="0"
             android:layout_row="0"
             android:background="@mipmap/ic_phone_green"
-            android:contentDescription="@string/phone_button_content_description" />
+            android:contentDescription="@string/content_description_call" />
 
         <ImageButton
             android:id="@+id/emailButton"
@@ -90,7 +90,7 @@
             android:layout_column="0"
             android:layout_row="1"
             android:background="@mipmap/ic_mail"
-            android:contentDescription="@string/email_button_content_description"/>
+            android:contentDescription="@string/content_description_email" />
 
         <ImageButton
             android:id="@+id/feedbackButton"
@@ -99,7 +99,7 @@
             android:layout_column="0"
             android:layout_row="2"
             android:background="@mipmap/ic_feedback"
-            android:contentDescription="@string/feedback"/>
+            android:contentDescription="@string/feedback" />
 
         <TextView
             android:id="@+id/phoneTextView"

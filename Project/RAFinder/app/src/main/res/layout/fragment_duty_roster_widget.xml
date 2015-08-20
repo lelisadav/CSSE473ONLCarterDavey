@@ -8,27 +8,28 @@
     tools:context="edu.rosehulman.rafinder.controller.DutyRosterFragment">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/weekendTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:text="@string/dates_default"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:textStyle="bold" />
 
         <ImageButton
+            android:id="@+id/editButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@mipmap/ic_edit"
-            android:id="@+id/editButton" />
+            android:contentDescription="@string/content_description_edit" />
 
     </LinearLayout>
 
@@ -70,7 +71,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
-            android:background="@mipmap/ic_phone_green" />
+            android:background="@mipmap/ic_phone_green"
+            android:contentDescription="@string/content_description_call" />
 
         <TextView
             android:id="@+id/satTextView"
@@ -104,7 +106,8 @@
             android:layout_alignBottom="@+id/satNameTextView"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="5dp"
-            android:background="@mipmap/ic_phone_green" />
+            android:background="@mipmap/ic_phone_green"
+            android:contentDescription="@string/content_description_call" />
     </RelativeLayout>
 
 </LinearLayout>

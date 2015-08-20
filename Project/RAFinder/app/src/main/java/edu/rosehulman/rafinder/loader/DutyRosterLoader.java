@@ -24,11 +24,11 @@ public class DutyRosterLoader {
     private final DutyRosterLoaderListener callbacks;
     private LocalDate date;
 
-    public DutyRosterLoader(String url, String hallName, DutyRosterLoaderListener cb, List<Employee> ras, boolean isEdit) {
+    public DutyRosterLoader(String hallName, DutyRosterLoaderListener cb, List<Employee> ras, boolean isEdit) {
         callbacks = cb;
         this.ras = ras;
         this.isEdit = isEdit;
-        Firebase firebase = new Firebase(url + "/" + DutyRosters + "/" + hallName);
+        Firebase firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + "/" + DutyRosters + "/" + hallName);
         Log.d(ConfigKeys.LOG_TAG, "Loading Duty Roster data...");
         firebase.addListenerForSingleValueEvent(new DutyRosterValueEventListener());
     }
@@ -58,7 +58,6 @@ public class DutyRosterLoader {
     }
 
     private class DutyRosterValueEventListener implements ValueEventListener {
-
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             roster = new DutyRoster(dataSnapshot, modifyDate(LocalDate.now()), ras);

@@ -13,12 +13,12 @@ import com.firebase.client.FirebaseError;
 import java.util.Arrays;
 
 import edu.rosehulman.rafinder.ConfigKeys;
-import edu.rosehulman.rafinder.model.SearchResultItem;
 
 /**
  * Any Residence Life employee.
  */
-public class Employee extends Resident  implements SearchResultItem {
+@SuppressWarnings("unused")
+public class Employee extends Resident {
     private String email;
     private int floor;
     private String hall;
@@ -44,7 +44,7 @@ public class Employee extends Resident  implements SearchResultItem {
                 convertToBitmap(ds.child(ConfigKeys.employeePicture).getValue(String.class)),
                 ds.getKey()
         );
-        firebaseKey=ds.getKey();
+        firebaseKey = ds.getKey();
         firebase = new Firebase(ConfigKeys.FIREBASE_ROOT_URL + ds.getRef().getPath().toString());
         firebase.addChildEventListener(new ChildrenListener());
     }
@@ -63,15 +63,15 @@ public class Employee extends Resident  implements SearchResultItem {
     }
 
     private Employee(String name,
-             String email,
-             int floor,
-             String hall,
-             String phoneNumber,
-             int room,
-             String status,
-             String statusDetail,
-             Bitmap profilePicture,
-             String uid) {
+                     String email,
+                     int floor,
+                     String hall,
+                     String phoneNumber,
+                     int room,
+                     String status,
+                     String statusDetail,
+                     Bitmap profilePicture,
+                     String uid) {
         super(name, uid);
         this.email = email;
         this.floor = floor;
@@ -114,14 +114,6 @@ public class Employee extends Resident  implements SearchResultItem {
     }
 
     private class ChildrenListener implements ChildEventListener {
-        public void onCancelled(FirebaseError arg0) {
-            // ignored
-        }
-
-        public void onChildAdded(DataSnapshot arg0, String arg1) {
-            // ignored
-        }
-
         public void onChildChanged(DataSnapshot arg0, String arg1) {
             switch (arg0.getKey()) {
             case ConfigKeys.employeeEmail:
@@ -151,11 +143,19 @@ public class Employee extends Resident  implements SearchResultItem {
             }
         }
 
+        public void onChildAdded(DataSnapshot arg0, String arg1) {
+            // ignored
+        }
+
         public void onChildMoved(DataSnapshot arg0, String arg1) {
             // ignored
         }
 
         public void onChildRemoved(DataSnapshot arg0) {
+            // ignored
+        }
+
+        public void onCancelled(FirebaseError arg0) {
             // ignored
         }
     }
@@ -187,7 +187,8 @@ public class Employee extends Resident  implements SearchResultItem {
                 phoneNumber,
                 room,
                 status,
-                statusDetail).toString();
+                statusDetail
+        ).toString();
     }
 
     public String getEmail() {

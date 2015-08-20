@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="19"
             android:background="@android:drawable/ic_menu_search"
-            android:clickable="true" />
+            android:clickable="true"
+            android:contentDescription="@string/content_description_search" />
     </LinearLayout>
 
     <ListView
